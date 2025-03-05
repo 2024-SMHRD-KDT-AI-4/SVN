@@ -1,0 +1,79 @@
+.funcButton {
+
+    width: 300px;
+    height: 100px;
+    background-color: rgb(255, 201, 255);
+    border: '0px solid black';
+}
+
+.funcButton_auth {
+    width: 300px;
+    height: 100px;
+    background-color: rgb(90, 147, 255);
+    border: '0px solid black';
+
+}
+
+.funcButton:hover {
+
+    background-color: rgb(255, 138, 255);
+}
+
+.funcButton_auth:hover {
+
+    background-color: rgb(14, 98, 255);
+}
+
+#changableView {
+    border: '1px solid black';
+    display: flex;
+    justify-content: center;
+    /* 수평 가운데 정렬 */
+    gap: 10px;
+    /* 컴포넌트 간 간격 */
+    /* margin-top: 20px; */
+    margin-left: 8px;
+
+}
+
+#welcome {
+    width: 600px;
+    text-align: end;
+    /* display: flex; */
+}
+
+#profile {
+    display: flex;
+    align-items: center;
+    /* justify-self: end; */
+    height: 50px;
+}
+
+#picture {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#logo {
+    display: block;
+    align-items: center;
+    width: auto; /* width를 auto로 설정하여 화면 크기에 영향을 받지 않도록 설정 */
+    margin-left: 25px;
+    font-size: 30px;
+    font-weight: bold; /* 'bold'에서 따옴표 제거 */
+}
+
+#account {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: fixed; /* 화면에 고정 */
+    width: 1920px; /* 고정된 너비 */
+}
+#picture:hover {
+    color: brown;
+}
+
+#buttonGroup {
+    background-color: rgb(168, 196, 238);
+}

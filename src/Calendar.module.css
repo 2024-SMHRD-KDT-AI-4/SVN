@@ -1,0 +1,152 @@
+/* Calendar.module.css */
+.calendar {
+    width: 1400px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #4a90e2;
+    color: white;
+}
+
+.header button {
+    background-color: white;
+    color: #4a90e2;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.header button:hover {
+    background-color: #f0f0f0;
+}
+
+.header h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+div.calendarChanges {
+    display: flex;
+
+    /* Flexbox 사용 */
+    /* justify-content: space-around; */
+    /* 버튼 간격 균등 배치 */
+    /* align-items: center; */
+    /* 세로축 중앙 정렬 */
+}
+
+span.monthBtn,
+span.weekBtn  {
+    /* flex: 1     ; */
+    /* 각 버튼이 동일한 비율로 공간 차지 */
+    text-align: center;
+    /* 텍스트 중앙 정렬 */
+    padding: 10px;
+    /* 버튼 내부 여백 추가 */
+    border: 1px solid #ccc;
+    /* 경계선 추가 (선택 사항) */
+    border-radius: 5px;
+    /* 경계선 둥글게 (선택 사항) */
+    cursor: pointer;
+    /* 클릭 가능한 버튼처럼 표시 */
+    font-size: 25px;
+    width: 100px;
+
+}
+span.monthBtn:hover,
+span.weekBtn:hover {
+    /* flex: 1; 각 버튼이 동일한 비율로 공간 차지 */
+    /* text-align: center; 텍스트 중앙 정렬 */
+    padding: 10px; /* 버튼 내부 여백 추가 */
+    border: 1px solid #ccc; /* 경계선 추가 (선택 사항) */
+    border-radius: 5px; /* 경계선 둥글게 (선택 사항) */
+    cursor: pointer; /* 클릭 가능한 버튼처럼 표시 */
+    font-size: 25px;
+    background-color: #4a90e2;
+  }
+
+.days-of-week,
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    padding: 10px;
+}
+
+.days-of-week div {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666;
+}
+
+.daysOfWeek {
+    display: flex;
+    /* background-color: aqua; */
+    padding: 10px;
+}
+
+.days div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 160px; */
+    height: 100px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.days div:hover {
+    background-color: #c9c9c9;
+}
+
+.days div.inactive {
+    color: #636363;
+    pointer-events: none;
+}
+
+.days div.active {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.test {
+    color: rgb(0, 0, 0);
+    width: 200px;
+    height: 28px;
+    text-align: center;
+    /* border: 1px solid #e0e0e0; */
+    /* border-radius: 5px; */
+    font-size: 28px;
+    /* margin-left: 5px; */
+
+}
+
+.test1 {
+    color: rgb(255, 82, 82);
+    width: 200px;
+    height: 28px;
+    text-align: center;
+    /* border: 1px solid #e0e0e0; */
+    /* border-radius: 5px; */
+    font-size: 28px;
+    /* margin-left: 5px; */
+
+}

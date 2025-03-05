@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 모달 스타일 */
+        .modal {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed;
+            z-index: 1; /* 화면 앞에 표시 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0); /* 배경 색 */
+            background-color: rgba(0,0,0,0.4); /* 배경 투명도 */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            height: 40%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>사바나 근무 관리 시스템에 오신 것을 환영합니다.</h1>
+
+    <form action="user/login" method="post">
+        <input type="text" name="id" placeholder="아이디를 입력하세요." id="userID" maxlength="">
+        <br>
+        <input type="password" name="pw" placeholder="비밀번호를 입력하세요." id="userPW">
+        <br>
+        <button>로그인</button>
+    </form>
+
+    <a href="#" id="openModal">처음이신가요?</a>
+    <a href="/system">사바나</a>
+
+    <!-- 모달 -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>가입하기</h2>
+            <form action="user/join" method="post">
+                <input type="text" name="id" placeholder="아이디를 입력하세요." id="userID" maxlength="">
+                <br>
+                <input type="password" name="pw" placeholder="비밀번호를 입력하세요." id="userPW">
+                <br>
+                <input type="text" name="nick" placeholder="닉네임을 입력하세요." id="nickName">
+                <br>
+                <input type="text" name="role" placeholder="번호를 입력하세요." id="roleCode">
+                <br>
+                <button>회원가입</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 모달 관련 변수
+        var modal = document.getElementById("myModal");
+        var openModal = document.getElementById("openModal");
+        var closeModal = document.getElementById("closeModal");
+
+        // "처음이신가요?" 클릭 시 모달 열기
+        openModal.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // 모달 닫기
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        }
+    </script>
+</body>
+</html>
