@@ -34,13 +34,13 @@ const ManWorkers = () => {
             <div>
                 <span>총 직원 수 6</span>
                 <hr />
-                <div style={{ display: "flex", gap: "20px" }}>
-                    <span style={{ width: "150px" }}>사원번호</span>
-                    <span style={{ width: "150px" }}>이름</span>
-                    <span style={{ width: "150px" }}>직책</span>
-                    <span style={{ width: "150px" }}>입사일</span>
-                    <span style={{ width: "150px" }}>조직</span>
-                    <span style={{ width: "150px" }}>연락처</span>
+                <div style={{ display: "flex", gap: "10px" }}>
+                    <span style={{ width: "150px", textAlign: "right" }}>사원번호</span>
+                    <span style={{ width: "150px", textAlign: "right" }}>이름</span>
+                    <span style={{ width: "150px", textAlign: "right" }}>직책</span>
+                    <span style={{ width: "150px", textAlign: "right" }}>입사일</span>
+                    <span style={{ width: "150px", textAlign: "right" }}>조직</span>
+                    <span style={{ width: "150px", textAlign: "right" }}>연락처</span>
                 </div>
                 <hr />
                 {/* 실질적인 직원 표시 */}

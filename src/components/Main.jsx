@@ -4,6 +4,7 @@ import Buttons from './Buttons';
 import Calendar from './Calendar';
 import Attendance from './Attendance';
 import Management from './Management';
+import Schedule from './Schedule';
 import '../App.css';
 
 const Main = () => {
@@ -67,7 +68,7 @@ const Main = () => {
 
                     {account.role === "관리자" && (
                         <>
-                            <Buttons name={'스케줄 생성'} func={() => { setTextValue('스케줄 생성'); }} auth={true} />
+                            <Buttons name={'스케줄 생성'} func={() => { setTextValue(<Schedule/>); }} auth={true} />
                             <Buttons name={'관리하기'} func={() => { setTextValue(<Management/>); }} auth={true} />
                             <Buttons name={'통계 및 분석'} func={() => { setTextValue('통계 및 분석'); }} auth={true} />
                         </>
