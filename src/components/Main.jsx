@@ -3,7 +3,10 @@ import React, { useState, useEffect } from 'react';
 import Buttons from './Buttons';
 import Calendar from './Calendar';
 import Attendance from './Attendance';
+import Management from './Management';
+import Schedule from './Schedule';
 import '../App.css';
+import RequestForm from './RequestForm';
 
 const Main = () => {
 
@@ -62,12 +65,12 @@ const Main = () => {
                     <Buttons name={'메인'} func={() => { setTextValue(<Calendar />); }} />
                     <Buttons name={'작은달력'} func={() => { setTextValue('작은달력'); }} />
                     <Buttons name={'할일'} func={() => { setTextValue(<Attendance />); }} />
-                    <Buttons name={'요청하기'} func={() => { setTextValue('요청하기'); }} />
+                    <Buttons name={'요청하기'} func={() => { setTextValue(<RequestForm />); }} />
 
                     {account.role === "관리자" && (
                         <>
-                            <Buttons name={'스케줄 생성'} func={() => { setTextValue('스케줄 생성'); }} auth={true} />
-                            <Buttons name={'관리하기'} func={() => { setTextValue('관리하기'); }} auth={true} />
+                            <Buttons name={'스케줄 생성'} func={() => { setTextValue(<Schedule/>); }} auth={true} />
+                            <Buttons name={'관리하기'} func={() => { setTextValue(<Management/>); }} auth={true} />
                             <Buttons name={'통계 및 분석'} func={() => { setTextValue('통계 및 분석'); }} auth={true} />
                         </>
                     )}

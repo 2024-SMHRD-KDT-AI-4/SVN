@@ -1,0 +1,30 @@
+span.workerTab,
+span.groupTab  {
+    /* flex: 1     ; */
+    /* 각 버튼이 동일한 비율로 공간 차지 */
+    text-align: center;
+    /* 텍스트 중앙 정렬 */
+    padding: 10px;
+    /* 버튼 내부 여백 추가 */
+    border: 1px solid #ccc;
+    /* 경계선 추가 (선택 사항) */
+    border-radius: 5px;
+    /* 경계선 둥글게 (선택 사항) */
+    cursor: pointer;
+    /* 클릭 가능한 버튼처럼 표시 */
+    font-size: 25px;
+    width: 100px;
+
+}
+span.workerTab:hover,
+span.groupTab:hover {
+    /* flex: 1; 각 버튼이 동일한 비율로 공간 차지 */
+    /* text-align: center; 텍스트 중앙 정렬 */
+    padding: 10px; /* 버튼 내부 여백 추가 */
+    border: 1px solid #ccc; /* 경계선 추가 (선택 사항) */
+    border-radius: 5px; /* 경계선 둥글게 (선택 사항) */
+    cursor: pointer; /* 클릭 가능한 버튼처럼 표시 */
+    font-size: 25px;
+    background-color: #4a90e2;
+  }
+/* 나중에 시간이 되면 이 모듈에 전부 취합할 예정 */

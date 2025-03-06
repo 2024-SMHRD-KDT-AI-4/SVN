@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import {React,  useState } from "react";
 import styles from "../Calendar.module.css";
 
 const Calendar = () => { // 현 컴포넌트의 함수실행
