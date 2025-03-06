@@ -112,7 +112,7 @@ const ManEmplyee = () => {
                 </span>
             </div>
             <div>
-                <span>총 직원 수 {workerData.length}</span>
+                <span>총 직원 수 : {workerData.length}</span>
                 <hr />
                 <div style={{ display: "flex", gap: "25px" }}>
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>

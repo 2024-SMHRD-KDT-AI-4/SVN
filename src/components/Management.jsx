@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styles from "../Group.module.css";
 import ManEmplyee from "./ManEmplyee";  // ManWorkers 컴포넌트 임포트
 import ManGroup from "./ManGroup";  // ManGroup 컴포넌트 임포트
+import ManWork from "./ManWork";  // ManWork 컴포넌트 임포트
+import ManVacation from "./ManVacation";  // ManWork 컴포넌트 임포트
 
 const Management = () => {
     const [status, setStatus] = useState(0);  // 현재 선택된 탭의 상태 관리
@@ -18,6 +20,7 @@ const Management = () => {
                 <span className={styles.workerTab} onClick={() => onClickTab(0)}>직원</span>
                 <span className={styles.groupTab} onClick={() => onClickTab(1)}>조직</span>
                 <span className={styles.groupTab} onClick={() => onClickTab(2)}>근로</span>
+                <span className={styles.groupTab} onClick={() => onClickTab(3)}>휴가</span>
             </div>
             {/* 수평선의 스타일을 조정해보기 */}
             <hr style={{ margin: "10px 0" }} />
@@ -25,7 +28,8 @@ const Management = () => {
                 {/* 상태에 맞는 탭의 콘텐츠 렌더링 */}
                 {status === 0 && <ManEmplyee />}  {/* 직원 탭 클릭 시 ManWorkers 컴포넌트 렌더링 */}
                 {status === 1 && <ManGroup />}  {/* 조직 탭 클릭 시 조직 관리 내용 */}
-                {status === 2 && <div>근로정보 컴포넌트</div>}  {/* 근로정보 탭 클릭 시 근로정보 내용 */}
+                {status === 2 && <ManWork/>}  {/* 근로 탭 클릭 시 근로 관리 내용 */}
+                {status === 3 && <ManVacation/>}  {/* 휴가 탭 클릭 시 근로 관리 내용 */}
             </div>
         </div>
     );
