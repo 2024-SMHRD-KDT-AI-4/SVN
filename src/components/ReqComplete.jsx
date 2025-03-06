@@ -2,19 +2,20 @@ import React from "react";
 import ReqLeave from "./ReqLeave";
 
 // ReqLeave.jsx에 보낼 변수값 4가지 설정
-const ReqComplete = ({startDate, endDate, days, reason}) => {
+const ReqComplete = ({ startDate, endDate, days, reason, confirm }) => {
     return (
         <div style={{
             width: "450px",
-            height: "650px",
+            // height: "650px",
             border: "1px solid #ccc",
             borderRadius: "10px",
             boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
             backgroundColor: "#fff",
             padding: "10px",
         }}>
+
             {/* 내용 영역 */}
-            <div style={{ 
+            <div style={{
                 width: "100%",
                 height: "80px",
                 border: "1px solid black",
@@ -24,7 +25,7 @@ const ReqComplete = ({startDate, endDate, days, reason}) => {
                 justifyContent: "center",
                 textAlign: "center"
             }}>
-            {`${startDate} ~ ${endDate} (${days}일) 사유: ${reason}`}
+                {`${startDate} ~ ${endDate} (${days}일) 사유: ${reason}`}
             </div>
 
             {/* 버튼 영역 */}
@@ -32,24 +33,37 @@ const ReqComplete = ({startDate, endDate, days, reason}) => {
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <button style={{
-                    width: "45%",
-                    padding: "5px 0",
-                    backgroundColor: "#ddd",
-                    border: "1px solid black",
-                    cursor: "pointer"
-                }}>수정</button>
 
-                <button style={{
-                    width: "45%",
-                    padding: "5px 0",
-                    backgroundColor: "#ffcccc",
-                    border: "1px solid black",
-                    cursor: "pointer"
-                }}>삭제</button>
+                {/* {confirm === true && (
+                    <>
+                        <button
+                            style={{
+                                width: "45%",
+                                padding: "5px 0",
+                                backgroundColor: "#ddd",
+                                border: "1px solid black",
+                                cursor: "pointer",
+                            }}
+                        >
+                            수정
+                        </button>
+
+                        <button
+                            style={{
+                                width: "45%",
+                                padding: "5px 0",
+                                backgroundColor: "#ffcccc",
+                                border: "1px solid black",
+                                cursor: "pointer",
+                            }}
+                        >
+                            삭제
+                        </button>
+                    </>
+                )
+                } */}
             </div>
         </div>
-    );
+    )
 }
-
 export default ReqComplete;

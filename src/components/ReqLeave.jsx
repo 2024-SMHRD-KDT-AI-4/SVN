@@ -32,7 +32,7 @@ const ReqLeave = () => {
 
         alert(`신청 완료! ${startDate} ~ ${endDate} (${days}일) 사유: ${reason}`);
         setIsSubmitted(true); // 신청 완료 -> 상태 변경
-        <ReqComplete startDate={startDate} endDate={endDate} days={days} reason={reason} />
+        <ReqComplete startDate={startDate} endDate={endDate} days={days} reason={reason} /> // DB 연결해서 
     };
 
 
