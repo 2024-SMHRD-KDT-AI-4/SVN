@@ -48,35 +48,57 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
                 display: "flex", flexDirection: "column", gap: "10px"
             }}>
                 <h3>직원 추가하기</h3>
-                {/* 각 입력 필드 */}
-                <input
-                    type="text" name="name" placeholder="이름"
-                    value={formData.name} onChange={handleChange}  // name 필드 변경 시 handleChange 호출
-                />
-                <input
-                    type="text" name="position" placeholder="직책"
-                    value={formData.position} onChange={handleChange}  // position 필드 변경 시 handleChange 호출
-                />
-                <input
-                    type="date" name="joinDate" placeholder="입사일"
-                    value={formData.joinDate} onChange={handleChange}  // joinDate 필드 변경 시 handleChange 호출
-                />
-                <input
-                    type="text" name="department" placeholder="조직"
-                    value={formData.department} onChange={handleChange}  // department 필드 변경 시 handleChange 호출
-                />
-                <input
-                    type="text" name="dob" placeholder="생년월일"
-                    value={formData.dob} onChange={handleChange}  // dob 필드 변경 시 handleChange 호출
-                />
-                <input
-                    type="text" name="phone" placeholder="연락처"
-                    value={formData.phone} onChange={handleChange}  // phone 필드 변경 시 handleChange 호출
-                />
-                <input
-                    type="email" name="email" placeholder="전자우편"
-                    value={formData.email} onChange={handleChange}  // email 필드 변경 시 handleChange 호출
-                />
+                {/* 각 입력 필드에 레이블 추가 */}
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="name">이름</label>
+                    <input
+                        type="text" name="name" id="name" placeholder="이름"
+                        value={formData.name} onChange={handleChange}  // name 필드 변경 시 handleChange 호출
+                    />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="position">직책</label>
+                    <input
+                        type="text" name="position" id="position" placeholder="직책"
+                        value={formData.position} onChange={handleChange}  // position 필드 변경 시 handleChange 호출
+                    />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="joinDate">입사일</label>
+                    <input
+                        type="date" name="joinDate" id="joinDate"
+                        value={formData.joinDate} onChange={handleChange}  // joinDate 필드 변경 시 handleChange 호출
+                    />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="department">부서</label>
+                    <input
+                        type="text" name="department" id="department" placeholder="부서"
+                        value={formData.department} onChange={handleChange}  // department 필드 변경 시 handleChange 호출
+                    />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="dob">생년월일</label>
+                    <input
+                        type="date" name="dob" id="dob"
+                        value={formData.dob} onChange={handleChange}  // dob 필드 변경 시 handleChange 호출
+                    />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="phone">연락처</label>
+                    <input
+                        type="text" name="phone" id="phone" placeholder="연락처"
+                        value={formData.phone} onChange={handleChange}  // phone 필드 변경 시 handleChange 호출
+                    />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="email">전자우편</label>
+                    <input
+                        type="email" name="email" id="email" placeholder="전자우편"
+                        value={formData.email} onChange={handleChange}  // email 필드 변경 시 handleChange 호출
+                    />
+                </div>
+
                 {/* 취소 및 저장 버튼 */}
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
                     <button onClick={onClose} style={{ padding: "5px 10px" }}>취소</button>  {/* 취소 버튼: 모달 닫기 */}
