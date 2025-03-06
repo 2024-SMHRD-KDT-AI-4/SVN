@@ -26,5 +26,6 @@ span.groupTab:hover {
     cursor: pointer; /* 클릭 가능한 버튼처럼 표시 */
     font-size: 25px;
     background-color: #4a90e2;
+    
   }
 /* 나중에 시간이 되면 이 모듈에 전부 취합할 예정 */
