@@ -1,6 +1,6 @@
 // 휴가 신청 컴포넌트
 import React, { useState } from 'react';
-import "react-datepicker/dist/react-datepicker.css";
+//import "react-datepicker/dist/react-datepicker.css";
 
 const ReqLeave = () => {
     const [startDate, setStartDate] = useState('');
