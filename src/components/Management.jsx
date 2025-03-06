@@ -11,6 +11,7 @@ const Management = () => {
             <div className={styles.manageBtns}>
                 <span className={styles.workerTab}>직원</span>
                 <span className={styles.groupTab}>조직</span>
+                <span className={styles.groupTab}>근로정보</span>
             </div>
 
             <div className={styles.content}>
