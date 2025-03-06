@@ -47,9 +47,9 @@
     <h1>사바나 근무 관리 시스템에 오신 것을 환영합니다.</h1>
 
     <form action="user/login" method="post">
-        <input type="text" name="id" placeholder="아이디를 입력하세요." id="userID" maxlength="">
+        <input type="text" name="id" placeholder="아이디를 입력하세요." id="act_id" maxlength="">
         <br>
-        <input type="password" name="pw" placeholder="비밀번호를 입력하세요." id="userPW">
+        <input type="password" name="pw" placeholder="비밀번호를 입력하세요." id="act_pw">
         <br>
         <button>로그인</button>
     </form>
@@ -63,13 +63,13 @@
             <span class="close" id="closeModal">&times;</span>
             <h2>가입하기</h2>
             <form action="user/join" method="post">
-                <input type="text" name="id" placeholder="아이디를 입력하세요." id="userID" maxlength="">
+                <input type="text" name="id" placeholder="아이디를 입력하세요." id="act_id" maxlength="">
                 <br>
-                <input type="password" name="pw" placeholder="비밀번호를 입력하세요." id="userPW">
+                <input type="password" name="pw" placeholder="비밀번호를 입력하세요." id="act_pw">
                 <br>
-                <input type="text" name="nick" placeholder="닉네임을 입력하세요." id="nickName">
+                <input type="text" name="nick" placeholder="이름을 입력하세요." id="act_name">
                 <br>
-                <input type="text" name="role" placeholder="번호를 입력하세요." id="roleCode">
+                <input type="text" name="role" placeholder="이메일을 입력하세요." id="act_mail">
                 <br>
                 <button>회원가입</button>
             </form>

@@ -3,7 +3,7 @@ const userRouter = express.Router();
 const conn = require("../config/db")
 const path = require("path");
 const { request } = require('http');
-const publicPath = path.join(__dirname,"../public/")
+const publicPath = path.join(__dirname, "../public/")
 /*
     DB와 열결할 때 작성할 프로세스
     1) 클라이언트가 보낸 데이터를 저장
@@ -12,55 +12,73 @@ const publicPath = path.join(__dirname,"../public/")
     4) 실행결과를 가지고 응답을 처리한다.
 
 */
+
+const table = "td_account" // DB테이블의 이름
+
+
 userRouter.post("/join", (request, response) => {
     console.log(request.body)
     // 클라이언트가 넘겨준 데이터를 활용해서 DB에 넣어주는 작업
     // 1. 데이터 저장
-    let { id, pw, nick } = request.body;
-    //return
+    let { act_id, act_pw, act_name, act_mail } = request.body;
     // 2. sql문 작성
-    let sql = "insert into member(id,pw,nick) values(?,?,?)";
+    let sql = `insert into ${table}(act_id,act_pw,act_name, act_mail) values(?,?,?,?)`;
     // 3. 쿼리문 실행
-    conn.query(sql, [id, pw, nick], (error, result) => {
+    conn.query(sql, [act_id, act_pw, act_name, act_mail], (error, result) => {
+
+        if (error) {
+            console.log("쿼리 실행 중 오류:", error);
+            //return response.status(500).send("서버 오류");
+        }
         console.log("실행결과 : ", result);
         // result결과에 있는 affectedrows > 0 테이블에 변화가 생겼다.
         // insert, update, delete
-        if(result.affectedRows > 0){
+        if (result.affectedRows > 0) {
             // 메인페이지로 이동
             // * sendfile로 파일을 보내면 url이 바뀌지 않는다 -> 새로고침시 로직이 다시 실행
             // * redirect로 경로 전환
             response.redirect("/")
         }
-        else{
+        else {
             console.log("실패")
             response.redirect("/join")
         }
     });
 })
 
-userRouter.post("/login",(request , response)=>{
+userRouter.post("/login", (request, response) => {
     console.log(request.body)
-    let {id,pw} = request.body;
-    let sql = "select * from member where id = ? and pw = ?";
+    let { id, pw } = request.body;
+    let sql = `select * from ${table} where act_id = ? and act_pw = ?`;
     //return
     conn.query(sql, [id, pw], (error, result) => {
-        console.log("실행결과 : ", result);
+        //console.log("실행결과 : ", result);
 
         // select문은 리턴결과가 리스트 형태로 반환 -> 데이터가 있으면 리스트의 길이가 0보다 크다
-
-        if(result?.length > 0){
-            response.redirect("/system")
+        if (result?.length > 0) {
+            response.json({
+                success: true,
+                message: "로그인 성공"
+            });
+        } else {
+            response.json({
+                success: false,
+                message: "아이디 또는 비밀번호가 잘못되었습니다."
+            });
         }
-        else{
-            console.log("실패")
-            response.redirect("/")
-        }
+        // if (result?.length > 0) {
+        //     response.redirect("/system")
+        // }
+        // else {
+        //     console.log("실패")
+        //     response.redirect("/")
+        // }
     });
 })
 
-userRouter.post("/delete",(request , response)=>{
+userRouter.post("/delete", (request, response) => {
     console.log(request.body)
-    let {id,pw} = request.body;
+    let { id, pw } = request.body;
     let sql = "delete from member where id = ? and pw = ?"
     //return
     conn.query(sql, [id, pw], (error, result) => {
@@ -68,10 +86,10 @@ userRouter.post("/delete",(request , response)=>{
 
         // select문은 리턴결과가 리스트 형태로 반환 -> 데이터가 있으면 리스트의 길이가 0보다 크다
 
-        if(result?.affectedRows > 0){
+        if (result?.affectedRows > 0) {
             response.redirect("/")
         }
-        else{
+        else {
             response.redirect("/delete")
         }
     });
