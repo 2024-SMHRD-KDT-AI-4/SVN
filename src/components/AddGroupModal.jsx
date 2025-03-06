@@ -4,14 +4,20 @@ import React, { useState } from 'react';
 const AddGroupModal = ({ isOpen, onClose, onSubmit }) => {
     // 폼 데이터 상태 관리
     const [formData, setFormData] = useState({
-        name: "",       // 이름
-        position: "",   // 직책
-        joinDate: "",   // 입사일
-        department: "", // 부서
-        dob: "",        // 생년월일
-        phone: "",      // 연락처
-        email: "",      // 이메일
+        id: "",       // 조직번호
+        dpName: "",   // 조직명
+        joinDate: "",   // 조직장
+        department: "", // 설명
+        dob: "",        // 위치
+        phone: ""     // 인원수
     });
+
+    // 조직번호 (Department ID): 조직을 고유하게 식별할 수 있는 번호
+    // 조직명 (Department Name): 해당 조직의 이름
+    // 조직장 (Department Head): 해당 조직의 관리자를 나타내는 정보
+    // 설명 (Description): 조직에 대한 간략한 설명
+    // 위치 (Location): 조직이 위치한 장소
+    // 인원수 (Number of Employees): 해당 조직에 소속된 직원 수
 
     // 입력값 변경 처리 함수
     const handleChange = (e) => {
@@ -29,8 +35,7 @@ const AddGroupModal = ({ isOpen, onClose, onSubmit }) => {
             joinDate: "",
             department: "",
             dob: "",
-            phone: "",
-            email: "",
+            phone: ""
         });
     };
 
@@ -47,7 +52,7 @@ const AddGroupModal = ({ isOpen, onClose, onSubmit }) => {
                 background: "#fff", padding: "20px", borderRadius: "10px", width: "400px",
                 display: "flex", flexDirection: "column", gap: "10px"
             }}>
-                <h3>직원 추가하기</h3>
+                <h3>조직 추가하기</h3>
                 {/* 각 입력 필드에 레이블 추가 */}
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
                     <label htmlFor="name">이름</label>
