@@ -7,6 +7,7 @@ import Management from './Management';
 import Schedule from './Schedule';
 import '../App.css';
 import RequestForm from './RequestForm';
+import QNA from './QNA';
 
 const Main = () => {
 
@@ -71,7 +72,7 @@ const Main = () => {
                         <>
                             <Buttons name={'스케줄 생성'} func={() => { setTextValue(<Schedule/>); }} auth={true} />
                             <Buttons name={'관리하기'} func={() => { setTextValue(<Management/>); }} auth={true} />
-                            <Buttons name={'통계 및 분석'} func={() => { setTextValue('통계 및 분석'); }} auth={true} />
+                            <Buttons name={'QNA'} func={() => { setTextValue(<QNA/>); }} auth={true} />
                         </>
                     )}
                 </div>
