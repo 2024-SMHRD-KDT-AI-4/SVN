@@ -1,11 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>제목</title>
-  </head>
-  <body>
+import React, { useState } from 'react';
+
+const ScheduleForm = () => {
+  const [formData, setFormData] = useState({
+    title: '',
+    date: '',
+    time: '',
+    description: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    console.log('Form submitted with data: ', formData);
+  };
+
   return (
     <div>
       <h2>일정 생성</h2>
@@ -54,6 +70,4 @@
   );
 };
 
-export default ScheduleForm;</div>
-  </body>
-</html>
+export default ScheduleForm;
