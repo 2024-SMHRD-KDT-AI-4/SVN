@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 const AddGroupModal = ({ isOpen, onClose, onSubmit }) => {
     // 폼 데이터 상태 관리
     const [formData, setFormData] = useState({
-        id: "",       // 조직번호
+        dpId: "",       // 조직번호
         dpName: "",   // 조직명
-        joinDate: "",   // 조직장
-        department: "", // 설명
-        dob: "",        // 위치
-        phone: ""     // 인원수
+        dpHead: "",   // 조직장
+        description: "", // 설명
+        location: "",        // 위치
+        number: ""     // 인원수
     });
 
     // 조직번호 (Department ID): 조직을 고유하게 식별할 수 있는 번호
@@ -30,12 +30,12 @@ const AddGroupModal = ({ isOpen, onClose, onSubmit }) => {
         onSubmit(formData);  // 부모 컴포넌트로 formData 전달
         // 폼 데이터 초기화
         setFormData({
-            name: "",
-            position: "",
-            joinDate: "",
-            department: "",
-            dob: "",
-            phone: ""
+            dpId: "",
+            dpName: "",
+            dpHead: "",
+            description: "",
+            location: "",
+            number: ""
         });
     };
 
@@ -55,52 +55,45 @@ const AddGroupModal = ({ isOpen, onClose, onSubmit }) => {
                 <h3>조직 추가하기</h3>
                 {/* 각 입력 필드에 레이블 추가 */}
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor="name">이름</label>
+                    <label htmlFor="dpId">조직번호</label>
                     <input
-                        type="text" name="name" id="name" placeholder="이름"
-                        value={formData.name} onChange={handleChange}  // name 필드 변경 시 handleChange 호출
+                        type="text" name="dpId" id="dpId" placeholder="조직번호"
+                        value={formData.dpId} onChange={handleChange}  // dpId 필드 변경 시 handleChange 호출
                     />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor="position">직책</label>
+                    <label htmlFor="dpName">조직명</label>
                     <input
-                        type="text" name="position" id="position" placeholder="직책"
-                        value={formData.position} onChange={handleChange}  // position 필드 변경 시 handleChange 호출
+                        type="text" name="dpName" id="dpName" placeholder="조직명"
+                        value={formData.dpName} onChange={handleChange}  // dpName 필드 변경 시 handleChange 호출
                     />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor="joinDate">입사일</label>
+                    <label htmlFor="dpHead">조직장</label>
                     <input
-                        type="date" name="joinDate" id="joinDate"
-                        value={formData.joinDate} onChange={handleChange}  // joinDate 필드 변경 시 handleChange 호출
+                        type="text" name="dpHead" id="dpHead" placeholder='조직장'
+                        value={formData.dpHead} onChange={handleChange}  // dpHead 필드 변경 시 handleChange 호출
                     />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor="department">부서</label>
+                    <label htmlFor="description">설명</label>
                     <input
-                        type="text" name="department" id="department" placeholder="부서"
-                        value={formData.department} onChange={handleChange}  // department 필드 변경 시 handleChange 호출
+                        type="text" name="description" id="description" placeholder="설명"
+                        value={formData.description} onChange={handleChange}  // description 필드 변경 시 handleChange 호출
                     />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor="dob">생년월일</label>
+                    <label htmlFor="location">위치</label>
                     <input
-                        type="date" name="dob" id="dob"
-                        value={formData.dob} onChange={handleChange}  // dob 필드 변경 시 handleChange 호출
+                        type="text" name="location" id="location" placeholder='위치'
+                        value={formData.location} onChange={handleChange}  // dob 필드 변경 시 handleChange 호출
                     />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor="phone">연락처</label>
+                    <label htmlFor="number">인원수</label>
                     <input
-                        type="text" name="phone" id="phone" placeholder="연락처"
-                        value={formData.phone} onChange={handleChange}  // phone 필드 변경 시 handleChange 호출
-                    />
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor="email">전자우편</label>
-                    <input
-                        type="email" name="email" id="email" placeholder="전자우편"
-                        value={formData.email} onChange={handleChange}  // email 필드 변경 시 handleChange 호출
+                        type="number" name="number" id="number" placeholder="인원수"
+                        value={formData.number} onChange={handleChange}  // phone 필드 변경 시 handleChange 호출
                     />
                 </div>
 

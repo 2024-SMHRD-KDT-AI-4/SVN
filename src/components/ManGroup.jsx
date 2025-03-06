@@ -1,5 +1,5 @@
 import { React, useState } from 'react'
-import Modal from './AddWorkerModal'
+import AddGroupModal from './AddGroupModal'
 
 const ManGroup = () => {
     const [groupData, setGroupData] = useState([
@@ -59,14 +59,12 @@ const ManGroup = () => {
         setGroupData([
             ...groupData,
             [
-                `25030600${groupData.length + 1}`, // 새로운 직원번호
-                newGroup.name || `새직원${groupData.length + 1}`, // 이름
-                newGroup.position || "사원", // 직책
-                newGroup.joinDate || "2025.03.06", // 입사일
-                newGroup.department || "부서 없음", // 조직
-                newGroup.dob || "19900000", // 생년월일
-                newGroup.phone || "010-0000-0000", // 연락처
-                newGroup.email || "newworker@gmail.com", // 이메일
+                newGroup.dpId || "T0000", // 팀번호
+                newGroup.dpName || "테스트팀", // 팀이름
+                newGroup.dpHead || "테스트장", // 팀장
+                newGroup.description || "테스트용", // 이름
+                newGroup.location || "8호실", // 이름
+                newGroup.number || "999", // 이름
             ],
         ]);
         setIsModalOpen(false); // 모달 닫기
@@ -139,7 +137,7 @@ const ManGroup = () => {
                 </div>
             </div>
             {/* AddWorkerModal 컴포넌트를 렌더링 */}
-            <Modal
+            <AddGroupModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)} // 모달 닫기
                 onSubmit={handleAddGroup} // 모달에서 직원 추가하기

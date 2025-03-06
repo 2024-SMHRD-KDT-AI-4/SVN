@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import Modal from "./AddWorkerModal";
 
-const ManWorkers = () => {
+const ManEmplyee = () => {
     const [workerData, setWorkerData] = useState([
         ["241210001", "김예은", "팀장", "2024.12.10", "백엔드", "20010507", "010-0000-0000", "temp@gmail.com"],
         ["241210002", "안지운", "부팀장", "2024.12.10", "프론트엔드", "19991123", "010-0000-0000", "temp@gmail.com"],
@@ -143,4 +143,4 @@ const ManWorkers = () => {
     );
 };
 
-export default ManWorkers;
+export default ManEmplyee;
