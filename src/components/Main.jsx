@@ -10,7 +10,7 @@ import RequestForm from './RequestForm';
 
 const Main = () => {
 
-    const [textValue, setTextValue] = useState('메인화면');
+    const [textValue, setTextValue] = useState(<Calendar />);
     const [account, setAccount] = useState({ name: '', role: '' }) // 계정의 정보를 가져오기
     //const check = true; // You can toggle this value to see the conditional rendering in action
 

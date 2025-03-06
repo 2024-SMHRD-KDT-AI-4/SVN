@@ -1,5 +1,5 @@
-import { React, useState } from 'react'
-import Modal from './AddWorkerModal'
+import { React, useState } from "react";
+import Modal from "./AddWorkerModal";
 
 const ManWorkers = () => {
     const [workerData, setWorkerData] = useState([
@@ -10,13 +10,34 @@ const ManWorkers = () => {
         ["241210005", "김민정", "사원", "2024.12.10", "백엔드", "19930421", "010-0000-0000", "temp@gmail.com"],
         ["241210006", "강인오", "사원", "2024.12.10", "프론트엔드", "19910225", "010-0000-0000", "kanginoh@gmail.com"],
     ]);
+    const [selectedWorkers, setSelectedWorkers] = useState([]); // 체크된 직원들의 ID를 관리
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleCheckboxChange = (code) => {
+        setSelectedWorkers((prev) =>
+            prev.includes(code)
+                ? prev.filter((id) => id !== code) // 이미 체크된 경우 제거
+                : [...prev, code] // 체크되지 않은 경우 추가
+        );
+    };
+
+    const btnRemoveWorker = () => {
+        setWorkerData(workerData.filter((worker) => !selectedWorkers.includes(worker[0])));
+        setSelectedWorkers([]); // 삭제 후 선택 초기화
+    };
 
     const workerLine = (code, name, role, firstDate, group, birthDate, phone, email) => {
         return (
-            <div>
+            <div key={code}>
                 <div style={{ display: "flex", gap: "25px" }}>
-                    <span style={{ width: "200px", textAlign: "right" }}>{code}</span>
+                    <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
+                        <input
+                            type="checkbox"
+                            checked={selectedWorkers.includes(code)} // 체크 상태 관리
+                            onChange={() => handleCheckboxChange(code)} // 상태 변경
+                        />
+                    </span>
+                    <span style={{ width: "150px", textAlign: "right" }}>{code}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{name}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{role}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{firstDate}</span>
@@ -25,12 +46,11 @@ const ManWorkers = () => {
                     <span style={{ width: "150px", textAlign: "right" }}>{phone}</span>
                     <span style={{ width: "200px", textAlign: "right" }}>{email}</span>
                 </div>
-
                 <hr />
             </div>
-
         );
     };
+
     const handleAddWorker = (newWorker) => {
         setWorkerData([
             ...workerData,
@@ -51,10 +71,11 @@ const ManWorkers = () => {
     const btnAddWorker = () => {
         setIsModalOpen(true); // 모달 열기
     };
+
     return (
         <div style={{ width: "1600px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                <h2 style={{ margin: 0 }}>직원관리</h2>
+            <h2 style={{ margin: 0, marginRight: "20px" }}>직원관리</h2>
+            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "20px" }}>
                 <span
                     style={{
                         display: "inline-block",
@@ -66,6 +87,24 @@ const ManWorkers = () => {
                         textAlign: "center",
                         fontSize: "14px",
                         fontWeight: "bold",
+                        marginLeft: "10px",
+                    }}
+                    onClick={btnRemoveWorker}
+                >
+                    - 직원 삭제하기
+                </span>
+                <span
+                    style={{
+                        display: "inline-block",
+                        padding: "10px 20px",
+                        backgroundColor: "#007BFF",
+                        color: "#fff",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                        marginLeft: "10px",
                     }}
                     onClick={btnAddWorker}
                 >
@@ -76,7 +115,14 @@ const ManWorkers = () => {
                 <span>총 직원 수 {workerData.length}</span>
                 <hr />
                 <div style={{ display: "flex", gap: "25px" }}>
-                    <span style={{ width: "200px", textAlign: "right" }}>사원번호</span>
+                    <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
+                        <input
+                            type="checkbox"
+                            onChange={(e) => setSelectedWorkers(e.target.checked ? workerData.map((w) => w[0]) : [])}
+                            checked={selectedWorkers.length === workerData.length && workerData.length > 0}
+                        />
+                    </span>
+                    <span style={{ width: "150px", textAlign: "right" }}>사원번호</span>
                     <span style={{ width: "150px", textAlign: "right" }}>이름</span>
                     <span style={{ width: "150px", textAlign: "right" }}>직책</span>
                     <span style={{ width: "150px", textAlign: "right" }}>입사일</span>
@@ -86,19 +132,15 @@ const ManWorkers = () => {
                     <span style={{ width: "200px", textAlign: "right" }}>전자우편</span>
                 </div>
                 <hr style={{ marginBottom: "25px" }} />
-                {/* 실질적인 직원 표시 */}
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {workerData.map(worker => workerLine(worker[0], worker[1], worker[2], worker[3], worker[4], worker[5], worker[6], worker[7]))}
+                    {workerData.map((worker) =>
+                        workerLine(worker[0], worker[1], worker[2], worker[3], worker[4], worker[5], worker[6], worker[7])
+                    )}
                 </div>
             </div>
-            {/* AddWorkerModal 컴포넌트를 렌더링 */}
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)} // 모달 닫기
-                onSubmit={handleAddWorker} // 모달에서 직원 추가하기
-            />
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddWorker} />
         </div>
-    )
-}
+    );
+};
 
-export default ManWorkers
+export default ManWorkers;
