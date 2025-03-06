@@ -6,6 +6,7 @@ import Attendance from './Attendance';
 import Management from './Management';
 import Schedule from './Schedule';
 import '../App.css';
+import RequestForm from './RequestForm';
 
 const Main = () => {
 
@@ -64,7 +65,7 @@ const Main = () => {
                     <Buttons name={'메인'} func={() => { setTextValue(<Calendar />); }} />
                     <Buttons name={'작은달력'} func={() => { setTextValue('작은달력'); }} />
                     <Buttons name={'할일'} func={() => { setTextValue(<Attendance />); }} />
-                    <Buttons name={'요청하기'} func={() => { setTextValue('요청하기'); }} />
+                    <Buttons name={'요청하기'} func={() => { setTextValue(<RequestForm />); }} />
 
                     {account.role === "관리자" && (
                         <>
