@@ -2,132 +2,145 @@ import { useState, useEffect } from "react";
 
 const WeeklyTableCalendar = () => {
   const [startDate, setStartDate] = useState(new Date());
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [schedules, setSchedules] = useState([]);
 
   useEffect(() => {
     setStartDate(getStartOfWeek(new Date()));
   }, []);
 
-  // 📌 주간 달력 시작 날짜 (월요일부터 시작)
   const getStartOfWeek = (date) => {
     const newDate = new Date(date);
     newDate.setDate(date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1));
     return newDate;
   };
 
-  // 📌 현재 주의 날짜 목록 (월~일)
   const getWeekDays = (date) => {
     return Array.from({ length: 7 }, (_, i) => {
       const day = new Date(date);
       day.setDate(date.getDate() + i);
       return {
-        date: day.getDate(),
-        dayOfWeek: ["월", "화", "수", "목", "금", "토", "일"][i],
-        fullDate: day.toISOString().split("T")[0], // YYYY-MM-DD 형식
+        date: `${day.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][day.getDay()]})`,
+        fullDate: day.toISOString().split("T")[0],
       };
     });
   };
 
-  // 📌 날짜 이동 (이전 / 다음 하루씩 이동)
   const changeDay = (direction) => {
     const newDate = new Date(startDate);
     newDate.setDate(startDate.getDate() + direction);
     setStartDate(newDate);
   };
 
-  // 📌 오늘 날짜(Today)로 이동
   const goToToday = () => {
-    setStartDate(new Date()); // 오늘 날짜로 변경
+    setStartDate(new Date());
   };
 
-  // 📌 현재 날짜(sysdate)
-  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD 형식
+  const today = new Date().toISOString().split("T")[0];
+  const workingHoursStart = 8;
+  const workingHoursEnd = 22;
+  const timeSlots = Array.from({ length: (workingHoursEnd - workingHoursStart) * 2 }, (_, i) => {
+    const hour = Math.floor(i / 2) + workingHoursStart;
+    const minutes = i % 2 === 0 ? "00" : "30";
+    return `${hour}:${minutes}`;
+  });
 
-  // 📌 근무시간 (08:00 ~ 22:00) - 30분 단위
-  const timeSlots = [
-    { label: "오픈", start: 8, end: 11 }, // 08:00 ~ 11:00
-    { label: "주간", start: 11, end: 17 }, // 11:00 ~ 17:00
-    { label: "마감", start: 17, end: 22 }, // 17:00 ~ 22:00
-  ];
+  const handleScheduleSubmit = () => {
+    if (!name.trim() || !date || !startTime || !endTime) {
+      alert("모든 입력값을 입력해주세요!");
+      return;
+    }
+
+    const startIdx = timeSlots.indexOf(startTime);
+    const endIdx = timeSlots.indexOf(endTime);
+
+    if (startIdx === -1 || endIdx === -1 || startIdx >= endIdx) {
+      alert("시간 입력이 잘못되었습니다.");
+      return;
+    }
+
+    const formattedDate = new Date(date).toISOString().split("T")[0];
+    
+    if (schedules.some((s) => s.name === name && s.date === formattedDate)) {
+      return;
+    }
+    
+    const newSchedule = {
+      name,
+      date: formattedDate,
+      startTime,
+      endTime,
+      startIndex: startIdx,
+      endIndex: endIdx,
+      color: getColorForName(name),
+    };
+
+    setSchedules([...schedules, newSchedule]);
+  };
+
+  const getColorForName = (name) => {
+    const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#FFA533", "#33FFF5", "#A833FF"];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+  };
 
   const weekDays = getWeekDays(startDate);
 
   return (
-    <div className="w-full max-w-[1600px] mx-auto bg-white shadow-lg rounded-lg p-4" style={{ border: "1px solid black" }}>
-      {/* 상단 네비게이션 */}
-      <div className="flex justify-between items-center mb-4">
-        <button onClick={() => changeDay(-1)} className="px-4 py-2 bg-gray-200 rounded-md">
-          ◀ 이전 날
-        </button>
-        <h2 className="text-xl font-bold">
-          {startDate.getFullYear()}년 {startDate.getMonth() + 1}월 {Math.ceil(startDate.getDate() / 7)}주차
-        </h2>
-        <button onClick={goToToday} className="px-4 py-2 bg-blue-500 text-white rounded-md">
-          오늘
-        </button>
-        <button onClick={() => changeDay(1)} className="px-4 py-2 bg-gray-200 rounded-md">
-          다음 날 ▶
-        </button>
+    <div className="w-full max-w-[1600px] mx-auto bg-white shadow-lg rounded-lg p-4">
+      <h1 className="text-2xl font-bold mb-4 text-center">주간 근무 일정표</h1>
+      <div className="flex justify-between mb-4">
+        <button onClick={() => changeDay(-1)} className="px-4 py-2 bg-gray-300 rounded">◀ 이전 날</button>
+        <button onClick={goToToday} className="px-4 py-2 bg-blue-500 text-white rounded">오늘</button>
+        <button onClick={() => changeDay(1)} className="px-4 py-2 bg-gray-300 rounded">다음 날 ▶</button>
       </div>
-
-      {/* 주간 스케줄 표 */}
-      <table className="w-full border-collapse" style={{ border: "1px solid black", minHeight: "600px" }}>
+      <div className="flex gap-4 mb-4" >
+        <input type="text" placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} className="border p-2 rounded" />
+        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="border p-2 rounded" />
+        <select value={startTime} onChange={(e) => setStartTime(e.target.value)} className="border p-2 rounded">
+          {timeSlots.map((time) => <option key={time} value={time}>{time}</option>)}
+        </select>
+        <select value={endTime} onChange={(e) => setEndTime(e.target.value)} className="border p-2 rounded">
+          {timeSlots.map((time) => <option key={time} value={time}>{time}</option>)}
+        </select>
+        <button onClick={handleScheduleSubmit} className="px-4 py-2 bg-green-500 text-white rounded">추가하기</button>
+      </div>
+      <table className="w-full max-w-[1600px] border-collapse border" style={{ width: '1600px' }}>
         <thead>
-          <tr style={{ backgroundColor: "#f0f0f0", borderBottom: "1px solid black", height: "60px" }}>
-            <th style={{ border: "1px solid black", padding: "10px", textAlign: "center", fontSize: "18px", width: "100px" }}>구분</th>
-            <th style={{ border: "1px solid black", padding: "10px", textAlign: "center", fontSize: "18px", width: "100px" }}>시간</th>
+        <tr className="border" style={{ borderTop: '1px solid black', borderBottom: '1px solid black' }}>
+            <th className="border p-2" style={{ width: '100px' }}>시간</th>
             {weekDays.map((day) => (
-              <th
-                key={day.fullDate}
-                style={{
-                  border: "1px solid black",
-                  padding: "10px",
-                  textAlign: "center",
-                  fontSize: "18px",
-                  minWidth: "150px",
-                  backgroundColor: day.fullDate === today ? "lightblue" : "white",
-                }}
-              >
-                {day.dayOfWeek} {day.date}
-              </th>
+              <th key={day.fullDate} className="border p-2" style={{ backgroundColor: day.fullDate === today ? 'pink' : 'transparent' }}>{day.date}</th>
             ))}
           </tr>
         </thead>
-        <tbody>
-          {timeSlots.map((slot, slotIdx) => {
-            const rows = (slot.end - slot.start) * 2; // 30분 단위로 나누기
-            return (
-              <tr key={slotIdx} style={{ height: `${rows * 20}px` }}>
-                <td rowSpan={rows} style={{ border: "1px solid black", textAlign: "center", fontSize: "16px", fontWeight: "bold", padding: "5px", backgroundColor: "#f0f0f0" }}>
-                  {slot.label}
+        <tbody >
+          {timeSlots.map((time, i) => (
+            <tr key={i} className="border" style={{ borderBottom: '1px solid black' }}>
+              <td className="border relative h-12" style={{ width: '100px', textAlign : "center", height : "100px" }}>{time}</td>
+              {weekDays.map((day) => (
+                <td key={day.fullDate} className="border relative h-12" style={{ borderRight: '1px solid black' }}>
+                  {schedules.map((schedule, index) => (
+                    schedule.date === day.fullDate && i >= schedule.startIndex && i < schedule.endIndex ? (
+                      <div
+                        key={index}
+                        className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white font-bold rounded-md"
+                        style={{ backgroundColor: schedule.color, zIndex: 1 , textAlign : "center", border : "1px solid" }}
+                      >
+                        {schedule.name}
+                      </div>
+                    ) : null
+                  ))}
                 </td>
-                {Array.from({ length: rows }, (_, i) => {
-                  const hour = Math.floor(i / 2) + slot.start;
-                  const minutes = i % 2 === 0 ? "00" : "30";
-                  return (
-                    <tr key={i} style={{ height: "40px" }}>
-                      <td style={{ border: "1px solid black", textAlign: "center", fontSize: "16px", fontWeight: "bold", padding: "5px" }}>{`${hour}:${minutes}`}</td>
-                      {weekDays.map((day) => (
-                        <td
-                          key={day.fullDate}
-                          style={{
-                            border: "1px solid black",
-                            minHeight: "40px",
-                            cursor: "pointer",
-                            backgroundColor: day.fullDate === today ? "#e0f7fa" : "#ffffff",
-                            textAlign: "center",
-                            fontSize: "16px",
-                          }}
-                          onClick={() => alert(`${day.dayOfWeek} ${day.date}일 ${hour}:${minutes} 일정 추가`)}
-                        >
-                          👤 0/5 {/* 예제 값 */}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tr>
-            );
-          })}
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
