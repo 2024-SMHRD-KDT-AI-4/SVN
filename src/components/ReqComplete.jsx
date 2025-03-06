@@ -1,31 +1,20 @@
 import React from "react";
 import ReqLeave from "./ReqLeave";
 
+// ReqLeave.jsx에 보낼 변수값 4가지 설정
 const ReqComplete = ({startDate, endDate, days, reason}) => {
     return (
         <div style={{
-            width: "350px",
-            padding: "30px",
-            border: "2px solid black",
-            margin: "20px",
-            borderRadius: "5px",
-            position: "relative",
-            fontFamily: "Arial, sans-serif"
+            width: "450px",
+            height: "650px",
+            border: "1px solid #ccc",
+            borderRadius: "10px",
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#fff",
+            padding: "10px",
         }}>
-            {/* 상단 제목 */}
-            <div style={{
-                position: "absolute",
-                top: "-12px",
-                left: "10px",
-                backgroundColor: "white",
-                padding: "0 5px",
-                fontWeight: "bold"
-            }}>
-                휴가 신청 완료
-            </div>
-
             {/* 내용 영역 */}
-            <div style={{
+            <div style={{ 
                 width: "100%",
                 height: "80px",
                 border: "1px solid black",

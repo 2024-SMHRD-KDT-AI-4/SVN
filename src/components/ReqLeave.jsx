@@ -1,23 +1,23 @@
-// 휴가 신청 컴포넌트
+// 휴가/병가 신청 컴포넌트
 import React, { useState, useEffect } from 'react';
 import ReqComplete from './ReqComplete';
 //import "react-datepicker/dist/react-datepicker.css";
 
 const ReqLeave = () => {
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [days, setDays] = useState('');
-    const [reason, setReason] = useState('');
+    const [startDate, setStartDate] = useState('');  // 시작 날짜
+    const [endDate, setEndDate] = useState('');      // 종료 날짜
+    const [days, setDays] = useState('');            // 신청 일 수
+    const [reason, setReason] = useState('');        // 사유
     const [isSubmitted, setIsSubmitted] = useState(false); // 신청 완료 상태
 
-    // 날짜 차이를 계산하는 함수
+    // 신청 일 수 계산하는 함수
     useEffect(() => {
         if (startDate && endDate) {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            const diffTime = end - start;
+            const start = new Date(startDate); // 시작 날짜
+            const end = new Date(endDate); // 종료 날짜
+            const diffTime = end - start; // 종료 - 시작
             const diffDays = diffTime / (1000 * 60 * 60 * 24) + 1; // 하루 포함 계산
-            setDays(diffDays > 0 ? diffDays : 0);
+            setDays(diffDays > 0 ? diffDays : 0); // 신청 일 수 출력
         } else {
             setDays(0);
         }
@@ -31,7 +31,8 @@ const ReqLeave = () => {
         }
 
         alert(`신청 완료! ${startDate} ~ ${endDate} (${days}일) 사유: ${reason}`);
-        setIsSubmitted(true); // 신청 완료 상태 변경
+        setIsSubmitted(true); // 신청 완료 -> 상태 변경
+        <ReqComplete startDate={startDate} endDate={endDate} days={days} reason={reason} />
     };
 
 
@@ -39,7 +40,7 @@ const ReqLeave = () => {
         <div
         style={{
             width: "450px",
-            height: "650px",
+            height: "300px",
             border: "1px solid #ccc",
             borderRadius: "10px",
             boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
@@ -48,9 +49,7 @@ const ReqLeave = () => {
         }}
         >
             <h3>휴가 / 병가 신청</h3>
-            {/* <div> // 잔여 휴가 일수 연동
-                <AttVacation />
-            </div> */}
+            {/* 잔여 휴가일 수 연동하기*/}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                 <span>시작 날짜:</span>
                 <input type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} style={{ width: "200px" }}/>
@@ -70,13 +69,13 @@ const ReqLeave = () => {
             
             <button 
             style={{ width: "100%", padding: "5px 0", cursor: "pointer" }} 
-            onClick={handleSubmit}>신청하기</button>
+            onClick={handleSubmit}>신청하기</button> 
 
-            <div style={{ textAlign: "center" }}>
-            {/* 신청 완료 후, 완료 UI를 보여줌 */}
+            {/* 신청 완료 선택 후, 완료 UI 출력*/}
+            {/* <div style={{ textAlign: "center" }}>
             {isSubmitted ? (
                 <ReqComplete startDate={startDate} endDate={endDate} days={days} reason={reason} />
-            ) : ('') }</div>
+            ) : ('') }</div> */}
         </div>
     );
 }
