@@ -5,12 +5,13 @@ import ReqLeave from "./ReqLeave";
 const ReqComplete = ({ startDate, endDate, days, reason, confirm }) => {
     return (
         <div style={{
-            width: "450px",
+            width: "400px",
             // height: "650px",
+            gap: "20px",
             border: "1px solid #ccc",
             borderRadius: "10px",
-            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-            backgroundColor: "#fff",
+            boxShadow: "0px 4px 6px rgba(12, 11, 11, 0.1)",
+            backgroundColor: "#fafafa",
             padding: "10px",
         }}>
 

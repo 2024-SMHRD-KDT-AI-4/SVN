@@ -49,7 +49,7 @@ const ReqLeave = () => {
         }}
         >
             <h3>휴가 / 병가 신청</h3>
-            {/* 잔여 휴가일 수 연동하기*/}
+            {/* 잔여 휴가일 수 연동 예정*/}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                 <span>시작 날짜:</span>
                 <input type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} style={{ width: "200px" }}/>
@@ -70,12 +70,6 @@ const ReqLeave = () => {
             <button 
             style={{ width: "100%", padding: "5px 0", cursor: "pointer" }} 
             onClick={handleSubmit}>신청하기</button> 
-
-            {/* 신청 완료 선택 후, 완료 UI 출력*/}
-            {/* <div style={{ textAlign: "center" }}>
-            {isSubmitted ? (
-                <ReqComplete startDate={startDate} endDate={endDate} days={days} reason={reason} />
-            ) : ('') }</div> */}
         </div>
     );
 }
