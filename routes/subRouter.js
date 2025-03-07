@@ -1,6 +1,10 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
+const conn = require("../config/db")
+const path = require("path");
+const { request } = require('http');
+const publicPath = path.join(__dirname, "../public/")
 
 // React 빌드 폴더 경로
 const buildPath = path.join(__dirname, '../build');

@@ -10,19 +10,27 @@ const MainPage = () => {
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault();
-
+        e.preventDefault(); // 폼의 기본 제출 동작 방지
+        
         try {
-            const response = await axios.post('user/login', { id, pw });
-
-            if (response.data.success) {
+            // 로그인 요청: id, pw을 서버로 전송
+            const response = await axios.post('user/login', { id, pw }); // sub라우터에 로그인요청보냄
+            
+            if (response.data.success) { // 요청을 받아 라우터에서 로직이 성공적으로 수행되었다면
+                const userData = response.data.user; // 서버에서 반환한 사용자 정보
+                console.log('사용자 정보:', userData);
+                
+                // 로컬스토리지에 사용자 정보 저장 (email 제외)
+                localStorage.setItem('user', JSON.stringify(userData));
+                
+                // 시스템 페이지로 이동
                 navigate('/system');
             } else {
                 alert(response.data.message || '로그인 실패');
             }
         } catch (error) {
             console.error('로그인 오류:', error);
-            alert('로그인 중 오류가 발생했습니다.');
+            alert('로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         }
     };
 

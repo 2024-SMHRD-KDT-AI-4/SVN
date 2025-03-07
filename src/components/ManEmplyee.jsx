@@ -3,12 +3,12 @@ import Modal from "./AddWorkerModal";
 
 const ManEmplyee = () => {
     const [workerData, setWorkerData] = useState([
-        ["241210001", "김예은", "팀장", "2024.12.10", "백엔드", "20010507", "010-0000-0000", "temp@gmail.com"],
-        ["241210002", "안지운", "부팀장", "2024.12.10", "프론트엔드", "19991123", "010-0000-0000", "temp@gmail.com"],
-        ["241210003", "김현웅", "사원", "2024.12.10", "프론트엔드", "19990120", "010-0000-0000", "temp@gmail.com"],
-        ["241210004", "전석현", "사원", "2024.12.10", "백엔드", "19971226", "010-0000-0000", "temp@gmail.com"],
-        ["241210005", "김민정", "사원", "2024.12.10", "백엔드", "19930421", "010-0000-0000", "temp@gmail.com"],
-        ["241210006", "강인오", "사원", "2024.12.10", "프론트엔드", "19910225", "010-0000-0000", "kanginoh@gmail.com"],
+        ["241210001", "김예은", "팀장", "2024.12.10", "백엔드", "2001.05.07", "010-0000-0000", "temp@gmail.com"],
+        ["241210002", "안지운", "부팀장", "2024.12.10", "프론트엔드", "1999.11.23", "010-0000-0000", "temp@gmail.com"],
+        ["241210003", "김현웅", "사원", "2024.12.10", "프론트엔드", "1999.01.20", "010-0000-0000", "temp@gmail.com"],
+        ["241210004", "전석현", "사원", "2024.12.10", "백엔드", "1997.12.26", "010-0000-0000", "temp@gmail.com"],
+        ["241210005", "김민정", "사원", "2024.12.10", "백엔드", "1993.04.21", "010-0000-0000", "temp@gmail.com"],
+        ["241210006", "강인오", "사원", "2024.12.10", "프론트엔드", "1991.02.25", "010-0000-0000", "kanginoh@gmail.com"],
     ]);
     const [selectedWorkers, setSelectedWorkers] = useState([]); // 체크된 직원들의 ID를 관리
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,18 +26,18 @@ const ManEmplyee = () => {
         setSelectedWorkers([]); // 삭제 후 선택 초기화
     };
 
-    const workerLine = (code, name, role, firstDate, group, birthDate, phone, email) => {
+    const workerLine = (id, name, role, firstDate, group, birthDate, phone, email) => {
         return (
-            <div key={code}>
+            <div>
                 <div style={{ display: "flex", gap: "25px" }}>
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            checked={selectedWorkers.includes(code)} // 체크 상태 관리
-                            onChange={() => handleCheckboxChange(code)} // 상태 변경
+                            checked={selectedWorkers.includes(id)} // 체크 상태 관리
+                            onChange={() => handleCheckboxChange(id)} // 상태 변경
                         />
                     </span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{code}</span>
+                    <span style={{ width: "150px", textAlign: "right" }}>{id}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{name}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{role}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{firstDate}</span>

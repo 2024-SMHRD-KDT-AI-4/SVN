@@ -10,26 +10,91 @@ import RequestForm from './RequestForm';
 import QNA from './QNA';
 
 const Main = () => {
-
+    const temps = [
+        {
+            emp_id: "241210001",
+            emp_name: "김예은",
+            emp_role: "팀장",
+            emp_firstDate: "2024.12.10",
+            emp_group: "백엔드",
+            emp_birthDate: "2001.05.07",
+            emp_phone: "010-0000-0000",
+            created_at: "2024.12.10"
+        },
+        {
+            emp_id: "241210002",
+            emp_name: "안지운",
+            emp_role: "부팀장",
+            emp_firstDate: "2024.12.10",
+            emp_group: "프론트엔드",
+            emp_birthDate: "1999.11.23",
+            emp_phone: "010-0000-0000",
+            created_at: "2024.12.10"
+        },
+        {
+            emp_id: "241210003",
+            emp_name: "김현웅",
+            emp_role: "사원",
+            emp_firstDate: "2024.12.10",
+            emp_group: "프론트엔드",
+            emp_birthDate: "1999.01.20",
+            emp_phone: "010-0000-0000",
+            created_at: "2024.12.10"
+        },
+        {
+            emp_id: "241210004",
+            emp_name: "전석현",
+            emp_role: "사원",
+            emp_firstDate: "2024.12.10",
+            emp_group: "백엔드",
+            emp_birthDate: "1997.12.26",
+            emp_phone: "010-0000-0000",
+            created_at: "2024.12.10"
+        },
+        {
+            emp_id: "241210005",
+            emp_name: "김민정",
+            emp_role: "사원",
+            emp_firstDate: "2024.12.10",
+            emp_group: "백엔드",
+            emp_birthDate: "1993.04.21",
+            emp_phone: "010-0000-0000",
+            created_at: "2024.12.10"
+        },
+        {
+            emp_id: "241210006",
+            emp_name: "강인오",
+            emp_role: "사원",
+            emp_firstDate: "2024.12.10",
+            emp_group: "프론트엔드",
+            emp_birthDate: "1991.02.25",
+            emp_phone: "010-0000-0000",
+            created_at: "2024.12.10"
+        }
+    ];
     const [textValue, setTextValue] = useState(<Calendar />);
-    const [account, setAccount] = useState({ name: '', role: '' }) // 계정의 정보를 가져오기
-    //const check = true; // You can toggle this value to see the conditional rendering in action
-
+    const [account, setAccount] = useState() // 계정의 정보를 가져오기
+    
     useEffect(() => {
-        const fetchAccount = async () => {
-            try {
-                const response = await fetch('/api/account'); // 서버에서 계정 정보 요청
-                if (!response.ok) throw new Error('Failed to fetch account data');
-                const data = await response.json();
-                setAccount(data); // 계정 정보 업데이트
-            } catch (error) {
-                console.error('Error fetching account data:', error);
-                setAccount({ name: '김예은', role: '관리자' })
-            }
-        };
-
-        fetchAccount();
-    }, []); // 빈 배열 -> 컴포넌트가 처음 렌더링될 때만 실행
+        const storedUser = localStorage.getItem('user'); // 저장된 사용자 정보 가져오기
+    
+        if (storedUser) {
+            const userData = JSON.parse(storedUser);
+            setAccount({
+                id: "temp", // 기본적으로 "temp"로 설정
+                name: userData.name, 
+                role: userData.role
+            }); // 저장된 사용자 정보로 상태 업데이트
+        } else {
+            // 로그인되지 않은 상태 처리 (필요시)
+            console.log('로그인되지 않은 사용자');
+            setAccount({
+                id: "temp", // 기본적으로 "temp"로 설정
+                name: '김예은', 
+                role: '관리자'
+            });
+        }
+    }, []);
 
     return (
         <div>
@@ -37,7 +102,7 @@ const Main = () => {
                 <span id='logo'>
                     SAVANNAH
                 </span>
-                <div id = "account">
+                <div id="account">
                     <span>
                         <h3 id='welcome'>환영합니다. {account.name}님!({account.role})</h3>
                     </span>
@@ -70,9 +135,9 @@ const Main = () => {
 
                     {account.role === "관리자" && (
                         <>
-                            <Buttons name={'스케줄 생성'} func={() => { setTextValue(<Schedule/>); }} auth={true} />
-                            <Buttons name={'관리하기'} func={() => { setTextValue(<Management/>); }} auth={true} />
-                            <Buttons name={'QNA'} func={() => { setTextValue(<QNA/>); }} auth={true} />
+                            <Buttons name={'스케줄 생성'} func={() => { setTextValue(<Schedule />); }} auth={true} />
+                            <Buttons name={'관리하기'} func={() => { setTextValue(<Management />); }} auth={true} />
+                            <Buttons name={'QNA'} func={() => { setTextValue(<QNA />); }} auth={true} />
                         </>
                     )}
                 </div>

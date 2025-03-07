@@ -13,7 +13,8 @@ const publicPath = path.join(__dirname, "../public/")
 
 */
 
-const table = "td_account" // DB테이블의 이름
+const accountTB = "tb_account" // DB테이블의 이름
+const adminTB = "tb_admin" // DB테이블의 이름
 
 
 userRouter.post("/join", (request, response) => {
@@ -22,7 +23,7 @@ userRouter.post("/join", (request, response) => {
     // 1. 데이터 저장
     let { act_id, act_pw, act_name, act_mail } = request.body;
     // 2. sql문 작성
-    let sql = `insert into ${table}(act_id,act_pw,act_name, act_mail) values(?,?,?,?)`;
+    let sql = `insert into ${accountTB}(act_id,act_pw,act_name, act_mail) values(?,?,?,?)`;
     // 3. 쿼리문 실행
     conn.query(sql, [act_id, act_pw, act_name, act_mail], (error, result) => {
 
@@ -47,18 +48,29 @@ userRouter.post("/join", (request, response) => {
 })
 
 userRouter.post("/login", (request, response) => {
-    console.log(request.body)
     let { id, pw } = request.body;
-    let sql = `select * from ${table} where act_id = ? and act_pw = ?`;
-    //return
-    conn.query(sql, [id, pw], (error, result) => {
-        //console.log("실행결과 : ", result);
+    let sql = `
+    SELECT ${accountTB}.*, ${adminTB}.admin_id
+    FROM ${accountTB}
+    LEFT JOIN ${adminTB} ON ${accountTB}.act_id = ${adminTB}.admin_id
+    WHERE ${accountTB}.act_id = ? AND ${accountTB}.act_pw = ?;
+`;
 
-        // select문은 리턴결과가 리스트 형태로 반환 -> 데이터가 있으면 리스트의 길이가 0보다 크다
+    conn.query(sql, [id, pw], (error, result) => {
         if (result?.length > 0) {
+            const user = result[0]; // DB에서 가져온 첫 번째 사용자 정보
+
+            // 동적으로 role 설정 (관리자인지 사원인지)
+            const role = user.admin_id ? "관리자" : "사원";
+
             response.json({
                 success: true,
-                message: "로그인 성공"
+                message: "로그인 성공",
+                user: {
+                    id: user.act_id,
+                    name: user.act_name,
+                    role: role, // 동적으로 role 설정
+                }
             });
         } else {
             response.json({
@@ -66,15 +78,8 @@ userRouter.post("/login", (request, response) => {
                 message: "아이디 또는 비밀번호가 잘못되었습니다."
             });
         }
-        // if (result?.length > 0) {
-        //     response.redirect("/system")
-        // }
-        // else {
-        //     console.log("실패")
-        //     response.redirect("/")
-        // }
     });
-})
+});
 
 userRouter.post("/delete", (request, response) => {
     console.log(request.body)
