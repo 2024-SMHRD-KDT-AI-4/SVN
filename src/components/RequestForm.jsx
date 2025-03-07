@@ -15,11 +15,31 @@ const RequestForm = () => {
         { startDate: "25-03-06", endDate: "25-03-06", days: "1", reason: "병가", confirm: true },
         { startDate: "25-03-06", endDate: "25-03-06", days: "1", reason: "병가", confirm: false },
     ])
-    const [selectedLists, setSelectedLists] = useState([]); // 체크된 조직들의 ID를 관리
+    const [selectedLists, setSelectedLists] = useState([]); // 선택된 항목을 저장
+
+    // 체크박스 선택 시 선택 리스트 업데이트
+    const handleCheckboxChange = (index) => {
+        setSelectedLists((prev) =>
+            prev.includes(index)
+                ? prev.filter((i) => i !== index) // 이미 체크된 경우 제거
+                : [...prev, index] // 체크되지 않은 경우 추가
+        );
+    };
+
+    // 삭제 버튼 클릭 시 선택된 항목 제거하는 함수
+    const handleDelete = () => {
+        setCompletes((prevCompletes) => 
+            prevCompletes.filter((_, index) => !selectedLists.includes(index))
+        );
+        setSelectedLists([]); // 삭제 후 선택 초기화
+    };
+
+
+
     return (
         <div>
             <h4>요청하기</h4>
-            <div style={{ display: "flex", flexDirection: "row", alignContent: "space-around", gap: "20px", marginTop: "100px" }}>
+            <div style={{ display: "flex", flexDirection: "row", alignContent: "space-around", gap: "20px", marginTop: "50px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                     {/* 휴가 및 병가 */}
                     <div>
@@ -39,29 +59,22 @@ const RequestForm = () => {
                         <ReqSpace />
                     </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "20px", background: "grey" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "20px", background: "#fafafa" }}>
                     <div>
                         <span>내역</span>
                         <button>수정</button>
-                        <button>삭제</button>
+                        {/* 삭제 버튼 클릭 시 선택된 항목 삭제 */}
+                        <button onClick={handleDelete}>삭제</button>
                     </div>
                     <div>
-
-                        {/* <ReqComplete /> */}
                         {completes.map((item, index) => (
-                            <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+                            <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
+                                {/* 체크박스 선택 시 선택 리스트 업데이트 */}
                                 <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                                     <input
                                         type="checkbox"
-                                        onChange={(e) => {
-                                            let aa = index;
-                                            console.log(aa);
-
-                                        }}
-                                            
-                                            
-                                            
-                                        // checked={selectedLists.length === workData.length && workData.length > 0}
+                                        onChange={() => handleCheckboxChange(index)}
+                                        checked={selectedLists.includes(index)}
                                     />
                                 </span>
                                 <ReqComplete
@@ -80,6 +93,6 @@ const RequestForm = () => {
             </div>
         </div>
     );
-}
+};
 
 export default RequestForm;
