@@ -94,7 +94,7 @@ const Main = () => {
             console.log('로그인되지 않은 사용자');
             setAccount({
                 id: "temp", // 기본적으로 "temp"로 설정
-                name: '김예은', 
+                name: '테스터', 
                 role: '관리자'
             });
         }

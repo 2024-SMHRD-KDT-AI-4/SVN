@@ -54,7 +54,7 @@ userRouter.post("/login", (request, response) => {
     FROM ${accountTB}
     LEFT JOIN ${adminTB} ON ${accountTB}.act_id = ${adminTB}.admin_id
     WHERE ${accountTB}.act_id = ? AND ${accountTB}.act_pw = ?;
-`;
+    `;
 
     conn.query(sql, [id, pw], (error, result) => {
         if (result?.length > 0) {
@@ -63,6 +63,9 @@ userRouter.post("/login", (request, response) => {
             // 동적으로 role 설정 (관리자인지 사원인지)
             const role = user.admin_id ? "관리자" : "사원";
 
+            console.log(user, role);
+
+            // 응답에서 비밀번호를 제외한 정보만 반환
             response.json({
                 success: true,
                 message: "로그인 성공",
@@ -73,6 +76,7 @@ userRouter.post("/login", (request, response) => {
                 }
             });
         } else {
+            console.log("로그인 실패");
             response.json({
                 success: false,
                 message: "아이디 또는 비밀번호가 잘못되었습니다."
@@ -80,6 +84,8 @@ userRouter.post("/login", (request, response) => {
         }
     });
 });
+
+
 
 userRouter.post("/delete", (request, response) => {
     console.log(request.body)
