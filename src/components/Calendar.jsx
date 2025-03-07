@@ -1,9 +1,17 @@
-import {React,  useState } from "react";
+import { React, useState } from "react";
 import styles from "../Calendar.module.css";
+
 
 const Calendar = () => { // 현 컴포넌트의 함수실행
     const [currentDate, setCurrentDate] = useState(new Date()); //  오늘의 날짜를 담을 State 변수
     // %주의% new Date() : Date라는 클래스를 이용해서 생성한 인스턴스(인스턴스 명 : currentDate)
+
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+    const [selectedDate, setSelectedDate] = useState(null); // 선택한 날짜 저장
+    const [events, setEvents] = useState({}); // 날짜별 이벤트 저장
+    const [newEvent, setNewEvent] = useState(""); // 새 이벤트 입력 값
+
+
 
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; //1주일(7일)을 담은 리스트 상수(const) 변수
 
@@ -25,6 +33,22 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
         income = income === 0 ? 7 : income; // 결과를 재할당
         return income; // 반환
     };
+
+    const addEvent = () => {
+        if (!newEvent.trim()) return; // 빈 값 방지
+
+        setEvents((prevEvents) => ({
+            ...prevEvents,
+            [selectedDate]: Array.isArray(prevEvents[selectedDate]) // 기존에 배열인지 확인
+                ? [...prevEvents[selectedDate], newEvent] // 배열이면 기존 이벤트에 추가
+                : [newEvent], // 배열이 아니면 새 배열 생성
+        }));
+
+        setNewEvent(""); // 입력 필드 초기화
+        setIsModalOpen(false); // 모달 닫기
+    };
+
+
 
     const renderDays = () => { // 실질적인 캘린더의 전체적 표시와 배치를 맡는 함수, day라는 리스트를 return(반환)
         const year = currentDate.getFullYear(); // 오늘 날짜 기준의 년
@@ -50,18 +74,25 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
             );
         }
 
-        for (let day = 1; day <= daysInMonth; day++) { // 2025년 2월 기준 28회 반복
-
-            // 2025년 2월달의 일의 모음(1~28)
+        for (let day = 1; day <= daysInMonth; day++) {
+            const formattedDate = `${year}-${month + 1}-${day}`; // YYYY-M-D 형식
             days.push(
-
-
                 <div
                     key={day}
                     className={styles.active}
-                    onClick={() => console.log(`${day}`)}
+                    onClick={() => {
+                        setSelectedDate(formattedDate);
+                        setIsModalOpen(true);
+                    }}
                 >
-                    {day}
+                    <span className={styles.dayNumber}>{day}</span>
+                    <span className={styles.eventsContainer}>
+                        {Array.isArray(events[formattedDate]) &&
+                            events[formattedDate].map((event, index) => (
+                                <span key={index} className={styles.event} title={event}>{event}</span>
+                            ))
+                        }
+                    </span>
                 </div>
             );
         }
@@ -101,6 +132,30 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
                 ))}
             </div>
             <div className={styles.days}>{renderDays()}</div>
+            {isModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <h3>{selectedDate}</h3>
+                        <div className={styles.eventList}>
+                            {events[selectedDate] ? (
+                                events[selectedDate].map((event, index) => (
+                                    <p key={index} className={styles.eventText}>{event}</p>
+                                ))
+                            ) : (
+                                <p>저장된 이벤트가 없습니다.</p>
+                            )}
+                        </div>
+                        <input
+                            type="text"
+                            value={newEvent}
+                            onChange={(e) => setNewEvent(e.target.value)}
+                            placeholder="새 이벤트 추가"
+                        />
+                        <button onClick={addEvent} className={styles.addButton}>추가</button>
+                        <button onClick={() => setIsModalOpen(false)} className={styles.closeButton}>닫기</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
