@@ -73,8 +73,12 @@ const Main = () => {
         }
     ];
     const [textValue, setTextValue] = useState(<Calendar />);
-    const [account, setAccount] = useState() // 계정의 정보를 가져오기
-    
+    const [account, setAccount] = useState({
+        id: "temp", // 기본값
+        name: "Unknown", // 기본값
+        role: "Unknown", // 기본값
+    });
+
     useEffect(() => {
         const storedUser = localStorage.getItem('user'); // 저장된 사용자 정보 가져오기
     
@@ -82,9 +86,9 @@ const Main = () => {
             const userData = JSON.parse(storedUser);
             setAccount({
                 id: "temp", // 기본적으로 "temp"로 설정
-                name: userData.name, 
-                role: userData.role
-            }); // 저장된 사용자 정보로 상태 업데이트
+                name: userData?.name || 'Unknown', // name이 없을 경우 기본값
+                role: userData?.role || 'Unknown' // role이 없을 경우 기본값
+            });
         } else {
             // 로그인되지 않은 상태 처리 (필요시)
             console.log('로그인되지 않은 사용자');
