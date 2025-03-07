@@ -1,61 +1,50 @@
 import React, { useState } from 'react';
 
-const LoginPage = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+// 더미 Q&A 데이터
+const qnaData = [
+  { question: "스케줄 자동화 시스템이란 무엇인가요?", answer: "스케줄 자동화 시스템은 미리 설정한 주기나 시간에 따라 특정 작업을 자동으로 실행하는 시스템입니다. 예를 들어, 매일 정해진 시간에 질문을 시스템에 자동으로 추가하거나, 주기적으로 Q&A 시스템을 점검하고, 리포트를 자동으로 생성하는 등의 작업을 할 수 있습니다." },
+  { question: "시스템에서 자동화가 필요한 이유는 무엇인가요?", answer: "시간 절약: 관리자가 매번 수동으로 작업할 필요 없이 시스템이 자동으로 반복 작업을 처리할 수 있습니다." },
+  { question: "시스템에서 자동화가 필요한 이유는 무엇인가요?", answer: "정기적 관리: 예를 들어, 매일/매주/매월 정기적으로 Q&A 업데이트, 백업, 리포트 생성을 할 수 있습니다." },
+  { question: "시스템에서 자동화가 필요한 이유는 무엇인가요?", answer: "알림 및 업데이트: 사용자에게 새로운 답변이나 중요 공지사항을 자동으로 알릴 수 있습니다." },
+  { question: "시스템에서 자동화 외에 추가로 고려해야 할 점은 무엇인가요?", answer: "보안: 자동화된 시스템이 잘못된 데이터를 처리하거나 악용되지 않도록 보안에 신경을 써야 합니다." }
+];
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
+const QnaSearch = ({ name, func, auth = false }) => {
+  // 상태 관리
+  const [searchTerm, setSearchTerm] = useState("");  // 검색어 상태
+  const filteredQna = qnaData.filter(
+    (item) =>
+      item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.answer.toLowerCase().includes(searchTerm.toLowerCase())
+  );  // 검색어로 필터링된 데이터
 
   return (
-
     <div>
-      <h1>Q&A</h1>
-      <div>
-        <h2>일정 확인 스케줄</h2>
-        <h3>날짜 : 2025년도 전체</h3>
-        <h4>1. 관리자 Q&A : 2. 카페관계자 Q&A</h4>
-        <h5>관리자가 근무요청시 발생상황에 대해 매니저에게 문의하시기 바랍니다.</h5>
-        <h6>안녕하십니까? 어서오십시오.</h6>
-<h7>우리 카페는 고객에게 따뜻한 커피와 편안한 공간을 제공합니다.</h7>
-<br />
-<br />
-<h8>고객님이 편안히 쉬면서 소중한 시간을 보낼 수 있도록, 항상 깔끔하고 아늑한 분위기를 유지하는 것이 우리의 목표입니다.</h8>
-<br />
-<br />
-<h9>Q: 카페 스케줄을 자동화하는 이유는 무엇인가요?</h9>
-<br />
-<h10>A: 자동화 시스템을 도입하면 직원들의 근무 시간을 효율적으로 관리할 수 있고, 휴식 시간이나 근무 교대 시간도 자동으로 조정되어 인력 낭비를 줄일 수 있습니다. 또한, 실시간으로 근무 현황을 파악할 수 있어 인력 배치가 더욱 유연해집니다.</h10>
-<br />
-<br />
-<h11>Q: 직원들이 근무 스케줄을 변경하려면 어떻게 해야 하나요?</h11>
-<br />
-<h12>A: 스케줄 자동화 시스템에서는 직원들이 온라인으로 직접 변경 요청을 할 수 있습니다. 관리자 승인 후 변경 사항이 적용되며, 모든 직원에게 즉시 업데이트된 스케줄이 통보됩니다.</h12>
-<br />
-<br />
-<h13>Q: 직원들의 휴가나 휴일은 어떻게 관리하나요?</h13>
-<br />
-<h14>A: 자동화 시스템은 직원들의 휴가 일정을 미리 등록하고, 일정에 맞춰 자동으로 근무 스케줄을 재조정할 수 있습니다. 또한, 휴가나 휴일을 자동으로 반영하여 스케줄을 최적화합니다.</h14>
-<br />
-<br />
-<h15>Q: 직원들이 초과 근무를 했을 때, 보상은 어떻게 관리되나요?</h15>
-<br />
-<h16>A: 자동화 시스템은 직원들의 휴가 일정을 미리 등록하고, 일정에 맞춰 자동으로 근무 스케줄을 재조정할 수 있습니다. 또한, 휴가나 휴일을 자동으로 반영하여 스케줄을 최적화합니다.</h16>
-<br />
-<br />
-<h17>Q: 스케줄 정보 보안은 어떻게 관리하나요?</h17>
-<br />
-<h18>A: 자동화 시스템은 강력한 보안 체계를 갖추고 있으며, 관리자와 직원은 각각 인증을 통해 접속하고, 데이터는 암호화되어 안전하게 보호됩니다.</h18>
+      <h1>Q&A 검색</h1>
 
-        </div>
-      </div>
+      {/* 검색 입력 필드 */}
+      <input
+        type="text"
+        placeholder="검색어를 입력하세요..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}  // 검색어 상태 업데이트
+      />
 
-   
+      {/* 검색 결과 */}
+      <ul>
+        {filteredQna.length > 0 ? (
+          filteredQna.map((item, index) => (
+            <li key={index}>
+              <strong>질문:</strong> {item.question}<br />
+              <strong>답변:</strong> {item.answer}
+            </li>
+          ))
+        ) : (
+          <li>검색 결과가 없습니다.</li>
+        )}
+      </ul>
+    </div>
+  )}
 
-  );
-}
-export default LoginPage;
+
+export default QnaSearch;
