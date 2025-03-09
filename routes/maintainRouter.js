@@ -56,7 +56,7 @@ maintainRouter.post('/addEmployees', async (req, res) => {
             }
 
             if (result?.affectedRows > 0) {
-                console.log('직원 추가 성공:', result);
+                //console.log('직원 추가 성공:', result);
                 res.status(201).json({ message: '직원 추가 성공', data: result });
             } else {
                 console.log('직원 추가 실패: 변화 없음');

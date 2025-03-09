@@ -129,39 +129,50 @@ const ManEmplyee = () => {
     };
 
     const handleAddWorker = async (newWorker) => {
+
+        // 새로운 직원 정보 변수 선언
+        let temp_employeeId = `25030600${workerData.length + 1}`; // 직원번호 변수
+        let temp_name = `${newWorker.name}${workerData.length + 1}`  || `테스트맨`; // 이름 변수
+        let temp_position = newWorker.position || "테스트"; // 직책 변수
+        let temp_joinDate = newWorker.joinDate || "2025.03.06"; // 입사일 변수
+        let temp_department = newWorker.department || "테스트부서"; // 조직 변수
+        let temp_dob = newWorker.dob || "2025.03.06"; // 생년월일 변수
+        let temp_phone = newWorker.phone || "010-1234-5678"; // 연락처 변수
+        let temp_email = newWorker.email || "newworker@com"; // 이메일 변수
+
         try {
             // DB에 새 직원 추가 요청
             const response = await axios.post("/management/addEmployees", {
-                employeeId: `25030600${workerData.length + 1}`, // 새로운 직원번호
-                name: newWorker.name || `새직원${workerData.length + 1}`, // 이름
-                position: newWorker.position || "사원", // 직책
-                joinDate: newWorker.joinDate || "2025.03.06", // 입사일
-                department: newWorker.department || "부서 없음", // 조직
-                dob: newWorker.dob || "19900000", // 생년월일
-                phone: newWorker.phone || "010-0000-0000", // 연락처
-                email: newWorker.email || "newworker@gmail.com", // 이메일
+                employeeId: temp_employeeId, // 새로운 직원번호
+                name: temp_name, // 이름
+                position: temp_position, // 직책
+                joinDate: temp_joinDate, // 입사일
+                department: temp_department, // 조직
+                dob: temp_dob, // 생년월일
+                phone: temp_phone, // 연락처
+                email: temp_email // 이메일
             });
 
             // 서버로부터 저장된 데이터를 가져옴
             const savedWorker = response.data;
+            //console.log(savedWorker);
 
             // 새로운 직원 데이터를 세션 저장소에 먼저 저장
             const updatedWorkerData = [
                 ...workerData,
-                [
-                    savedWorker.emp_id,
-                    savedWorker.emp_name,
-                    savedWorker.emp_role,
-                    savedWorker.emp_firstDate,
-                    savedWorker.emp_group,
-                    savedWorker.emp_birthDate,
-                    savedWorker.emp_phone,
-                    savedWorker.emp_email,
-                    savedWorker.employeeId,
-
-                ],
+                {
+                    emp_id: temp_employeeId,
+                    emp_name: temp_name,
+                    emp_role: temp_position,
+                    emp_firstDate: temp_joinDate,
+                    emp_group: temp_department,
+                    emp_birthDate: temp_dob,
+                    emp_phone: temp_phone,
+                    emp_email: temp_email,
+                    created_at: new Date().toISOString() // 현재 시간
+                }
             ];
-
+            console.log(updatedWorkerData)
             sessionStorage.setItem('workerData', JSON.stringify(updatedWorkerData)); // 세션 저장소에 저장
 
             // 세션 저장소에 저장된 데이터로 상태 업데이트

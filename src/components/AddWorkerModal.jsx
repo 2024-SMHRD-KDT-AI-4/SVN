@@ -34,6 +34,37 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
         });
     };
 
+    const testSubmit = () => {
+
+        // 테스트 데이터로 설정
+        const testData = {
+            name: "테스트맨",
+            position: "테스트",
+            joinDate: "2025.03.06",
+            department: "테스트부서",
+            dob: "2025.03.06",
+            phone: "010-1234-5678",
+            email: "test@gmail.com",
+        };
+        // 상태 업데이트
+        setFormData(testData);
+        console.log(testData);  // 테스트 데이터를 콘솔에 출력
+
+        // 상태 업데이트 후 부모에게 데이터 전달
+        onSubmit(testData);
+        
+        // 폼 데이터 초기화
+        setFormData({
+            name: "",
+            position: "",
+            joinDate: "",
+            department: "",
+            dob: "",
+            phone: "",
+            email: "",
+        });
+    };
+
     // isOpen이 false일 경우, 모달을 렌더링하지 않음
     if (!isOpen) return null;
 
@@ -102,6 +133,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
                 {/* 취소 및 저장 버튼 */}
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
                     <button onClick={onClose} style={{ padding: "5px 10px" }}>취소</button>  {/* 취소 버튼: 모달 닫기 */}
+                    <button onClick={testSubmit} style={{ padding: "5px 10px" }}>테스트</button>  {/* 테스트 버튼: 데이터 저장 */}
                     <button onClick={handleSubmit} style={{ padding: "5px 10px" }}>저장</button>  {/* 저장 버튼: 데이터 저장 */}
                 </div>
             </div>
