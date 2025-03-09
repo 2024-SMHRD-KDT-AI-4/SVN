@@ -1,17 +1,93 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import Modal from "./AddWorkerModal";
-
+import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 const ManEmplyee = () => {
-    const [workerData, setWorkerData] = useState([
-        ["241210001", "김예은", "팀장", "2024.12.10", "백엔드", "2001.05.07", "010-0000-0000", "temp@gmail.com"],
-        ["241210002", "안지운", "부팀장", "2024.12.10", "프론트엔드", "1999.11.23", "010-0000-0000", "temp@gmail.com"],
-        ["241210003", "김현웅", "사원", "2024.12.10", "프론트엔드", "1999.01.20", "010-0000-0000", "temp@gmail.com"],
-        ["241210004", "전석현", "사원", "2024.12.10", "백엔드", "1997.12.26", "010-0000-0000", "temp@gmail.com"],
-        ["241210005", "김민정", "사원", "2024.12.10", "백엔드", "1993.04.21", "010-0000-0000", "temp@gmail.com"],
-        ["241210006", "강인오", "사원", "2024.12.10", "프론트엔드", "1991.02.25", "010-0000-0000", "kanginoh@gmail.com"],
-    ]);
+    const [workerData, setWorkerData] = useState([]);
     const [selectedWorkers, setSelectedWorkers] = useState([]); // 체크된 직원들의 ID를 관리
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        const storedWorkers = sessionStorage.getItem('workerData'); // 저장된 사용자 정보 가져오기
+        //console.log("한번실행")
+        if (storedWorkers) {
+            const parsedData = JSON.parse(storedWorkers);
+            //console.log("직원데이터 :", parsedData);
+            setWorkerData(parsedData);
+        } else {
+            // 로그인되지 않은 상태 처리 (필요시)
+            console.log('로그인되지 않은 사용자');
+            const temps = [
+                {
+                    emp_id: "241210001",
+                    emp_name: "김예은",
+                    emp_role: "팀장",
+                    emp_firstDate: "2024.12.10",
+                    emp_group: "백엔드",
+                    emp_birthDate: "2001.05.07",
+                    emp_phone: "010-0000-0000",
+                    emp_email: "temp@gmail.com",
+                    created_at: "2024.12.10"
+                },
+                {
+                    emp_id: "241210002",
+                    emp_name: "안지운",
+                    emp_role: "부팀장",
+                    emp_firstDate: "2024.12.10",
+                    emp_group: "프론트엔드",
+                    emp_birthDate: "1999.11.23",
+                    emp_phone: "010-0000-0000",
+                    emp_email: "temp@gmail.com",
+                    created_at: "2024.12.10"
+                },
+                {
+                    emp_id: "241210003",
+                    emp_name: "김현웅",
+                    emp_role: "사원",
+                    emp_firstDate: "2024.12.10",
+                    emp_group: "프론트엔드",
+                    emp_birthDate: "1999.01.20",
+                    emp_phone: "010-0000-0000",
+                    emp_email: "temp@gmail.com",
+                    created_at: "2024.12.10"
+                },
+                {
+                    emp_id: "241210004",
+                    emp_name: "전석현",
+                    emp_role: "사원",
+                    emp_firstDate: "2024.12.10",
+                    emp_group: "백엔드",
+                    emp_birthDate: "1997.12.26",
+                    emp_phone: "010-0000-0000",
+                    emp_email: "temp@gmail.com",
+                    created_at: "2024.12.10"
+                },
+                {
+                    emp_id: "241210005",
+                    emp_name: "김민정",
+                    emp_role: "사원",
+                    emp_firstDate: "2024.12.10",
+                    emp_group: "백엔드",
+                    emp_birthDate: "1993.04.21",
+                    emp_phone: "010-0000-0000",
+                    emp_email: "temp@gmail.com",
+                    created_at: "2024.12.10"
+                },
+                {
+                    emp_id: "241210006",
+                    emp_name: "강인오",
+                    emp_role: "사원",
+                    emp_firstDate: "2024.12.10",
+                    emp_group: "프론트엔드",
+                    emp_birthDate: "1991.02.25",
+                    emp_phone: "010-0000-0000",
+                    emp_email: "temp@gmail.com",
+                    created_at: "2024.12.10"
+                }
+            ];
+            setWorkerData(temps);
+        }
+    }, []);
+
 
     const handleCheckboxChange = (code) => {
         setSelectedWorkers((prev) =>
@@ -22,11 +98,12 @@ const ManEmplyee = () => {
     };
 
     const btnRemoveWorker = () => {
-        setWorkerData(workerData.filter((worker) => !selectedWorkers.includes(worker[0])));
+        setWorkerData(workerData.filter((worker) => !selectedWorkers.includes(worker.emp_id)));
         setSelectedWorkers([]); // 삭제 후 선택 초기화
     };
 
     const workerLine = (id, name, role, firstDate, group, birthDate, phone, email) => {
+        //console.log(id, name, role, firstDate, group, birthDate, phone, email)
         return (
             <div>
                 <div style={{ display: "flex", gap: "25px" }}>
@@ -51,27 +128,56 @@ const ManEmplyee = () => {
         );
     };
 
-    const handleAddWorker = (newWorker) => {
-        setWorkerData([
-            ...workerData,
-            [
-                `25030600${workerData.length + 1}`, // 새로운 직원번호
-                newWorker.name || `새직원${workerData.length + 1}`, // 이름
-                newWorker.position || "사원", // 직책
-                newWorker.joinDate || "2025.03.06", // 입사일
-                newWorker.department || "부서 없음", // 조직
-                newWorker.dob || "19900000", // 생년월일
-                newWorker.phone || "010-0000-0000", // 연락처
-                newWorker.email || "newworker@gmail.com", // 이메일
-            ],
-        ]);
-        setIsModalOpen(false); // 모달 닫기
+    const handleAddWorker = async (newWorker) => {
+        try {
+            // DB에 새 직원 추가 요청
+            const response = await axios.post("/management/addEmployees", {
+                employeeId: `25030600${workerData.length + 1}`, // 새로운 직원번호
+                name: newWorker.name || `새직원${workerData.length + 1}`, // 이름
+                position: newWorker.position || "사원", // 직책
+                joinDate: newWorker.joinDate || "2025.03.06", // 입사일
+                department: newWorker.department || "부서 없음", // 조직
+                dob: newWorker.dob || "19900000", // 생년월일
+                phone: newWorker.phone || "010-0000-0000", // 연락처
+                email: newWorker.email || "newworker@gmail.com", // 이메일
+            });
+
+            // 서버로부터 저장된 데이터를 가져옴
+            const savedWorker = response.data;
+
+            // 새로운 직원 데이터를 세션 저장소에 먼저 저장
+            const updatedWorkerData = [
+                ...workerData,
+                [
+                    savedWorker.emp_id,
+                    savedWorker.emp_name,
+                    savedWorker.emp_role,
+                    savedWorker.emp_firstDate,
+                    savedWorker.emp_group,
+                    savedWorker.emp_birthDate,
+                    savedWorker.emp_phone,
+                    savedWorker.emp_email,
+                    savedWorker.employeeId,
+
+                ],
+            ];
+
+            sessionStorage.setItem('workerData', JSON.stringify(updatedWorkerData)); // 세션 저장소에 저장
+
+            // 세션 저장소에 저장된 데이터로 상태 업데이트
+            setWorkerData(updatedWorkerData); // 상태 업데이트
+
+            setIsModalOpen(false); // 모달 닫기
+        } catch (error) {
+            console.error("Failed to add worker:", error);
+            alert("직원을 추가하는 데 실패했습니다. 다시 시도해주세요.");
+        }
     };
+
 
     const btnAddWorker = () => {
         setIsModalOpen(true); // 모달 열기
     };
-
     return (
         <div style={{ width: "1600px" }}>
             <h2 style={{ margin: 0, marginRight: "20px" }}>직원관리</h2>
@@ -118,7 +224,7 @@ const ManEmplyee = () => {
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            onChange={(e) => setSelectedWorkers(e.target.checked ? workerData.map((w) => w[0]) : [])}
+                            onChange={(e) => setSelectedWorkers(e.target.checked ? workerData.map((w) => w.emp_id) : [])}
                             checked={selectedWorkers.length === workerData.length && workerData.length > 0}
                         />
                     </span>
@@ -133,9 +239,18 @@ const ManEmplyee = () => {
                 </div>
                 <hr style={{ marginBottom: "25px" }} />
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {workerData.map((worker) =>
-                        workerLine(worker[0], worker[1], worker[2], worker[3], worker[4], worker[5], worker[6], worker[7])
-                    )}
+                    {/* 객체를 배열처리해줘야  map함수 사용 가능 */}
+                    <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
+                        {workerData.map(worker => workerLine(
+                            worker.emp_id,
+                            worker.emp_name,
+                            worker.emp_role,
+                            worker.emp_firstDate,
+                            worker.emp_group,
+                            worker.emp_birthDate,
+                            worker.emp_phone,
+                            worker.emp_email,))}
+                    </div>
                 </div>
             </div>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddWorker} />

@@ -63,7 +63,7 @@ userRouter.post("/login", (request, response) => {
             // 동적으로 role 설정 (관리자인지 사원인지)
             const role = user.admin_id ? "관리자" : "사원";
 
-            console.log(user, role);
+            //console.log(user, role);
 
             // 응답에서 비밀번호를 제외한 정보만 반환
             response.json({
