@@ -1,5 +1,0 @@
-DELETE FROM tb_employee WHERE emp_id = '25030600NaN';
-DELETE FROM tb_employee WHERE emp_id = '250306008';
-
-DELETE FROM 테이블명 WHERE 조건;
-DELETE FROM employees WHERE emp_name = '테스트맨';

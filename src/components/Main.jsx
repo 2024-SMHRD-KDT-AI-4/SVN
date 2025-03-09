@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 import Buttons from './Buttons';
 import Calendar from './Calendar';
+import Chatting from './Chatting';
 import Attendance from './Attendance';
 import Management from './Management';
 import Schedule from './Schedule';
@@ -76,13 +77,17 @@ const Main = () => {
                 <div id="account">
                     {/* 사용자 정보 표시 */}
                     <h3 id='welcome'>환영합니다. {account.name}님!({account.role})</h3>
+                    {/* 알림표시 아이콘 */}
+                    <img src="#" alt="알림" srcset="" />
+                     {/* 계정 접속자의 사진 */}
+                    <img src="#" alt="사진" srcset="" />
                 </div>
             </div>
             <hr />
             <div style={{ display: 'flex' }}>
                 <div id='buttonGroup'>
-                    <Buttons className="funcButton" name={'메인'} func={() => { setTextValue(<Calendar />); }} />
-                    <Buttons className="funcButton" name={'작은달력'} func={() => { setTextValue('작은달력'); }} />
+                    <Buttons className="funcButton" name={'메인'} func={() => { setTextValue(<Calendar />); }} />              
+                    <Buttons className="funcButton" name={'채팅'} func={() => { setTextValue(<Chatting />); }} />
                     <Buttons className="funcButton" name={'할일'} func={() => { setTextValue(<Attendance />); }} />
                     <Buttons className="funcButton" name={'요청하기'} func={() => { setTextValue(<RequestForm />); }} />
 
@@ -90,7 +95,6 @@ const Main = () => {
                         <>
                             <Buttons className="funcButton_auth" name={'스케줄 생성'} func={() => { setTextValue(<Schedule />); }} auth={true} />
                             <Buttons className="funcButton_auth" name={'관리하기'} func={() => { setTextValue(<Management />); }} auth={true} />
-                            <Buttons className="funcButton_auth" name={'테스트'} func={() =>{console.log(JSON.parse(sessionStorage.getItem('workerData')))}} auth={true} />
                             <Buttons className="funcButton_auth" name={'QNA'} func={() => { setTextValue(<QNA />); }} auth={true} />
                         </>
                     )}

@@ -1,0 +1,12 @@
+DELETE FROM tb_employee WHERE emp_id = '25030600NaN';
+DELETE FROM tb_employee WHERE emp_id = '250306008';
+
+DELETE FROM 테이블명 WHERE 조건;
+DELETE FROM employees WHERE emp_name = '테스트맨';
+
+CREATE TABLE td_chating (
+  chat_id INT AUTO_INCREMENT PRIMARY KEY,
+  chat_name TEXT NOT NULL,
+  chat_message TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
