@@ -1,0 +1,12 @@
+// 데이터 저장
+sessionStorage.setItem("username", "Alice");
+
+// 데이터 읽기
+const username = sessionStorage.getItem("username");
+console.log(username); // "Alice"
+
+// 데이터 삭제
+sessionStorage.removeItem("username");
+
+// 모든 데이터 삭제
+sessionStorage.clear();

@@ -21,7 +21,7 @@ const MainPage = () => {
                 console.log('사용자 정보:', userData);
                 
                 // 로컬스토리지에 사용자 정보 저장 (email 제외)
-                localStorage.setItem('user', JSON.stringify(userData));
+                sessionStorage.setItem('user', JSON.stringify(userData));
                 
                 // 시스템 페이지로 이동
                 navigate('/system');

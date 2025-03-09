@@ -80,7 +80,7 @@ const Main = () => {
     });
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user'); // 저장된 사용자 정보 가져오기
+        const storedUser = sessionStorage.getItem('user'); // 저장된 사용자 정보 가져오기
     
         if (storedUser) {
             const userData = JSON.parse(storedUser);
