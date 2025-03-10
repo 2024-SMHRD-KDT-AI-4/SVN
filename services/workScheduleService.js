@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../config/db');
 
 // ✅ 근무 시간 + 근무 유형 설정 로직
 const setWorkSchedule = async (req, res) => {

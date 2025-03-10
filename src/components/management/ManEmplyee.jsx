@@ -1,10 +1,12 @@
 import { React, useState, useEffect } from "react";
 import AddWorkerModal from "../modals/AddWorkerModal";
+import DeleteWorkerModal from "../modals/DeleteWorkerModal";
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 const ManEmplyee = () => {
     const [workerData, setWorkerData] = useState([]);
     const [selectedWorkers, setSelectedWorkers] = useState([]); // 체크된 직원들의 ID를 관리
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isDltModalOpen, setIsDltModalOpen] = useState(false);
 
     useEffect(() => {
         const storedWorkers = sessionStorage.getItem('workerData'); // 저장된 사용자 정보 가져오기
@@ -88,9 +90,9 @@ const ManEmplyee = () => {
         }
     }, []);
 
-    useEffect(() => {
-        console.log(selectedWorkers);
-    }, [selectedWorkers]);
+    // useEffect(() => {
+    //     console.log(selectedWorkers);
+    // }, [selectedWorkers]);
 
     const handleCheckboxChange = (code) => {
         setSelectedWorkers((prev) =>
@@ -99,12 +101,8 @@ const ManEmplyee = () => {
                 : [...prev, code] // 체크되지 않은 경우 추가
         );
     };
+    //////////////////////////////////////////////////////////////////////
 
-    const btnRemoveWorker = () => {
-
-        setWorkerData(workerData.filter((worker) => !selectedWorkers.includes(worker.emp_id)));
-        setSelectedWorkers([]); // 삭제 후 선택 초기화
-    };
 
     const workerLine = (id, name, role, firstDate, group, birthDate, phone, email) => {
         //console.log(id, name, role, firstDate, group, birthDate, phone, email)
@@ -182,17 +180,59 @@ const ManEmplyee = () => {
             // 세션 저장소에 저장된 데이터로 상태 업데이트
             setWorkerData(updatedWorkerData); // 상태 업데이트
 
-            setIsModalOpen(false); // 모달 닫기
+            setIsAddModalOpen(false); // 모달 닫기
         } catch (error) {
             console.error("Failed to add worker:", error);
-            alert("직원을 추가하는 데 실패했습니다. 다시 시도해주세요.");
+            alert("직원을 tkrwp하는 데 실패했습니다. 다시 시도해주세요.");
         }
     };
-
-
-    const btnAddWorker = () => {
-        setIsModalOpen(true); // 모달 열기
+    const handleDeleteWorker = async (confirm) => {
+        if (!confirm) {
+            //console.log("삭제가 취소됨");
+            return; // 아무 동작도 하지 않음
+        }
+    
+        try {
+            // 서버에 삭제 요청
+            const response = await axios.post("/management/dltEmployees", { ids: selectedWorkers });
+            //console.log("서버에 보낸 데이터:", selectedWorkers);
+    
+            // 서버 응답 확인
+            const returnData = response.data;
+            //console.log("서버에서 받은 데이터:", returnData);
+    
+            // 응답이 성공적일 경우
+            if (response.status === 200) {
+                // 상태 업데이트
+                const updatedWorkerData = workerData.filter((worker) => !selectedWorkers.includes(worker.emp_id));
+                //console.log("업데이트된 직원 데이터:", updatedWorkerData);
+    
+                sessionStorage.setItem('workerData', JSON.stringify(updatedWorkerData)); // 세션 저장
+                setWorkerData(updatedWorkerData); // React 상태 업데이트
+                setSelectedWorkers([]); // 선택 초기화
+                setIsAddModalOpen(false); // 모달 닫기
+            } else {
+                console.error("서버 응답 오류:", response.data);
+                alert("직원 삭제 요청이 실패했습니다. 서버의 응답을 확인하세요.");
+            }
+        } catch (error) {
+            console.error("직원 삭제 요청 중 오류 발생:", error);
+            alert("직원을 삭제하는 데 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
+        }
     };
+    
+
+    ///////버튼 기능들/////////////////////////////
+    const btnAddWorker = () => {
+        setIsAddModalOpen(true); // 추가 모달 열기
+    };
+    const btnRemoveWorker = () => {
+
+        setIsDltModalOpen(true); // 삭제 모달 열기
+
+    };
+    /////////////////////////////////////////
+
     return (
         <div style={{ width: "1600px" }}>
             <h2 style={{ margin: 0, marginRight: "20px" }}>직원관리</h2>
@@ -268,8 +308,8 @@ const ManEmplyee = () => {
                     </div>
                 </div>
             </div>
-            <AddWorkerModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddWorker} />
-            <AddWorkerModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddWorker} />
+            <AddWorkerModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onSubmit={handleAddWorker} />
+            <DeleteWorkerModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteWorker} />
         </div>
     );
 };

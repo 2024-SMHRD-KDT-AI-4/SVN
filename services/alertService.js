@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../config/db');
 
 // 📌 알림 저장 함수
 async function sendAlert(emp_id, sche_idx, message) {

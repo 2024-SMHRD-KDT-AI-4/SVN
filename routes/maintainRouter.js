@@ -69,4 +69,39 @@ maintainRouter.post('/addEmployees', async (req, res) => {
     }
 });
 
+// 직원 데이터를 삭제하는 라우터
+maintainRouter.post('/dltEmployees', async (req, res) => {
+    const { ids } = req.body; // req.body에서 ids라는 배열로 여러 ID를 전달받음
+
+    // 요청받은 데이터가 문자열일 경우 파싱
+    if (typeof ids === 'string') {
+        try {
+            ids = JSON.parse(ids); // 문자열을 배열로 변환
+        } catch (error) {
+            return res.status(400).json({ message: '잘못된 데이터 형식입니다.' });
+        }
+    }
+
+    // 여러 ID를 DELETE하기 위해 IN 절 사용
+    const sql = `DELETE FROM ${employeeTB} WHERE emp_id IN (?);`;
+
+    try {
+        conn.query(sql, [ids], (error, result) => {
+            if (error) {
+                console.error('직원 삭제 중 오류:', error);
+                return res.status(500).json({ message: '직원 삭제 오류', error: error.message });
+            }
+
+            if (result.affectedRows > 0) {
+                res.status(200).json({ message: '직원 삭제 성공', data: result });
+            } else {
+                res.status(404).json({ message: '삭제할 직원이 없습니다.', data: null });
+            }
+        });
+    } catch (error) {
+        console.error('직원 삭제 중 예외:', error);
+        res.status(500).json({ message: '직원 삭제 중 서버 오류', error: error.message });
+    }
+});
+
 module.exports = maintainRouter;
