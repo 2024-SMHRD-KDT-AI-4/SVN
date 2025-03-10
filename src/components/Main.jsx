@@ -8,6 +8,7 @@ import Management from './Management';
 import Schedule from './Schedule';
 import RequestForm from './RequestForm';
 import QNA from './QNA';
+import MenuList from './MenuList'; // 🔹 메뉴 리스트 추가
 import '../App.css';
 
 const Main = () => {
@@ -69,6 +70,36 @@ const Main = () => {
 
     }, []); // 빈 배열이므로 이 useEffect는 컴포넌트가 처음 렌더링될 때만 실행됩니다.
 
+    // ✅ 메뉴 리스트에서 선택될 때 실행되는 함수
+    const handleMenuSelect = (item) => {
+        switch (item.label) {
+            case '메인':
+                setTextValue(<Calendar />);
+                break;
+            case '채팅':
+                setTextValue(<Chatting />);
+                break;
+            case '할일':
+                setTextValue(<Attendance />);
+                break;
+            case '요청하기':
+                setTextValue(<RequestForm />);
+                break;
+            case '스케줄 생성':
+                if (account.role === "관리자") setTextValue(<Schedule />);
+                break;
+            case '관리하기':
+                if (account.role === "관리자") setTextValue(<Management />);
+                break;
+            case 'QNA':
+                if (account.role === "관리자") setTextValue(<QNA />);
+                break;
+            default:
+                setTextValue(<Calendar />);
+        }
+    };
+
+
     return (
         <div>
             {/* 사용자 프로필 영역 */}
@@ -86,9 +117,26 @@ const Main = () => {
             <hr />
             <div style={{ display: 'flex' }}>
                 <div id='buttonGroup'>
-                    <Buttons className="funcButton" name={'메인'} func={() => { setTextValue(<Calendar />); }} />              
+                    {/* ✅ MenuList 추가 */}
+                    <MenuList 
+                        menuItems={[
+                            { label: '메인' },
+                            { label: '채팅' },
+                            { label: '근태' },
+                            { label: '요청하기' },
+                            ...(account.role === "관리자" ? [
+                                { label: '스케줄 생성' },
+                                { label: '관리하기' },
+                                { label: 'QNA' }
+                            ] : [])
+                        ]} 
+                        onItemSelect={handleMenuSelect} // 메뉴 클릭 시 실행할 함수 전달
+                    />
+
+                    {/* 버튼들 */}
+                    {/* <Buttons className="funcButton" name={'메인'} func={() => { setTextValue(<Calendar />); }} />              
                     <Buttons className="funcButton" name={'채팅'} func={() => { setTextValue(<Chatting />); }} />
-                    <Buttons className="funcButton" name={'할일'} func={() => { setTextValue(<Attendance />); }} />
+                    <Buttons className="funcButton" name={'근태'} func={() => { setTextValue(<Attendance />); }} />
                     <Buttons className="funcButton" name={'요청하기'} func={() => { setTextValue(<RequestForm />); }} />
 
                     {account.role === "관리자" && (
@@ -97,7 +145,7 @@ const Main = () => {
                             <Buttons className="funcButton_auth" name={'관리하기'} func={() => { setTextValue(<Management />); }} auth={true} />
                             <Buttons className="funcButton_auth" name={'QNA'} func={() => { setTextValue(<QNA />); }} auth={true} />
                         </>
-                    )}
+                    )} */}
                 </div>
                 <div id='changableView'>
                     {/* 현재 선택된 컴포넌트 표시 */}
