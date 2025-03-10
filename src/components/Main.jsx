@@ -79,7 +79,7 @@ const Main = () => {
             case '채팅':
                 setTextValue(<Chatting />);
                 break;
-            case '할일':
+            case '근태':
                 setTextValue(<Attendance />);
                 break;
             case '요청하기':
