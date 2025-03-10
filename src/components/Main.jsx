@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
-import Buttons from './Buttons';
+//import Buttons from './Buttons';
 import Calendar from './Calendar';
 import Chatting from './Chatting';
 import Attendance from './Attendance';
@@ -109,9 +109,9 @@ const Main = () => {
                     {/* 사용자 정보 표시 */}
                     <h3 id='welcome'>환영합니다. {account.name}님!({account.role})</h3>
                     {/* 알림표시 아이콘 */}
-                    <img src="#" alt="알림" srcset="" />
+                    <img src="#" alt="알림" srcSet="" />
                      {/* 계정 접속자의 사진 */}
-                    <img src="#" alt="사진" srcset="" />
+                    <img src="#" alt="사진" srcSet="" />
                 </div>
             </div>
             <hr />

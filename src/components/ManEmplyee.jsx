@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import Modal from "./AddWorkerModal";
+import AddWorkerModal from "./AddWorkerModal";
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 const ManEmplyee = () => {
     const [workerData, setWorkerData] = useState([]);
@@ -87,10 +87,10 @@ const ManEmplyee = () => {
             setWorkerData(temps);
         }
     }, []);
-    useEffect(()=>{
-        
 
-    },setSelectedWorkers);
+    useEffect(() => {
+        console.log(selectedWorkers);
+    }, [selectedWorkers]);
 
     const handleCheckboxChange = (code) => {
         setSelectedWorkers((prev) =>
@@ -101,6 +101,7 @@ const ManEmplyee = () => {
     };
 
     const btnRemoveWorker = () => {
+
         setWorkerData(workerData.filter((worker) => !selectedWorkers.includes(worker.emp_id)));
         setSelectedWorkers([]); // 삭제 후 선택 초기화
     };
@@ -267,7 +268,8 @@ const ManEmplyee = () => {
                     </div>
                 </div>
             </div>
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddWorker} />
+            <AddWorkerModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddWorker} />
+            <AddWorkerModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddWorker} />
         </div>
     );
 };
