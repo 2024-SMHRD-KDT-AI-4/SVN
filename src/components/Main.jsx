@@ -52,10 +52,10 @@ const Main = () => {
             try {
                 // 서버에 GET 요청을 보내 직원 데이터를 가져옴
                 const response = await axios.get('/management/getEmployees');
-                const fetchedWorkerData = response.data.data; // 서버에서 받은 직원 데이터
-                //console.log(fetchedWorkerData)
+                const fetchedWorkerData = JSON.stringify(response.data.data) ; // 서버에서 받은 직원 데이터
+                //console.log("직원 데이터 : ", fetchedWorkerData)
                 // 4. 받은 데이터를 세션 저장소에 저장
-                sessionStorage.setItem('workerData', JSON.stringify(fetchedWorkerData));
+                sessionStorage.setItem('employeeData', fetchedWorkerData);
 
                 // // 5. 상태 업데이트하여 UI에 직원 데이터를 반영
                 // setWorkerData(fetchedWorkerData);
@@ -65,15 +65,16 @@ const Main = () => {
             }
         };
 
-        // 3. DB에서 직원 데이터를 가져오는 함수
+        // 3. DB에서 그룹 데이터를 가져오는 함수
         const fetchGroupData = async () => {
+            //console.log("그룹 데이터 가져오기")
             try {
-                // 서버에 GET 요청을 보내 직원 데이터를 가져옴
+                // 서버에 GET 요청을 보내 그룹 데이터를 가져옴
                 const response = await axios.get('/management/getGroup');
-                const fetchedGroupData = response.data.data; // 서버에서 받은 직원 데이터
-                console.log(fetchedGroupData)
-                // 4. 받은 데이터를 세션 저장소에 저장
-                sessionStorage.setItem('groupData', JSON.stringify(fetchedGroupData));
+                const fetchedGroupData = JSON.stringify(response.data.data, null, 2); // 서버에서 받은 조직 데이터
+                //console.log("그룹 데이터:", fetchedGroupData);
+                // 4. 받은 그룹 데이터를 세션 저장소에 저장
+                sessionStorage.setItem('groupData', fetchedGroupData);
 
                 // // 5. 상태 업데이트하여 UI에 직원 데이터를 반영
                 // setWorkerData(fetchedWorkerData);
@@ -83,7 +84,7 @@ const Main = () => {
             }
         };
 
-        // 7. 페이지 로드 시 직원 데이터를 가져오는 함수 호출
+        // 7. 페이지 로드 시 데이터들을 가져오는 함수 호출
         fetchWorkerData();
         fetchGroupData();
 

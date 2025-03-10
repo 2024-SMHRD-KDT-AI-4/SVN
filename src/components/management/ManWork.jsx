@@ -3,7 +3,7 @@ import AddGroupModal from '../modals/AddGroupModal'
 
 const ManWork = () => {
     const [workData, setWorkData] = useState([
-        ["DE01", "오픈", "월급", "월,화,수,목,금", "주 40시간", "주 52시간", "정규직","매장관리자"],
+        ["DE01", "오픈", "월급", "월,화,수,목,금", "주 40시간", "주 52시간", "정규직", "매장관리자"],
         ["OE01", "오픈", "월급", "월,화,수,목,금", "주 40시간", "주 52시간", "정규직", "오픈직원"],
         ["ME01", "미들", "시급", "월,수,금", "주 24시간", "주 30시간", "계약직", "청소/재고관리"],
         ["CE01", "마감", "시급", "목,금", "주 8시간", "주 8시간", "인턴", "교육중"],
@@ -17,7 +17,8 @@ const ManWork = () => {
     // 계약유형
 
     const [selectedWorks, setSelectedWorks] = useState([]); // 체크된 조직들의 ID를 관리
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isDltModalOpen, setIsDltModalOpen] = useState(false);
 
     const groupLine = (code, wName, salary, workDates, defTime, limtTime, type, comment) => {
         return (
@@ -69,10 +70,10 @@ const ManWork = () => {
                 newWork.number || "999", // 이름
             ],
         ]);
-        setIsModalOpen(false); // 모달 닫기
+        setIsAddModalOpen(false); // 모달 닫기
     };
     const btnAddGroup = () => {
-        setIsModalOpen(true); // 모달 열기
+        setIsAddModalOpen(true); // 모달 열기
     };
     return (
         <div style={{ width: "1600px" }}>
@@ -137,13 +138,13 @@ const ManWork = () => {
                 <hr style={{ marginBottom: "25px" }} />
                 {/* 실질적인 직원 표시 */}
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {workData.map(works => groupLine(works[0], works[1], works[2], works[3], works[4], works[5],works[6],works[7]))}
+                    {workData.map(works => groupLine(works[0], works[1], works[2], works[3], works[4], works[5], works[6], works[7]))}
                 </div>
             </div>
             {/* AddWorkerModal 컴포넌트를 렌더링 */}
             <AddGroupModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)} // 모달 닫기
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)} // 모달 닫기
                 onSubmit={handleAddGroup} // 모달에서 직원 추가하기
             />
         </div>

@@ -1,12 +1,9 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import AddGroupModal from '../modals/AddGroupModal'
+import DeleteGroupModal from "../modals/DeleteGroupModal";
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 const ManGroup = () => {
-    const [groupData, setGroupData] = useState([
-        ["B1001", "팬더팀", "김예은", "백엔드", "4라인", "2"],
-        ["F1001", "너구리팀", "안지운", "프론트엔드", "4라인", "2"],
-        ["P1001", "꾀꼬리팀", "김민정", "기획", "5라인", "2"],
-    ]);
+    const [groupData, setGroupData] = useState([]);
 
     // 조직번호 (Department ID): 조직을 고유하게 식별할 수 있는 번호
     // 조직명 (Department Name): 해당 조직의 이름
@@ -15,10 +12,54 @@ const ManGroup = () => {
     // 위치 (Location): 조직이 위치한 장소
     // 인원수 (Number of Employees): 해당 조직에 소속된 직원 수
 
-
     const [selectedGroups, setSelectedGroups] = useState([]); // 체크된 조직들의 ID를 관리
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDltModalOpen, setIsDltModalOpen] = useState(false);
+
+    useEffect(() => {
+        console.log("변화된 ", selectedGroups);
+        // 테스트용 잘 선택되나 확인
+    }, [selectedGroups])
+
+    useEffect(() => {
+        const storedGroups = sessionStorage.getItem('groupData'); // 저장된 사용자 정보 가져오기
+        //console.log("한번실행")
+        if (storedGroups) {
+            const parsedData = JSON.parse(storedGroups);
+            console.log("조직 데이터 :", parsedData);
+            setGroupData(parsedData);
+        } else {
+            // 로그인되지 않은 상태 처리 (필요시)
+            console.log('로그인되지 않은 사용자');
+            const tempGroups = [
+                {
+                    group_id: "B1001",
+                    group_name: "팬더팀",
+                    group_head: "김예은",
+                    group_desc: "백엔드",
+                    group_pos: "4라인",
+                    group_count: 2,
+                },
+                {
+                    group_id: "F1001",
+                    group_name: "너구리팀",
+                    group_head: "안지운",
+                    group_desc: "프론트엔드",
+                    group_pos: "4라인",
+                    group_count: 2,
+                },
+                {
+                    group_id: "P1001",
+                    group_name: "꾀꼬리팀",
+                    group_head: "김민정",
+                    group_desc: "기획",
+                    group_pos: "5라인",
+                    group_count: 2,
+                },
+            ];
+            setGroupData(tempGroups);
+        }
+    }, []);
 
     const groupLine = (code, dpName, dpHeader, description, location, number) => {
         return (
@@ -51,20 +92,17 @@ const ManGroup = () => {
                 : [...prev, code] // 체크되지 않은 경우 추가
         );
     };
-    const btnRemoveGroup = () => {
-        setGroupData(groupData.filter((group) => !selectedGroups.includes(group[0])));
-        setSelectedGroups([]); // 삭제 후 선택 초기화
-    };
 
     const handleAddGroup = async (newGroup) => {
 
         // 새로운 그룹 정보 변수 선언
-        let temp_groupId =  newGroup.dpId || `group001`;  // 그룹 ID 변수
-        let temp_groupName =  newGroup.dpName || `테스트그룹`;  // 그룹 이름 변수
+        let temp_groupId = newGroup.dpId + `${groupData.length}` || `group001`;  // 그룹 ID 변수
+        let temp_groupName = newGroup.dpName || `테스트그룹`;  // 그룹 이름 변수
         let temp_groupHead = newGroup.dpHead || `테스트그룹장`;  // 그룹장 ID 변수
         let temp_groupDesc = newGroup.description || `테스트 그룹 설명`;  // 그룹 설명 변수
         let temp_groupPos = newGroup.location || `테스트 위치`;  // 조직 위치 변수
         let temp_groupCount = newGroup.number || 999;  // 그룹 인원 수 변수
+
         try {
             // DB에 새 그룹 추가 요청
             const response = await axios.post("/management/addGroup", {
@@ -78,12 +116,23 @@ const ManGroup = () => {
 
             // 서버로부터 저장된 데이터를 가져옴
             const incomingGroup = response.data;
-            console.log(incomingGroup);
+            //console.log("서버 요청 결과 : ", incomingGroup);
 
             // 새로운 직원 데이터를 세션 저장소에 먼저 저장
-            const updatedGroupData = incomingGroup;
-            
-            console.log(updatedGroupData)
+            const updatedGroupData = [
+                ...groupData,
+                {
+                    group_id: temp_groupId,
+                    group_name: temp_groupName,
+                    group_head: temp_groupHead,
+                    group_desc: temp_groupDesc,
+                    group_pos: temp_groupPos,
+                    group_count: temp_groupCount,
+                    created_at: new Date().toISOString() // 현재 시간
+                }
+            ];
+
+            //console.log(updatedGroupData)
             sessionStorage.setItem('groupData', JSON.stringify(updatedGroupData)); // 세션 저장소에 저장
 
             // 세션 저장소에 저장된 데이터로 상태 업데이트
@@ -91,25 +140,59 @@ const ManGroup = () => {
             setIsAddModalOpen(false); // 모달 닫기
         } catch (error) {
             console.error("Failed to add worker:", error);
-            alert("직원을 tkrwp하는 데 실패했습니다. 다시 시도해주세요.");
+            alert("그룹을 추가하는 데 실패했습니다. 다시 시도해주세요.");
         }
 
         setIsAddModalOpen(false); // 모달 닫기
+    };
+    const handleDeleteGroup = async (confirm) => {
+        if (!confirm) {
+            //console.log("삭제가 취소됨");
+            return; // 아무 동작도 하지 않음
+        }
+
+        try {
+            // 서버에 삭제 요청
+            const response = await axios.post("/management/dltGroup", { ids: selectedGroups });
+            //console.log("서버에 보낸 데이터:", selectedGroups);
+
+            // 서버 응답 확인
+            const returnData = response.data;
+            console.log("서버에서 받은 데이터:", returnData);
+
+            // 응답이 성공적일 경우
+            if (response.status === 200) {
+                // 상태 업데이트
+                const updatedGroupData = groupData.filter((group) => !selectedGroups.includes(group.group_id));
+                //console.log("업데이트된 직원 데이터:", updatedGroupData);
+
+                sessionStorage.setItem('groupData', JSON.stringify(updatedGroupData)); // 세션 저장소에 저장
+
+                setGroupData(updatedGroupData); // React 상태 업데이트
+                setSelectedGroups([]); // 선택 초기화
+                setIsAddModalOpen(false); // 모달 닫기
+            } else {
+                console.error("서버 응답 오류:", response.data);
+                alert("직원 삭제 요청이 실패했습니다. 서버의 응답을 확인하세요.");
+            }
+        } catch (error) {
+            console.error("직원 삭제 요청 중 오류 발생:", error);
+            alert("직원을 삭제하는 데 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
+        }
     };
 
     ///////버튼 기능들/////////////////////////////
     const btnAddGroup = () => {
         setIsAddModalOpen(true); // 그룹 추가 모달 열기
     };
-    const btnRemoveWorker = () => {
-
+    const btnRemoveGroup = () => {
+        if (selectedGroups.length === 0) {
+            //console.log("체크된 것이 없습니다.")
+            return // 선택된 것이 없음으로 빠져나가기
+        }
         setIsDltModalOpen(true); // 그룹 삭제 모달 열기
-
     };
     /////////////////////////////////////////
-
-
-
 
     return (
         <div style={{ width: "1600px" }}>
@@ -157,7 +240,7 @@ const ManGroup = () => {
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            onChange={(e) => setSelectedGroups(e.target.checked ? groupData.map((w) => w[0]) : [])}
+                            onChange={(e) => setSelectedGroups(e.target.checked ? groupData.map((g) => g.group_id) : [])}
                             checked={selectedGroups.length === groupData.length && groupData.length > 0}
                         />
                     </span>
@@ -170,17 +253,22 @@ const ManGroup = () => {
 
                 </div>
                 <hr style={{ marginBottom: "25px" }} />
-                {/* 실질적인 직원 표시 */}
+                {/* 객체를 배열처리해줘야  map함수 사용 가능 */}
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {groupData.map(group => groupLine(group[0], group[1], group[2], group[3], group[4], group[5]))}
+                    {
+                        groupData.map(countedGroup => groupLine(
+                            countedGroup.group_id,
+                            countedGroup.group_name,
+                            countedGroup.group_head,
+                            countedGroup.group_desc,
+                            countedGroup.group_pos,
+                            countedGroup.group_count))}
+
                 </div>
             </div>
             {/* AddWorkerModal 컴포넌트를 렌더링 */}
-            <AddGroupModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)} // 모달 닫기
-                onSubmit={handleAddGroup} // 모달에서 직원 추가하기
-            />
+            <AddGroupModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onSubmit={handleAddGroup} />
+            <DeleteGroupModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteGroup} />
         </div>
     )
 }

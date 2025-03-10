@@ -38,7 +38,34 @@ const AddGroupModal = ({ isOpen, onClose, onSubmit }) => {
             number: ""
         });
     };
+    const testSubmit = () => {
 
+        // 테스트 데이터로 설정
+        const testData = {
+            dpId: "T",
+            dpName: "테스트부서",
+            dpHead: "테스트장",
+            description: "테스트용",
+            location: "스마트",
+            number: 999,
+        };
+        // 상태 업데이트
+        setFormData(testData);
+        //console.log(testData);  // 테스트 데이터를 콘솔에 출력
+
+        // 상태 업데이트 후 부모에게 데이터 전달
+        onSubmit(testData);
+        
+        // 폼 데이터 초기화
+        setFormData({
+            dpId: "",
+            dpName: "",
+            dpHead: "",
+            description: "",
+            location: "",
+            number: ""
+        });
+    };
     // isOpen이 false일 경우, 모달을 렌더링하지 않음
     if (!isOpen) return null;
 
@@ -100,6 +127,7 @@ const AddGroupModal = ({ isOpen, onClose, onSubmit }) => {
                 {/* 취소 및 저장 버튼 */}
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
                     <button onClick={onClose} style={{ padding: "5px 10px" }}>취소</button>  {/* 취소 버튼: 모달 닫기 */}
+                    <button onClick={testSubmit} style={{ padding: "5px 10px" }}>테스트</button>  {/* 테스트 버튼: 데이터 저장 */}
                     <button onClick={handleSubmit} style={{ padding: "5px 10px" }}>저장</button>  {/* 저장 버튼: 데이터 저장 */}
                 </div>
             </div>

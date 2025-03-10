@@ -3,18 +3,18 @@ import AddWorkerModal from "../modals/AddWorkerModal";
 import DeleteWorkerModal from "../modals/DeleteWorkerModal";
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 const ManEmplyee = () => {
-    const [workerData, setWorkerData] = useState([]);
-    const [selectedWorkers, setSelectedWorkers] = useState([]); // 체크된 직원들의 ID를 관리
+    const [employeeData, setEmployeeData] = useState([]);
+    const [selectedEmployees, setSelectedEmployees] = useState([]); // 체크된 직원들의 ID를 관리
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDltModalOpen, setIsDltModalOpen] = useState(false);
 
     useEffect(() => {
-        const storedWorkers = sessionStorage.getItem('workerData'); // 저장된 사용자 정보 가져오기
+        const storedWorkers = sessionStorage.getItem('employeeData'); // 저장된 사용자 정보 가져오기
         //console.log("한번실행")
         if (storedWorkers) {
             const parsedData = JSON.parse(storedWorkers);
             //console.log("직원데이터 :", parsedData);
-            setWorkerData(parsedData);
+            setEmployeeData(parsedData);
         } else {
             // 로그인되지 않은 상태 처리 (필요시)
             console.log('로그인되지 않은 사용자');
@@ -86,16 +86,12 @@ const ManEmplyee = () => {
                     created_at: "2024.12.10"
                 }
             ];
-            setWorkerData(temps);
+            setEmployeeData(temps);
         }
     }, []);
 
-    // useEffect(() => {
-    //     console.log(selectedWorkers);
-    // }, [selectedWorkers]);
-
     const handleCheckboxChange = (code) => {
-        setSelectedWorkers((prev) =>
+        setSelectedEmployees((prev) =>
             prev.includes(code)
                 ? prev.filter((id) => id !== code) // 이미 체크된 경우 제거
                 : [...prev, code] // 체크되지 않은 경우 추가
@@ -104,7 +100,7 @@ const ManEmplyee = () => {
     //////////////////////////////////////////////////////////////////////
 
 
-    const workerLine = (id, name, role, firstDate, group, birthDate, phone, email) => {
+    const employLine = (id, name, role, firstDate, group, birthDate, phone, email) => {
         //console.log(id, name, role, firstDate, group, birthDate, phone, email)
         return (
             <div>
@@ -112,7 +108,7 @@ const ManEmplyee = () => {
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            checked={selectedWorkers.includes(id)} // 체크 상태 관리
+                            checked={selectedEmployees.includes(id)} // 체크 상태 관리
                             onChange={() => handleCheckboxChange(id)} // 상태 변경
                         />
                     </span>
@@ -130,17 +126,17 @@ const ManEmplyee = () => {
         );
     };
 
-    const handleAddWorker = async (newWorker) => {
+    const handleAddEmployee = async (newEmployee) => {
 
         // 새로운 직원 정보 변수 선언
-        let temp_employeeId = `250306${ (workerData.length + 1 > 99 ? "": workerData.length + 1 > 9 ? "0" : "00")}`+ `${workerData.length + 1}`; // 직원번호 변수
-        let temp_name = `${newWorker.name}${workerData.length + 1}`  || `테스트맨`; // 이름 변수
-        let temp_position = newWorker.position || "테스트"; // 직책 변수
-        let temp_joinDate = newWorker.joinDate || "2025.03.06"; // 입사일 변수
-        let temp_department = newWorker.department || "테스트부서"; // 조직 변수
-        let temp_dob = newWorker.dob || "2025.03.06"; // 생년월일 변수
-        let temp_phone = newWorker.phone || "010-1234-5678"; // 연락처 변수
-        let temp_email = newWorker.email || "newworker@com"; // 이메일 변수
+        let temp_employeeId = `250306${(employeeData.length + 1 > 99 ? "" : employeeData.length + 1 > 9 ? "0" : "00")}` + `${employeeData.length + 1}`; // 직원번호 변수
+        let temp_name = `${newEmployee.name}${employeeData.length + 1}` || `테스트맨`; // 이름 변수
+        let temp_position = newEmployee.position || "테스트"; // 직책 변수
+        let temp_joinDate = newEmployee.joinDate || "2025.03.06"; // 입사일 변수
+        let temp_department = newEmployee.department || "테스트부서"; // 조직 변수
+        let temp_dob = newEmployee.dob || "2025.03.06"; // 생년월일 변수
+        let temp_phone = newEmployee.phone || "010-1234-5678"; // 연락처 변수
+        let temp_email = newEmployee.email || "newworker@com"; // 이메일 변수
 
         try {
             // DB에 새 직원 추가 요청
@@ -156,12 +152,12 @@ const ManEmplyee = () => {
             });
 
             // 서버로부터 저장된 데이터를 가져옴
-            const savedWorker = response.data;
-            //console.log(savedWorker);
+            const returnData = response.data;
+            console.log("서버에서 받은 데이터:", returnData);
 
             // 새로운 직원 데이터를 세션 저장소에 먼저 저장
-            const updatedWorkerData = [
-                ...workerData,
+            const updatedEmployeeData = [
+                ...employeeData,
                 {
                     emp_id: temp_employeeId,
                     emp_name: temp_name,
@@ -174,11 +170,11 @@ const ManEmplyee = () => {
                     created_at: new Date().toISOString() // 현재 시간
                 }
             ];
-            console.log(updatedWorkerData)
-            sessionStorage.setItem('workerData', JSON.stringify(updatedWorkerData)); // 세션 저장소에 저장
+            //console.log(updatedWorkerData)
+            sessionStorage.setItem('employeeData', JSON.stringify(updatedEmployeeData)); // 세션 저장소에 저장
 
             // 세션 저장소에 저장된 데이터로 상태 업데이트
-            setWorkerData(updatedWorkerData); // 상태 업데이트
+            setEmployeeData(updatedEmployeeData); // 상태 업데이트
 
             setIsAddModalOpen(false); // 모달 닫기
         } catch (error) {
@@ -191,25 +187,25 @@ const ManEmplyee = () => {
             //console.log("삭제가 취소됨");
             return; // 아무 동작도 하지 않음
         }
-    
+
         try {
             // 서버에 삭제 요청
-            const response = await axios.post("/management/dltEmployees", { ids: selectedWorkers });
+            const response = await axios.post("/management/dltEmployees", { ids: selectedEmployees });
             //console.log("서버에 보낸 데이터:", selectedWorkers);
-    
+
             // 서버 응답 확인
             const returnData = response.data;
-            //console.log("서버에서 받은 데이터:", returnData);
-    
+            console.log("서버에서 받은 데이터:", returnData);
+
             // 응답이 성공적일 경우
             if (response.status === 200) {
                 // 상태 업데이트
-                const updatedWorkerData = workerData.filter((worker) => !selectedWorkers.includes(worker.emp_id));
+                const updatedWorkerData = employeeData.filter((worker) => !selectedEmployees.includes(worker.emp_id));
                 //console.log("업데이트된 직원 데이터:", updatedWorkerData);
-    
-                sessionStorage.setItem('workerData', JSON.stringify(updatedWorkerData)); // 세션 저장
-                setWorkerData(updatedWorkerData); // React 상태 업데이트
-                setSelectedWorkers([]); // 선택 초기화
+
+                sessionStorage.setItem('employeeData', JSON.stringify(updatedWorkerData)); // 세션 저장
+                setEmployeeData(updatedWorkerData); // React 상태 업데이트
+                setSelectedEmployees([]); // 선택 초기화
                 setIsAddModalOpen(false); // 모달 닫기
             } else {
                 console.error("서버 응답 오류:", response.data);
@@ -220,14 +216,16 @@ const ManEmplyee = () => {
             alert("직원을 삭제하는 데 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
         }
     };
-    
+
 
     ///////버튼 기능들/////////////////////////////
-    const btnAddWorker = () => {
+    const btnAddEmployee = () => {
         setIsAddModalOpen(true); // 추가 모달 열기
     };
-    const btnRemoveWorker = () => {
-
+    const btnRemoveEmployee = () => {
+        if (selectedEmployees.length === 0) {
+            return // 선택된 것이 없음으로 빠져나가기
+        }
         setIsDltModalOpen(true); // 삭제 모달 열기
 
     };
@@ -250,7 +248,7 @@ const ManEmplyee = () => {
                         fontWeight: "bold",
                         marginLeft: "10px",
                     }}
-                    onClick={btnRemoveWorker}
+                    onClick={btnRemoveEmployee}
                 >
                     - 직원 삭제하기
                 </span>
@@ -267,20 +265,20 @@ const ManEmplyee = () => {
                         fontWeight: "bold",
                         marginLeft: "10px",
                     }}
-                    onClick={btnAddWorker}
+                    onClick={btnAddEmployee}
                 >
                     + 직원 추가하기
                 </span>
             </div>
             <div>
-                <span>총 직원 수 : {workerData.length}</span>
+                <span>총 직원 수 : {employeeData.length}</span>
                 <hr />
                 <div style={{ display: "flex", gap: "25px" }}>
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            onChange={(e) => setSelectedWorkers(e.target.checked ? workerData.map((w) => w.emp_id) : [])}
-                            checked={selectedWorkers.length === workerData.length && workerData.length > 0}
+                            onChange={(e) => setSelectedEmployees(e.target.checked ? employeeData.map((employee) => employee.emp_id) : [])}
+                            checked={selectedEmployees.length === employeeData.length && employeeData.length > 0}
                         />
                     </span>
                     <span style={{ width: "150px", textAlign: "right" }}>사원번호</span>
@@ -296,7 +294,7 @@ const ManEmplyee = () => {
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
                     {/* 객체를 배열처리해줘야  map함수 사용 가능 */}
                     <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                        {workerData.map(worker => workerLine(
+                        {employeeData.map(worker => employLine(
                             worker.emp_id,
                             worker.emp_name,
                             worker.emp_role,
@@ -308,7 +306,7 @@ const ManEmplyee = () => {
                     </div>
                 </div>
             </div>
-            <AddWorkerModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onSubmit={handleAddWorker} />
+            <AddWorkerModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onSubmit={handleAddEmployee} />
             <DeleteWorkerModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteWorker} />
         </div>
     );

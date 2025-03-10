@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const DeleteWorkerModal = ({ isOpen, onClose, onSubmit }) => {
+const DeleteGroupModal = ({ isOpen, onClose, onSubmit }) => {
     const handleConfirm = () => {
         onSubmit(true); // 삭제 확정
         onClose(); // 모달 닫기
@@ -39,8 +39,8 @@ const DeleteWorkerModal = ({ isOpen, onClose, onSubmit }) => {
                     gap: "10px",
                 }}
             >
-                <h3>직원 삭제하기</h3>
-                <p>선택한 직원(들)을 삭제하시겠습니까?</p>
+                <h3>그룹 삭제하기</h3>
+                <p>선택한 그룹(들)을 삭제하시겠습니까?</p>
                 <div
                     style={{
                         display: "flex",
@@ -60,4 +60,4 @@ const DeleteWorkerModal = ({ isOpen, onClose, onSubmit }) => {
     );
 };
 
-export default DeleteWorkerModal;
+export default DeleteGroupModal;

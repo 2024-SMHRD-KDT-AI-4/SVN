@@ -48,7 +48,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
         };
         // 상태 업데이트
         setFormData(testData);
-        console.log(testData);  // 테스트 데이터를 콘솔에 출력
+        //console.log(testData);  // 테스트 데이터를 콘솔에 출력
 
         // 상태 업데이트 후 부모에게 데이터 전달
         onSubmit(testData);

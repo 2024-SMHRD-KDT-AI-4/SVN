@@ -45,7 +45,7 @@ const MainPage = () => {
 
             if (response.data.success) { // 요청을 받아 라우터에서 로직이 성공적으로 수행되었다면
                 const userData = response.data.user; // 서버에서 반환한 사용자 정보
-                console.log('사용자 정보:', userData);
+                //console.log('사용자 정보:', userData);
 
                 // 로컬스토리지에 사용자 정보 저장 (email 제외)
                 sessionStorage.setItem('user', JSON.stringify(userData));
