@@ -1,5 +1,5 @@
 import React from "react";
-import ReqLeave from "./ReqLeave";
+//import ReqLeave from "./ReqLeave";
 
 // ReqLeave.jsx에 보낼 변수값 4가지 설정
 const ReqComplete = ({ startDate, endDate, days, reason, confirm }) => {

@@ -3,10 +3,10 @@ import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 �
 //import Buttons from './Buttons';
 import Calendar from './Calendar';
 import Chatting from './Chatting';
-import Attendance from './Attendance';
-import Management from './Management';
+import Attendance from './attendance/Attendance';
+import Management from './management/Management';
 import Schedule from './Schedule';
-import RequestForm from './RequestForm';
+import RequestForm from './requests/RequestForm';
 import QNA from './QNA';
 import MenuList from './MenuList'; // 🔹 메뉴 리스트 추가
 import '../App.css';

@@ -1,5 +1,5 @@
 import { React, useState } from 'react'
-import AddGroupModal from './AddGroupModal'
+import AddGroupModal from '../modals/AddGroupModal'
 
 const ManGroup = () => {
     const [groupData, setGroupData] = useState([

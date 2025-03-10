@@ -1,7 +1,7 @@
 import { React, useState } from 'react'
-import AddGroupModal from './AddGroupModal'
+import AddGroupModal from '../modals/AddGroupModal'
 
-const ManWork = () => {
+const ManVacation = () => {
     const [workData, setWorkData] = useState([
         ["DE01", "오픈", "월급", "월,화,수,목,금", "주 40시간", "주 52시간", "정규직","매장관리자"],
         ["OE01", "오픈", "월급", "월,화,수,목,금", "주 40시간", "주 52시간", "정규직", "오픈직원"],
@@ -76,7 +76,7 @@ const ManWork = () => {
     };
     return (
         <div style={{ width: "1600px" }}>
-            <h2 style={{ margin: 0, marginRight: "20px" }}>근로관리</h2>
+            <h2 style={{ margin: 0, marginRight: "20px" }}>휴가관리</h2>
             <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "20px" }}>
                 <span
                     style={{
@@ -150,4 +150,4 @@ const ManWork = () => {
     )
 }
 
-export default ManWork
+export default ManVacation

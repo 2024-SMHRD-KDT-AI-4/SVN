@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import AddWorkerModal from "./AddWorkerModal";
+import AddWorkerModal from "../modals/AddWorkerModal";
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 const ManEmplyee = () => {
     const [workerData, setWorkerData] = useState([]);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from "../Group.module.css";
+import styles from "../../Group.module.css";
 import ManEmplyee from "./ManEmplyee";  // ManWorkers 컴포넌트 임포트
 import ManGroup from "./ManGroup";  // ManGroup 컴포넌트 임포트
 import ManWork from "./ManWork";  // ManWork 컴포넌트 임포트
