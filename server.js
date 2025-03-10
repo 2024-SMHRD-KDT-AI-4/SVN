@@ -24,8 +24,8 @@ app.use('/system', subRouter);  // 서브 페이지는 /esports로 처리
 const userRouter = require('./routes/userRouter.js');
 app.use('/user', userRouter);  // 유저 페이지는 /user 처리
 
-const maintainRouter = require('./routes/maintainRouter.js');
-app.use('/management', maintainRouter);  // 관리하기 페이지는 /maintain 처리
+const managementRouter = require('./routes/managementRouter.js');
+app.use('/management', managementRouter);  // 관리하기 페이지는 /maintain 처리
 
 // ✅ 근무 스케줄 라우터 추가
 const workScheduleRouter = require('./routes/workSchedule.js');

@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const maintainRouter = express.Router();
+const managementRouter = express.Router();
 const conn = require("../config/db"); // DB 연결
 const { request } = require('http');
 
@@ -8,10 +8,10 @@ const { request } = require('http');
 const employeeTB = "tb_employee"; // DB테이블의 이름
 
 // POST 요청을 처리하기 위한 미들웨어 설정
-maintainRouter.use(express.json()); // 요청 본문을 JSON으로 파싱
+managementRouter.use(express.json()); // 요청 본문을 JSON으로 파싱
 
 // 직원 데이터를 가져오는 라우터
-maintainRouter.get('/getEmployees', async (req, res) => {
+managementRouter.get('/getEmployees', async (req, res) => {
     // DB에서 직원 데이터 가져오기
     const sql = `SELECT * FROM cgi_24K_AI4_p2_3.${employeeTB}`;
 
@@ -39,7 +39,7 @@ maintainRouter.get('/getEmployees', async (req, res) => {
 });
 
 // 직원 데이터를 추가하는 라우터
-maintainRouter.post('/addEmployees', async (req, res) => {
+managementRouter.post('/addEmployees', async (req, res) => {
     const { employeeId, name, position, joinDate, department, dob, phone, email } = req.body;
 
     const sql = `
@@ -70,7 +70,7 @@ maintainRouter.post('/addEmployees', async (req, res) => {
 });
 
 // 직원 데이터를 삭제하는 라우터
-maintainRouter.post('/dltEmployees', async (req, res) => {
+managementRouter.post('/dltEmployees', async (req, res) => {
     const { ids } = req.body; // req.body에서 ids라는 배열로 여러 ID를 전달받음
 
     // 요청받은 데이터가 문자열일 경우 파싱
@@ -104,4 +104,4 @@ maintainRouter.post('/dltEmployees', async (req, res) => {
     }
 });
 
-module.exports = maintainRouter;
+module.exports = managementRouter;
