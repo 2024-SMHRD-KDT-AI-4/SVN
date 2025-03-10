@@ -48,6 +48,19 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
         setIsModalOpen(false); // 모달 닫기
     };
 
+    const deleteEvent = (date, index) => {
+        setEvents((prevEvents) => {
+            const updatedEvents = { ...prevEvents };
+            updatedEvents[date] = updatedEvents[date].filter((_, i) => i !== index);
+
+            // 만약 해당 날짜의 모든 이벤트가 삭제되면 빈 배열 대신 키 자체를 삭제
+            if (updatedEvents[date].length === 0) {
+                delete updatedEvents[date];
+            }
+
+            return updatedEvents;
+        });
+    };
 
 
     const renderDays = () => { // 실질적인 캘린더의 전체적 표시와 배치를 맡는 함수, day라는 리스트를 return(반환)
@@ -88,15 +101,20 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
                     <span className={styles.dayNumber}>{day}</span>
                     <span className={styles.eventsContainer}>
                         {Array.isArray(events[formattedDate]) &&
-                            events[formattedDate].map((event, index) => (
+                            events[formattedDate].slice(0, 5).map((event, index) => (
                                 <span key={index} className={styles.event} title={event}>{event}</span>
                             ))
                         }
+            
+                        {events[formattedDate] && events[formattedDate].length > 5 && (
+                            <span className={styles.moreEvents}>
+                                ... 외 {events[formattedDate].length - 5}개
+                            </span>
+                        )}
                     </span>
                 </div>
             );
         }
-
         const other = days.length
         //console.log(other)
         for (let j = (other + 1); j < 43; j++) {
@@ -137,9 +155,17 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <h3>{selectedDate}</h3>
                         <div className={styles.eventList}>
-                            {events[selectedDate] ? (
+                            {events[selectedDate] && events[selectedDate].length > 0 ? (
                                 events[selectedDate].map((event, index) => (
-                                    <p key={index} className={styles.eventText}>{event}</p>
+                                    <div key={index} className={styles.eventItem}>
+                                        <p className={styles.eventText}>{event}</p>
+                                        <button
+                                            className={styles.deleteButton}
+                                            onClick={() => deleteEvent(selectedDate, index)}
+                                        >
+                                            ❌
+                                        </button>
+                                    </div>
                                 ))
                             ) : (
                                 <p>저장된 이벤트가 없습니다.</p>

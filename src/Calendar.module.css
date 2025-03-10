@@ -47,7 +47,7 @@ div.calendarChanges {
 }
 
 span.monthBtn,
-span.weekBtn  {
+span.weekBtn {
     /* flex: 1     ; */
     /* 각 버튼이 동일한 비율로 공간 차지 */
     text-align: center;
@@ -64,17 +64,22 @@ span.weekBtn  {
     width: 100px;
 
 }
+
 span.monthBtn:hover,
 span.weekBtn:hover {
     /* flex: 1; 각 버튼이 동일한 비율로 공간 차지 */
     /* text-align: center; 텍스트 중앙 정렬 */
-    padding: 10px; /* 버튼 내부 여백 추가 */
-    border: 1px solid #ccc; /* 경계선 추가 (선택 사항) */
-    border-radius: 5px; /* 경계선 둥글게 (선택 사항) */
-    cursor: pointer; /* 클릭 가능한 버튼처럼 표시 */
+    padding: 10px;
+    /* 버튼 내부 여백 추가 */
+    border: 1px solid #ccc;
+    /* 경계선 추가 (선택 사항) */
+    border-radius: 5px;
+    /* 경계선 둥글게 (선택 사항) */
+    cursor: pointer;
+    /* 클릭 가능한 버튼처럼 표시 */
     font-size: 25px;
     background-color: #4a90e2;
-  }
+}
 
 .days-of-week,
 .days {
@@ -99,10 +104,12 @@ span.weekBtn:hover {
 
 .days div {
     display: flex;
-    justify-content: flex-start; /* 왼쪽 정렬 */
-    align-items: flex-start; /* 상단 정렬 */
+    justify-content: flex-start;
+    /* 왼쪽 정렬 */
+    align-items: flex-start;
+    /* 상단 정렬 */
     text-align: left;
-    
+
     /* width: 160px; */
     height: 100px;
     border: 1px solid #e0e0e0;
@@ -238,32 +245,88 @@ span.weekBtn:hover {
 }
 
 .eventsContainer {
-    display: flex; /* ✅ 한 줄씩 정렬 */
-    flex-direction: column; /* ✅ 세로 정렬 */
-    gap: 4px; /* ✅ 이벤트 간 간격 추가 */
-    overflow: hidden; /* ✅ 넘치는 내용 숨김 */
-    max-height: 100px; /* ✅ 일정 개수 이상 넘어가면 스크롤 */
+    display: flex;
+    /* ✅ 한 줄씩 정렬 */
+    flex-direction: column;
+    /* ✅ 세로 정렬 */
+    gap: 4px;
+    /* ✅ 이벤트 간 간격 추가 */
+    overflow: hidden;
+    /* ✅ 넘치는 내용 숨김 */
+    max-height: 120px;
+    /* ✅ 일정 개수 이상 넘어가면 스크롤 */
+    position: relative;
 }
 
 
+/* ✅ 6개 이상일 때 "..." 표시 */
+.moreEvents {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 0;
+}
+
 
 .event {
-    background-color: white;  /* 배경색 */
-    color: black;  /* 글자색 */
+    background-color: white;
+    /* 배경색 */
+    color: black;
+    /* 글자색 */
     padding: 4px 8px;
     font-size: 12px;
     border-radius: 4px;
     text-align: center;
 
-    white-space: nowrap; /* ✅ 한 줄 유지 */
-    overflow: hidden; /* ✅ 넘칠 경우 숨김 */
-    text-overflow: ellipsis; /* ✅ 초과 시 ...으로 표시 */
+    white-space: nowrap;
+    /* ✅ 한 줄 유지 */
+    overflow: hidden;
+    /* ✅ 넘칠 경우 숨김 */
+    text-overflow: ellipsis;
     
-    width: 100px; /* ✅ 고정 너비 */
-    min-width: 100px; /* ✅ 최소 너비 */
-    max-width: 100px; /* ✅ 최대 너비 */
+    /* ✅ 초과 시 ...으로 표시 */
+
+    width: 100px;
+    /* ✅ 고정 너비 */
+    min-width: 100px;
+    /* ✅ 최소 너비 */
+    max-width: 100px;
+    /* ✅ 최대 너비 */
+
+    display: inline-block;
+    /* ✅ 한 줄에서 `...` 동작 가능하게 변경 */
+    vertical-align: middle;
     
-    display: inline-block; /* ✅ 한 줄에서 `...` 동작 가능하게 변경 */
-    vertical-align: middle; /* ✅ 텍스트 세로 정렬 */
+    /* ✅ 텍스트 세로 정렬 */
+    display: block;  /* ✅ 한 줄씩 배치 */
+    margin-bottom: -2px;  /* ✅ 줄 간격 조정 (기본 4px, 더 늘리려면 값 증가) */
+    line-height: 0.5;  /* ✅ 글자 높이 조정 (1.5배) */
+}
+
+.eventItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.deleteButton {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.deleteButton:hover {
+    color: darkred;
 }
 
