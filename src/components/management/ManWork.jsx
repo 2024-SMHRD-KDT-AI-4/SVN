@@ -20,7 +20,7 @@ const ManWork = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDltModalOpen, setIsDltModalOpen] = useState(false);
 
-    const groupLine = (code, wName, salary, workDates, defTime, limtTime, type, comment) => {
+    const workLine = (code, wName, salary, workDates, defTime, limtTime, type, comment) => {
         return (
             <div>
                 <div style={{ display: "flex", gap: "25px" }}>
@@ -138,7 +138,7 @@ const ManWork = () => {
                 <hr style={{ marginBottom: "25px" }} />
                 {/* 실질적인 직원 표시 */}
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {workData.map(works => groupLine(works[0], works[1], works[2], works[3], works[4], works[5], works[6], works[7]))}
+                    {workData.map(works => workLine(works[0], works[1], works[2], works[3], works[4], works[5], works[6], works[7]))}
                 </div>
             </div>
             {/* AddWorkerModal 컴포넌트를 렌더링 */}

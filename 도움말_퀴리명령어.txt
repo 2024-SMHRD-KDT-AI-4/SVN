@@ -27,3 +27,40 @@ VALUES
 ('B1001', '팬더팀', '김예은', '백엔드', '4라인', 2, NOW()),
 ('F1001', '너구리팀', '안지운', '프론트엔드', '4라인', 2, NOW()),
 ('P1001', '꾀꼬리팀', '김민정', '기획', '5라인', 2, NOW());
+
+
+CREATE TABLE tb_work (
+  work_id VARCHAR(20) PRIMARY KEY,  -- VARCHAR로 설정
+  work_name VARCHAR(255) NOT NULL,
+  work_salary_type ENUM('월급', '시급') NOT NULL, -- 월급, 시급
+  work_days VARCHAR(50) NOT NULL,  -- 월,화,수,목,금,토
+  work_default_rule INT NOT NULL,  -- 소정근로규칙 (예: 40 시간)
+  work_max_rule INT NOT NULL,      -- 최대 근로규칙 (예: 52 시간)
+  work_type ENUM('정규직', '계약직', '인턴') NOT NULL, -- 직급
+  work_desc TEXT, -- 비고란, 널 값 허용
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+
+
+CREATE TABLE enum_values (
+    id INT AUTO_INCREMENT PRIMARY KEY,  -- 고유 아이디
+    category VARCHAR(50) NOT NULL,      -- 카테고리 (예: 'salary_type', 'work_type')
+    value VARCHAR(50) NOT NULL          -- 실제 값 (예: '월급', '시급', '정규직', '계약직', '인턴')
+);
+
+
+-- work_salary_type에 대한 값들 삽입
+INSERT INTO enum_values (category, value) VALUES 
+('work_salary_type', '월급'),
+('work_salary_type', '시급');
+
+-- work_type에 대한 값들 삽입
+INSERT INTO enum_values (category, value) VALUES 
+('work_type', '정규직'),
+('work_type', '계약직'),
+('work_type', '인턴');
+
+
