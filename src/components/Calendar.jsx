@@ -100,12 +100,14 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
                 >
                     <span className={styles.dayNumber}>{day}</span>
                     <span className={styles.eventsContainer}>
+                        {/* ✅ 5개까지만 일정 표시 */}
                         {Array.isArray(events[formattedDate]) &&
                             events[formattedDate].slice(0, 5).map((event, index) => (
                                 <span key={index} className={styles.event} title={event}>{event}</span>
                             ))
                         }
             
+                        {/* ✅ '... 외 n개'를 항상 가장 아래로 */}
                         {events[formattedDate] && events[formattedDate].length > 5 && (
                             <span className={styles.moreEvents}>
                                 ... 외 {events[formattedDate].length - 5}개
@@ -115,6 +117,7 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
                 </div>
             );
         }
+
         const other = days.length
         //console.log(other)
         for (let j = (other + 1); j < 43; j++) {

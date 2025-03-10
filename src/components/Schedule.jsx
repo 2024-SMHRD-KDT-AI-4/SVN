@@ -147,16 +147,28 @@ const WeeklyTableCalendar = () => {
       </div>
 
       {/* 근무 일정 테이블 */}
-      <table className="w-full max-w-[1600px] border-collapse border" style={{ width: '1600px' }}>
-        <thead>
-          <tr className="border">
-            <th className="border p-2">시간</th>
-            {weekDays.map((day) => (
-              <th key={day.fullDate} className="border p-2" style={{ backgroundColor: day.fullDate === today ? 'pink' : 'transparent' }}>{day.date}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
+      <table className="w-full max-w-[1600px] border-collapse border" style={{ width: '1600px', tableLayout: "fixed" }}>
+  <thead>
+    <tr className="border">
+      <th className="border p-2" style={{ width: "100px" }}>시간</th>
+      {weekDays.map((day) => (
+        <th
+          key={day.fullDate}
+          className="border p-2"
+          style={{
+            width: "150px", // ✅ `th` 크기 고정 (늘어나지 않음)
+            backgroundColor: day.fullDate === today ? 'pink' : 'transparent',
+            whiteSpace: "nowrap", // ✅ 줄바꿈 방지
+            overflow: "hidden", // ✅ 넘치는 텍스트 숨김
+            textOverflow: "ellipsis", // ✅ 초과된 부분 '...' 표시
+          }}
+        >
+          {day.date}
+        </th>
+      ))}
+    </tr>
+  </thead>
+  <tbody>
   {timeSlots.map((time, i) => (
     <React.Fragment key={i}>
       <tr className="border-b-2 border-gray-800">
@@ -175,17 +187,21 @@ const WeeklyTableCalendar = () => {
                 return schedule.date === day.fullDate && i >= startIdx && i < endIdx;
               })
               .map((schedule, index) => (
-                <div
-                  key={`schedule-${index}`}
-                  className="w-full p-1 text-white font-bold rounded-md flex items-center justify-center"
-                  style={{
-                    backgroundColor: schedule.color,
-                    marginBottom: "4px", // 일정 간격 추가
-                    textAlign: 'center',
-                  }}
-                >
+                <span
+                key={`schedule-${index}`}
+                className="p-1 text-white font-bold rounded-md flex items-center justify-center"
+                style={{
+                  backgroundColor: schedule.color, // ✅ 기존 색상 유지
+                  marginBottom: "4px",
+                  whiteSpace: "nowrap", // ✅ 한 줄 유지 (줄바꿈 방지)
+                  overflow: "hidden", // ✅ 넘치는 텍스트 숨김
+                  textOverflow: "ellipsis", // ✅ 초과된 부분 '...' 표시
+                  maxWidth: "100%", // ✅ 부모 요소에 맞춰 자동 조정
+                }}
+              >
+
                   {schedule.name}
-                </div>
+                </span>
               ))}
           </td>
         ))}
