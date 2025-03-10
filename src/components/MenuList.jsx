@@ -20,7 +20,7 @@ const MenuList = ({ menuItems, onItemSelect }) => {
 
   return (
     // 🔹 전체 메뉴 리스트를 감싸는 Box 컨테이너
-    <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+    <Box sx={{ width: '320px', maxWidth: "320px", bgcolor: 'background.paper' }}>
       
       {/* 🔹 메뉴 리스트 */}
       <List component="nav" aria-label="menu options">
@@ -35,7 +35,7 @@ const MenuList = ({ menuItems, onItemSelect }) => {
               '&:hover': { bgcolor: 'primary.light' }, // 마우스 호버 시 효과
               borderRadius: '8px', // 둥근 테두리 스타일 추가
               margin: '5px 5px', // 위아래 간격 추가
-              padding: '15px 40px', // 내부 패딩 조정
+              padding: '15px 110px', // 내부 패딩 조정
               minHeight: '100px', // 🔹 버튼 높이 고정
               display: 'flex', // 🔹 내부 정렬을 위해 flex 사용
               alignItems: 'center', // 🔹 텍스트를 수직 중앙 정렬
