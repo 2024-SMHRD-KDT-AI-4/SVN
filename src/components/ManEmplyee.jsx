@@ -87,7 +87,10 @@ const ManEmplyee = () => {
             setWorkerData(temps);
         }
     }, []);
+    useEffect(()=>{
+        
 
+    },setSelectedWorkers);
 
     const handleCheckboxChange = (code) => {
         setSelectedWorkers((prev) =>
@@ -131,7 +134,7 @@ const ManEmplyee = () => {
     const handleAddWorker = async (newWorker) => {
 
         // 새로운 직원 정보 변수 선언
-        let temp_employeeId = `25030600${workerData.length + 1}`; // 직원번호 변수
+        let temp_employeeId = `250306${ (workerData.length + 1 > 99 ? "": workerData.length + 1 > 9 ? "0" : "00")}`+ `${workerData.length + 1}`; // 직원번호 변수
         let temp_name = `${newWorker.name}${workerData.length + 1}`  || `테스트맨`; // 이름 변수
         let temp_position = newWorker.position || "테스트"; // 직책 변수
         let temp_joinDate = newWorker.joinDate || "2025.03.06"; // 입사일 변수
