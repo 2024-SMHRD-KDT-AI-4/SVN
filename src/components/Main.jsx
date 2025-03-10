@@ -65,8 +65,27 @@ const Main = () => {
             }
         };
 
+        // 3. DB에서 직원 데이터를 가져오는 함수
+        const fetchGroupData = async () => {
+            try {
+                // 서버에 GET 요청을 보내 직원 데이터를 가져옴
+                const response = await axios.get('/management/getGroup');
+                const fetchedGroupData = response.data.data; // 서버에서 받은 직원 데이터
+                console.log(fetchedGroupData)
+                // 4. 받은 데이터를 세션 저장소에 저장
+                sessionStorage.setItem('groupData', JSON.stringify(fetchedGroupData));
+
+                // // 5. 상태 업데이트하여 UI에 직원 데이터를 반영
+                // setWorkerData(fetchedWorkerData);
+            } catch (error) {
+                // 6. 서버에서 데이터를 가져오는 데 실패한 경우 오류 처리
+                console.error("직원 데이터를 가져오는 데 실패했습니다.", error);
+            }
+        };
+
         // 7. 페이지 로드 시 직원 데이터를 가져오는 함수 호출
         fetchWorkerData();
+        fetchGroupData();
 
     }, []); // 빈 배열이므로 이 useEffect는 컴포넌트가 처음 렌더링될 때만 실행됩니다.
 
@@ -110,7 +129,7 @@ const Main = () => {
                     <h3 id='welcome'>환영합니다. {account.name}님!({account.role})</h3>
                     {/* 알림표시 아이콘 */}
                     <img src="#" alt="알림" srcSet="" />
-                     {/* 계정 접속자의 사진 */}
+                    {/* 계정 접속자의 사진 */}
                     <img src="#" alt="사진" srcSet="" />
                 </div>
             </div>
@@ -118,7 +137,7 @@ const Main = () => {
             <div style={{ display: 'flex' }}>
                 <div id='buttonGroup'>
                     {/* ✅ MenuList 추가 */}
-                    <MenuList 
+                    <MenuList
                         menuItems={[
                             { label: '메인' },
                             { label: '채팅' },
@@ -129,7 +148,7 @@ const Main = () => {
                                 { label: '관리하기' },
                                 { label: 'QNA' }
                             ] : [])
-                        ]} 
+                        ]}
                         onItemSelect={handleMenuSelect} // 메뉴 클릭 시 실행할 함수 전달
                     />
 
