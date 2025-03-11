@@ -5,11 +5,12 @@ import Calendar from './Calendar';
 import Chatting from './Chatting';
 import Attendance from './attendance/Attendance';
 import Management from './management/Management';
-import Schedule from './Schedule';
+import Schedule2 from './Schedule2';
 import RequestForm from './requests/RequestForm';
 import QNA from './QNA';
 import MenuList from './MenuList'; // 🔹 메뉴 리스트 추가
 import '../App.css';
+
 
 const Main = () => {
     const [textValue, setTextValue] = useState(<Calendar />); // 현재 표시할 컴포넌트
@@ -120,7 +121,7 @@ const Main = () => {
                 setTextValue(<RequestForm />);
                 break;
             case '스케줄 생성':
-                if (account.role === "관리자") setTextValue(<Schedule />);
+                if (account.role === "관리자") setTextValue(<Schedule2 />);
                 break;
             case '관리하기':
                 if (account.role === "관리자") setTextValue(<Management />);
