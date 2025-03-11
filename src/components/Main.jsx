@@ -48,24 +48,22 @@ const Main = () => {
         //////////////////////////////////////////////////
 
         // 3. DB에서 직원 데이터를 가져오는 함수
-        const fetchWorkerData = async () => {
+        const fetchEmployeeData = async () => {
             try {
                 // 서버에 GET 요청을 보내 직원 데이터를 가져옴
                 const response = await axios.get('/management/getEmployees');
-                const fetchedWorkerData = JSON.stringify(response.data.data) ; // 서버에서 받은 직원 데이터
+                const fetchedEmployeeData = JSON.stringify(response.data.data); // 서버에서 받은 직원 데이터
                 //console.log("직원 데이터 : ", fetchedWorkerData)
                 // 4. 받은 데이터를 세션 저장소에 저장
-                sessionStorage.setItem('employeeData', fetchedWorkerData);
+                sessionStorage.setItem('employeeData', fetchedEmployeeData);
 
-                // // 5. 상태 업데이트하여 UI에 직원 데이터를 반영
-                // setWorkerData(fetchedWorkerData);
             } catch (error) {
                 // 6. 서버에서 데이터를 가져오는 데 실패한 경우 오류 처리
                 console.error("직원 데이터를 가져오는 데 실패했습니다.", error);
             }
         };
 
-        // 3. DB에서 그룹 데이터를 가져오는 함수
+        // 4. DB에서 조직 데이터를 가져오는 함수
         const fetchGroupData = async () => {
             //console.log("그룹 데이터 가져오기")
             try {
@@ -73,20 +71,36 @@ const Main = () => {
                 const response = await axios.get('/management/getGroup');
                 const fetchedGroupData = JSON.stringify(response.data.data, null, 2); // 서버에서 받은 조직 데이터
                 //console.log("그룹 데이터:", fetchedGroupData);
-                // 4. 받은 그룹 데이터를 세션 저장소에 저장
+                // 4. 받은 조직 데이터를 세션 저장소에 저장
                 sessionStorage.setItem('groupData', fetchedGroupData);
 
-                // // 5. 상태 업데이트하여 UI에 직원 데이터를 반영
-                // setWorkerData(fetchedWorkerData);
             } catch (error) {
                 // 6. 서버에서 데이터를 가져오는 데 실패한 경우 오류 처리
-                console.error("직원 데이터를 가져오는 데 실패했습니다.", error);
+                console.error("조직 데이터를 가져오는 데 실패했습니다.", error);
+            }
+        };
+
+        // 4. DB에서 근무 데이터를 가져오는 함수
+        const fetchWorkData = async () => {
+            //console.log("근무 데이터 가져오기")
+            try {
+                // 서버에 GET 요청을 보내 근무 데이터를 가져옴
+                const response = await axios.get('/management/getWork');
+                const fetchedWorkData = JSON.stringify(response.data.data, null, 2); // 서버에서 받은 근무 데이터
+                console.log("근무 데이터:", fetchedWorkData);
+                // 4. 받은 근무 데이터를 세션 저장소에 저장
+                sessionStorage.setItem('workData', fetchedWorkData);
+
+            } catch (error) {
+                // 6. 서버에서 데이터를 가져오는 데 실패한 경우 오류 처리
+                console.error("근무 데이터를 가져오는 데 실패했습니다.", error);
             }
         };
 
         // 7. 페이지 로드 시 데이터들을 가져오는 함수 호출
-        fetchWorkerData();
+        fetchEmployeeData();
         fetchGroupData();
+        fetchWorkData();
 
     }, []); // 빈 배열이므로 이 useEffect는 컴포넌트가 처음 렌더링될 때만 실행됩니다.
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DeleteGroupModal = ({ isOpen, onClose, onSubmit }) => {
+const DeleteConfirmModal = ({ isOpen, onClose, onSubmit, isType }) => {
     const handleConfirm = () => {
         onSubmit(true); // 삭제 확정
         onClose(); // 모달 닫기
@@ -10,6 +10,7 @@ const DeleteGroupModal = ({ isOpen, onClose, onSubmit }) => {
         onSubmit(false); // 삭제 취소
         onClose(); // 모달 닫기
     };
+
 
     // 모달이 닫힌 상태면 아무것도 렌더링하지 않음
     if (!isOpen) return null;
@@ -39,8 +40,8 @@ const DeleteGroupModal = ({ isOpen, onClose, onSubmit }) => {
                     gap: "10px",
                 }}
             >
-                <h3>그룹 삭제하기</h3>
-                <p>선택한 그룹(들)을 삭제하시겠습니까?</p>
+                <h3>{isType} 삭제하기</h3>
+                <p>선택한 {isType}(들)을 삭제하시겠습니까?</p>
                 <div
                     style={{
                         display: "flex",
@@ -60,4 +61,4 @@ const DeleteGroupModal = ({ isOpen, onClose, onSubmit }) => {
     );
 };
 
-export default DeleteGroupModal;
+export default DeleteConfirmModal;

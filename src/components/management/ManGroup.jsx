@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from 'react'
 import AddGroupModal from '../modals/AddGroupModal'
-import DeleteGroupModal from "../modals/DeleteGroupModal";
+//import DeleteGroupModal from "../modals/DeleteGroupModal";
+import DeleteConfirmModal from "../modals/DeleteConfirmModal";
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 const ManGroup = () => {
     const [groupData, setGroupData] = useState([]);
@@ -268,7 +269,8 @@ const ManGroup = () => {
             </div>
             {/* AddWorkerModal 컴포넌트를 렌더링 */}
             <AddGroupModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onSubmit={handleAddGroup} />
-            <DeleteGroupModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteGroup} />
+            {/* <DeleteGroupModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteGroup} /> */}
+            <DeleteConfirmModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteGroup} isType={"조직"} />
         </div>
     )
 }

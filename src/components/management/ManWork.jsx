@@ -1,13 +1,10 @@
-import { React, useState } from 'react'
-import AddGroupModal from '../modals/AddGroupModal'
+import { React, useState, useEffect } from 'react'
+import AddWorkModal from '../modals/AddWorkModal'
+import DeleteConfirmModal from '../modals/DeleteConfirmModal'
+import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 
 const ManWork = () => {
-    const [workData, setWorkData] = useState([
-        ["DE01", "오픈", "월급", "월,화,수,목,금", "주 40시간", "주 52시간", "정규직", "매장관리자"],
-        ["OE01", "오픈", "월급", "월,화,수,목,금", "주 40시간", "주 52시간", "정규직", "오픈직원"],
-        ["ME01", "미들", "시급", "월,수,금", "주 24시간", "주 30시간", "계약직", "청소/재고관리"],
-        ["CE01", "마감", "시급", "목,금", "주 8시간", "주 8시간", "인턴", "교육중"],
-    ]);
+    const [workData, setWorkData] = useState([]);
     // 근로번호
     // 근로명
     // 월급/시급
@@ -19,6 +16,72 @@ const ManWork = () => {
     const [selectedWorks, setSelectedWorks] = useState([]); // 체크된 조직들의 ID를 관리
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDltModalOpen, setIsDltModalOpen] = useState(false);
+
+    useEffect(() => {
+        console.log("변화된 ", selectedWorks);
+        // 테스트용 잘 선택되나 확인
+    }, [selectedWorks])
+
+    useEffect(() => {
+        const storedWorks = sessionStorage.getItem('workData'); // 저장된 사용자 정보 가져오기
+        //console.log("한번실행")
+        if (storedWorks) {
+            const parsedData = JSON.parse(storedWorks);
+            console.log("근무 데이터 :", parsedData);
+            setWorkData(parsedData);
+        } else {
+            // 로그인되지 않은 상태 처리 (필요시)
+            console.log('로그인되지 않은 사용자');
+            const tempWorks = [
+                {
+                    work_id: "DE01",
+                    work_name: "오픈",
+                    work_salary_type: "월급",
+                    work_days: "월,화,수,목,금",
+                    work_default_rule: "주 40시간",
+                    work_max_rule: "주 52시간",
+                    work_type: "정규직",
+                    work_desc: "매장관리자",
+                    created_at: "2025.03.11"
+                },
+                {
+                    work_id: "OE01",
+                    work_name: "오픈",
+                    work_salary_type: "월급",
+                    work_days: "월,화,수,목,금",
+                    work_default_rule: "주 40시간",
+                    work_max_rule: "주 52시간",
+                    work_type: "정규직",
+                    work_desc: "오픈직원",
+                    created_at: "2025.03.11"
+                },
+                {
+                    work_id: "ME01",
+                    work_name: "미들",
+                    work_salary_type: "시급",
+                    work_days: "월,수,금",
+                    work_default_rule: "주 24시간",
+                    work_max_rule: "주 30시간",
+                    work_type: "계약직",
+                    work_desc: "청소/재고관리",
+                    created_at: "2025.03.11"
+                },
+                {
+                    work_id: "CE01",
+                    work_name: "마감",
+                    work_salary_type: "시급",
+                    work_days: "목,금",
+                    work_default_rule: "주 8시간",
+                    work_max_rule: "주 8시간",
+                    work_type: "인턴",
+                    work_desc: "교육중",
+                    created_at: "2025.03.11"
+                }
+            ];
+            setWorkData(tempWorks);
+        }
+    }, []);
+
 
     const workLine = (code, wName, salary, workDates, defTime, limtTime, type, comment) => {
         return (
@@ -53,26 +116,105 @@ const ManWork = () => {
                 : [...prev, code] // 체크되지 않은 경우 추가
         );
     };
-    const btnRemoveGroup = () => {
-        setWorkData(workData.filter((group) => !selectedWorks.includes(group[0])));
+    const btnRemoveWork = () => {
+        setWorkData(workData.filter((work) => !selectedWorks.includes(work.work_id)));
         setSelectedWorks([]); // 삭제 후 선택 초기화
     };
 
-    const handleAddGroup = (newWork) => {
-        setWorkData([
-            ...workData,
-            [
-                newWork.dpId || "T0000", // 팀번호
-                newWork.dpName || "테스트팀", // 팀이름
-                newWork.dpHead || "테스트장", // 팀장
-                newWork.description || "테스트용", // 이름
-                newWork.location || "8호실", // 이름
-                newWork.number || "999", // 이름
-            ],
-        ]);
+    const handleAddWork = async (newWork) => {
+        // 새로운 그룹 정보 변수 선언
+        let temp01 = newWork.wrkId + `${workData.length}` || `group001`;  // 그룹 ID 변수
+        let temp02 = newWork.wrkName || `테스트그룹`;  // 그룹 이름 변수
+        let temp03 = newWork.salaryType || `테스트그룹장`;  // 그룹장 ID 변수
+        let temp04 = newWork.wrkDays || `테스트 그룹 설명`;  // 그룹 설명 변수
+        let temp05 = newWork.wrkDfRule || `테스트 위치`;  // 조직 위치 변수
+        let temp06 = newWork.wrkMxRule || 999;  // 그룹 인원 수 변수
+        let temp07 = newWork.wrkType || 999;  // 그룹 인원 수 변수
+        let temp08 = newWork.wrkDesc || 999;  // 그룹 인원 수 변수
+
+        try {
+            // DB에 새 그룹 추가 요청
+            const response = await axios.post("/management/addwork", {
+                work_id: temp01,
+                work_name: temp02,
+                work_salary_type: temp03,
+                work_days: temp04,
+                work_default_rule: temp05,
+                work_max_rule: temp06,
+                work_type: temp07,
+                work_desc: temp08
+            });
+            // 서버로부터 저장된 데이터를 가져옴
+            const incomingGroup = response.data;
+            //console.log("서버 요청 결과 : ", incomingGroup);
+
+            // 새로운 직원 데이터를 세션 저장소에 먼저 저장
+            const updatedWorkData = [
+                ...workData,
+                {
+                    work_id: temp01,
+                    work_name: temp02,
+                    work_salary_type: temp03,
+                    work_days: temp04,
+                    work_default_rule: temp05,
+                    work_max_rule: temp06,
+                    work_type: temp07,
+                    work_desc: temp08,
+                    created_at: new Date().toISOString() // 현재 시간
+                }
+            ];
+
+            //console.log(updatedGroupData)
+            sessionStorage.setItem('workData', JSON.stringify(updatedWorkData)); // 세션 저장소에 저장
+
+            // 세션 저장소에 저장된 데이터로 상태 업데이트
+            setWorkData(updatedWorkData); // 상태 업데이트
+            setIsAddModalOpen(false); // 모달 닫기
+        } catch (error) {
+            console.error("Failed to add worker:", error);
+            alert("그룹을 추가하는 데 실패했습니다. 다시 시도해주세요.");
+        }
+
         setIsAddModalOpen(false); // 모달 닫기
     };
-    const btnAddGroup = () => {
+
+    const handleDeleteWork = async (confirm) => {
+        if (!confirm) {
+            //console.log("삭제가 취소됨");
+            return; // 아무 동작도 하지 않음
+        }
+
+        try {
+            // 서버에 삭제 요청
+            const response = await axios.post("/management/dltWork", { ids: selectedWorks });
+            //console.log("서버에 보낸 데이터:", selectedGroups);
+
+            // 서버 응답 확인
+            const returnData = response.data;
+            console.log("서버에서 받은 데이터:", returnData);
+
+            // 응답이 성공적일 경우
+            if (response.status === 200) {
+                // 상태 업데이트
+                const updatedWorkData = workData.filter((work) => !selectedWorks.includes(work.group_id));
+                //console.log("업데이트된 직원 데이터:", updatedGroupData);
+
+                sessionStorage.setItem('workData', JSON.stringify(updatedWorkData)); // 세션 저장소에 저장
+
+                setWorkData(updatedWorkData); // React 상태 업데이트
+                setSelectedWorks([]); // 선택 초기화
+                setIsAddModalOpen(false); // 모달 닫기
+            } else {
+                console.error("서버 응답 오류:", response.data);
+                alert("직원 삭제 요청이 실패했습니다. 서버의 응답을 확인하세요.");
+            }
+        } catch (error) {
+            console.error("직원 삭제 요청 중 오류 발생:", error);
+            alert("직원을 삭제하는 데 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
+        }
+    };
+
+    const btnAddWork = () => {
         setIsAddModalOpen(true); // 모달 열기
     };
     return (
@@ -92,7 +234,7 @@ const ManWork = () => {
                         fontWeight: "bold",
                         marginLeft: "10px",
                     }}
-                    onClick={btnRemoveGroup}
+                    onClick={btnRemoveWork}
                 >
                     - 근로 삭제하기
                 </span>
@@ -109,7 +251,7 @@ const ManWork = () => {
                         fontWeight: "bold",
                         marginLeft: "10px",
                     }}
-                    onClick={btnAddGroup}
+                    onClick={btnAddWork}
                 >
                     + 근로 추가하기
                 </span>
@@ -138,15 +280,20 @@ const ManWork = () => {
                 <hr style={{ marginBottom: "25px" }} />
                 {/* 실질적인 직원 표시 */}
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {workData.map(works => workLine(works[0], works[1], works[2], works[3], works[4], works[5], works[6], works[7]))}
+                    {
+                        workData.map(work => workLine(
+                            work.work_id,
+                            work.work_name,
+                            work.work_salary_type,
+                            work.work_default_rule,
+                            work.work_max_rule,
+                            work.work_type,
+                            work.work_desc))}
                 </div>
             </div>
             {/* AddWorkerModal 컴포넌트를 렌더링 */}
-            <AddGroupModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)} // 모달 닫기
-                onSubmit={handleAddGroup} // 모달에서 직원 추가하기
-            />
+            <AddWorkModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onSubmit={handleAddWork} />
+            <DeleteConfirmModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteWork} isType={"근로"} />
         </div>
     )
 }

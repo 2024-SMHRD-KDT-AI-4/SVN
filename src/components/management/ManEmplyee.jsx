@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import AddWorkerModal from "../modals/AddWorkerModal";
-import DeleteWorkerModal from "../modals/DeleteWorkerModal";
+//import DeleteWorkerModal from "../modals/DeleteWorkerModal";
+import DeleteConfirmModal from "../modals/DeleteConfirmModal";
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 const ManEmplyee = () => {
     const [employeeData, setEmployeeData] = useState([]);
@@ -307,7 +308,8 @@ const ManEmplyee = () => {
                 </div>
             </div>
             <AddWorkerModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onSubmit={handleAddEmployee} />
-            <DeleteWorkerModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteWorker} />
+            {/* <DeleteWorkerModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteWorker} /> */}
+            <DeleteConfirmModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteWorker} isType={"직원"} />
         </div>
     );
 };
