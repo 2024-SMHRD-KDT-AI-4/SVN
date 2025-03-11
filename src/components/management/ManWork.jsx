@@ -17,68 +17,30 @@ const ManWork = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDltModalOpen, setIsDltModalOpen] = useState(false);
 
-    useEffect(() => {
-        console.log("변화된 ", selectedWorks);
-        // 테스트용 잘 선택되나 확인
-    }, [selectedWorks])
+    // useEffect(() => {
+    //     console.log("변화된 ", selectedWorks);
+    //     // 테스트용 잘 선택되나 확인
+    // }, [selectedWorks])
 
     useEffect(() => {
         const storedWorks = sessionStorage.getItem('workData'); // 저장된 사용자 정보 가져오기
         //console.log("한번실행")
-        if (storedWorks) {
-            const parsedData = JSON.parse(storedWorks);
-            //console.log("근무 데이터 :", parsedData);
+        //console.log(storedWorkers)
+        let parsedData = null;
+
+        try {
+            // storedWorkers가 항상 JSON 문자열로 들어온다고 가정
+            parsedData = JSON.parse(storedWorks);
+            console.log("일반근무데이터 :", parsedData);
+        
+            // 상태 업데이트
             setWorkData(parsedData);
-        } else {
-            // 로그인되지 않은 상태 처리 (필요시)
-            console.log('로그인되지 않은 사용자');
-            const tempWorks = [
-                {
-                    work_id: "DE01",
-                    work_name: "오픈",
-                    work_salary_type: "월급",
-                    work_days: "월,화,수,목,금",
-                    work_default_rule: "주 40시간",
-                    work_max_rule: "주 52시간",
-                    work_type: "정규직",
-                    work_desc: "매장관리자",
-                    created_at: "2025.03.11"
-                },
-                {
-                    work_id: "OE01",
-                    work_name: "오픈",
-                    work_salary_type: "월급",
-                    work_days: "월,화,수,목,금",
-                    work_default_rule: "주 40시간",
-                    work_max_rule: "주 52시간",
-                    work_type: "정규직",
-                    work_desc: "오픈직원",
-                    created_at: "2025.03.11"
-                },
-                {
-                    work_id: "ME01",
-                    work_name: "미들",
-                    work_salary_type: "시급",
-                    work_days: "월,수,금",
-                    work_default_rule: "주 24시간",
-                    work_max_rule: "주 30시간",
-                    work_type: "계약직",
-                    work_desc: "청소/재고관리",
-                    created_at: "2025.03.11"
-                },
-                {
-                    work_id: "CE01",
-                    work_name: "마감",
-                    work_salary_type: "시급",
-                    work_days: "목,금",
-                    work_default_rule: "주 8시간",
-                    work_max_rule: "주 8시간",
-                    work_type: "인턴",
-                    work_desc: "교육중",
-                    created_at: "2025.03.11"
-                }
-            ];
-            setWorkData(tempWorks);
+        } catch (error) {
+            // JSON 파싱에 실패한 경우
+            console.error("Error parsing JSON:", error);
+        
+            // 필요하다면 기본 데이터로 초기화
+            // setEmployeeData(temps); 
         }
     }, []);
 
@@ -116,10 +78,7 @@ const ManWork = () => {
                 : [...prev, code] // 체크되지 않은 경우 추가
         );
     };
-    const btnRemoveWork = () => {
-        setWorkData(workData.filter((work) => !selectedWorks.includes(work.work_id)));
-        setSelectedWorks([]); // 삭제 후 선택 초기화
-    };
+
 
     const handleAddWork = async (newWork) => {
         // 새로운 그룹 정보 변수 선언
@@ -187,11 +146,11 @@ const ManWork = () => {
         try {
             // 서버에 삭제 요청
             const response = await axios.post("/management/dltWork", { ids: selectedWorks });
-            console.log("서버에 보낸 데이터:", selectedWorks);
+            //console.log("서버에 보낸 데이터:", selectedWorks);
 
             // 서버 응답 확인
             const returnData = response.data;
-            console.log("서버에서 받은 데이터:", returnData);
+            //console.log("서버에서 받은 데이터:", returnData);
 
             // 응답이 성공적일 경우
             if (response.status === 200) {
@@ -214,9 +173,18 @@ const ManWork = () => {
         }
     };
 
+    ///////버튼 기능들/////////////////////////////
     const btnAddWork = () => {
-        setIsAddModalOpen(true); // 모달 열기
+        setIsAddModalOpen(true); // 그룹 추가 모달 열기
     };
+    const btnRemoveWork = () => {
+        if (selectedWorks.length === 0) {
+            //console.log("체크된 것이 없습니다.")
+            return // 선택된 것이 없음으로 빠져나가기
+        }
+        setIsDltModalOpen(true); // 그룹 삭제 모달 열기
+    };
+    /////////////////////////////////////////
     return (
         <div style={{ width: "1600px" }}>
             <h2 style={{ margin: 0, marginRight: "20px" }}>근로관리</h2>

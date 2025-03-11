@@ -1,31 +1,52 @@
-// server.js
 const express = require('express');
 const path = require('path');
 const app = express();
 const PORT = 5067;
 
+<<<<<<< HEAD
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // [기존 라우터들] (예: mainRouter, subRouter etc.)
+=======
+// 빌드된 파일 경로
+const buildPath = path.join(__dirname, 'build');
+
+// 미들웨어 추가
+app.use(express.json());  // JSON 형식의 body 파싱
+app.use(express.urlencoded({ extended: true }));  // URL 인코딩된 데이터 파싱
+
+
+// 정적 파일 서빙
+//app.use(express.static(buildPath));  // build 폴더 내의 모든 파일을 서빙
+
+// 메인 라우터와 서브 라우터
+>>>>>>> f9da20b099bd54ab4b7791b1b5555154edf3b7bb
 const mainRouter = require('./routes/mainRouter.js');
-app.use('/', mainRouter);
+app.use('/', mainRouter);  // 메인 페이지 처리
 
 const subRouter = require('./routes/subRouter.js');
-app.use('/system', subRouter);
+app.use('/system', subRouter);  // 서브 페이지는 /esports로 처리
 
 const userRouter = require('./routes/userRouter.js');
-app.use('/user', userRouter);
+app.use('/user', userRouter);  // 유저 페이지는 /user 처리
 
-const managementRouter = require('./routes/managementRouter.js');
-app.use('/management', managementRouter);
+const maintainRouter = require('./routes/maintainRouter.js');
+app.use('/management', maintainRouter);  // 관리하기 페이지는 /maintain 처리
 
+// 근무 스케줄 라우터 추가
 const workScheduleRouter = require('./routes/workSchedule.js');
-app.use('/work-schedule', workScheduleRouter);
+app.use('/work-schedule', workScheduleRouter);  // 근무 시간/유형 관리
 
+<<<<<<< HEAD
 // [출근/퇴근 라우터] (이미 만들어놓은 attendanceRouter.js)
 const attendanceRouter = require('./routes/attendanceRouter.js');
 app.use('/attendance', attendanceRouter);
+=======
+// 요청 (휴가/근무변경) 라우터 추가
+const requestRouter = require('./routes/requestRouter.js');
+app.use('/request', requestRouter);
+>>>>>>> f9da20b099bd54ab4b7791b1b5555154edf3b7bb
 
 // [새로 추가] 경고+얼굴인식 라우터
 const alertRouter = require('./routes/alertRouter.js');

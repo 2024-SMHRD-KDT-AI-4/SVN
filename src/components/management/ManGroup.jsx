@@ -13,52 +13,34 @@ const ManGroup = () => {
     // 위치 (Location): 조직이 위치한 장소
     // 인원수 (Number of Employees): 해당 조직에 소속된 직원 수
 
-    const [selectedGroups, setSelectedGroups] = useState([]); // 체크된 조직들의 ID를 관리
+    const [selectedGroups, setSelectedGroups] = useState([{}]); // 체크된 조직들의 ID를 관리
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDltModalOpen, setIsDltModalOpen] = useState(false);
 
-    useEffect(() => {
-        console.log("변화된 ", selectedGroups);
-        // 테스트용 잘 선택되나 확인
-    }, [selectedGroups])
+    // useEffect(() => {
+    //     console.log("변화된 ", selectedGroups);
+    //     // 테스트용 잘 선택되나 확인
+    // }, [selectedGroups])
 
     useEffect(() => {
         const storedGroups = sessionStorage.getItem('groupData'); // 저장된 사용자 정보 가져오기
         //console.log("한번실행")
-        if (storedGroups) {
-            const parsedData = JSON.parse(storedGroups);
-            console.log("조직 데이터 :", parsedData);
+        //console.log(storedWorkers)
+        let parsedData = null;
+
+        try {
+            // storedWorkers가 항상 JSON 문자열로 들어온다고 가정
+            parsedData = JSON.parse(storedGroups);
+            console.log("일반조직데이터 :", parsedData);
+        
+            // 상태 업데이트
             setGroupData(parsedData);
-        } else {
-            // 로그인되지 않은 상태 처리 (필요시)
-            console.log('로그인되지 않은 사용자');
-            const tempGroups = [
-                {
-                    group_id: "B1001",
-                    group_name: "팬더팀",
-                    group_head: "김예은",
-                    group_desc: "백엔드",
-                    group_pos: "4라인",
-                    group_count: 2,
-                },
-                {
-                    group_id: "F1001",
-                    group_name: "너구리팀",
-                    group_head: "안지운",
-                    group_desc: "프론트엔드",
-                    group_pos: "4라인",
-                    group_count: 2,
-                },
-                {
-                    group_id: "P1001",
-                    group_name: "꾀꼬리팀",
-                    group_head: "김민정",
-                    group_desc: "기획",
-                    group_pos: "5라인",
-                    group_count: 2,
-                },
-            ];
-            setGroupData(tempGroups);
+        } catch (error) {
+            // JSON 파싱에 실패한 경우
+            console.error("Error parsing JSON:", error);
+        
+            // 필요하다면 기본 데이터로 초기화
+            // setEmployeeData(temps); 
         }
     }, []);
 
