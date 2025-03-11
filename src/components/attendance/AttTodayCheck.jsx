@@ -5,57 +5,64 @@ const AttTodayCheck = () => {
   const [startTime, setStartTime] = useState(null); // 출근시간
   const [endTime, setEndTime] = useState(null);     // 퇴근시간
 
-  // 1초마다 실시간 시계 갱신
+  // [A] 매초마다 currentTime 업데이트 (실시간 시계)
   useEffect(() => {
-    const timer = setInterval(() => {
+    const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
-    return () => clearInterval(timer);
+    return () => clearInterval(intervalId);
   }, []);
 
-  // 출근하기
+  // [B] '출근하기' 버튼
   const handleCheckIn = async () => {
     try {
+      // 서버로 출근 요청
       const res = await fetch('/attendance/checkin', { method: 'POST' });
       const data = await res.json();
+
       if (res.ok) {
-        // 서버가 time: now 형태로 응답
+        // data.time: 서버가 준 출근 시각(ISO 형태)
+        // 화면에 표시하기 위해 Date 객체로 변환
         const dateObj = new Date(data.time);
-        setStartTime(dateObj);
+        setStartTime(dateObj); // 출근 시간 상태를 업데이트
       } else {
         console.error('출근 실패:', data.message);
       }
-    } catch (err) {
-      console.error('출근 처리 오류:', err);
+    } catch (error) {
+      console.error('출근 처리 중 오류:', error);
     }
   };
 
-  // 퇴근하기
+  // [C] '퇴근하기' 버튼
   const handleCheckOut = async () => {
     try {
       const res = await fetch('/attendance/checkout', { method: 'POST' });
       const data = await res.json();
+
       if (res.ok) {
         const dateObj = new Date(data.time);
-        setEndTime(dateObj);
+        setEndTime(dateObj); // 퇴근 시간 상태를 업데이트
       } else {
         console.error('퇴근 실패:', data.message);
       }
-    } catch (err) {
-      console.error('퇴근 처리 오류:', err);
+    } catch (error) {
+      console.error('퇴근 처리 중 오류:', error);
     }
   };
 
-  // 시계 표시 (HH:MM:SS 24시간제)
-  const clockStr = currentTime.toLocaleTimeString('ko-KR', { hour12: false });
+  // [D] 화면에 표시할 시각 문자열 만들기
+  // 실시간 시계: HH:MM:SS
+  const clockString = currentTime.toLocaleTimeString('ko-KR', {
+    hour12: false,
+  });
 
-  // 출근시간 표시
-  const startStr = startTime
+  // 출근시간 있으면 표시, 없으면 ??
+  const startString = startTime
     ? startTime.toLocaleTimeString('ko-KR', { hour12: false })
     : '?? : ?? : ??';
 
-  // 퇴근시간 표시
-  const endStr = endTime
+  // 퇴근시간 있으면 표시, 없으면 ??
+  const endString = endTime
     ? endTime.toLocaleTimeString('ko-KR', { hour12: false })
     : '?? : ?? : ??';
 
@@ -72,12 +79,12 @@ const AttTodayCheck = () => {
       }}
     >
       <div style={{ fontSize: "20px" }}>
-        {/* 가운데 큰 시계 */}
+        {/* 가운데 크게 보이는 실시간 시계 */}
         <div style={{ textAlign: "center", margin: "50px", fontSize: "40px" }}>
-          {clockStr}
+          {clockString}
         </div>
 
-        {/* 출근/퇴근시간 */}
+        {/* 출근시간/퇴근시간 표시 영역 */}
         <div
           style={{
             display: "flex",
@@ -87,12 +94,13 @@ const AttTodayCheck = () => {
             width: "100%",
           }}
         >
-          {/* 출근시간 영역 */}
+          {/* 왼쪽: 출근 시간 */}
           <div style={{ flex: 1, textAlign: "center" }}>
             <span>출근시간</span>
             <br /><br />
-            <span>{startStr}</span>
+            <span>{startString}</span>
           </div>
+
           <div></div>
           <div>
             <hr
@@ -103,11 +111,12 @@ const AttTodayCheck = () => {
               }}
             />
           </div>
-          {/* 퇴근시간 영역 */}
+
+          {/* 오른쪽: 퇴근 시간 */}
           <div style={{ flex: 1, textAlign: "center" }}>
             <span>퇴근시간</span>
             <br /><br />
-            <span>{endStr}</span>
+            <span>{endString}</span>
           </div>
         </div>
       </div>
