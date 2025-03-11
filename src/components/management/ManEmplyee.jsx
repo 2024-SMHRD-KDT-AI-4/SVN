@@ -4,7 +4,7 @@ import AddWorkerModal from "../modals/AddWorkerModal";
 import DeleteConfirmModal from "../modals/DeleteConfirmModal";
 import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 const ManEmplyee = () => {
-    const [employeeData, setEmployeeData] = useState([]);
+    const [employeeData, setEmployeeData] = useState([{}]);
     const [selectedEmployees, setSelectedEmployees] = useState([]); // 체크된 직원들의 ID를 관리
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDltModalOpen, setIsDltModalOpen] = useState(false);
@@ -12,82 +12,22 @@ const ManEmplyee = () => {
     useEffect(() => {
         const storedWorkers = sessionStorage.getItem('employeeData'); // 저장된 사용자 정보 가져오기
         //console.log("한번실행")
-        if (storedWorkers) {
-            const parsedData = JSON.parse(storedWorkers);
-            //console.log("직원데이터 :", parsedData);
+        //console.log(storedWorkers)
+        let parsedData = null;
+
+        try {
+            // storedWorkers가 항상 JSON 문자열로 들어온다고 가정
+            parsedData = JSON.parse(storedWorkers);
+            //console.log("일반직원데이터 :", parsedData);
+        
+            // 상태 업데이트
             setEmployeeData(parsedData);
-        } else {
-            // 로그인되지 않은 상태 처리 (필요시)
-            console.log('로그인되지 않은 사용자');
-            const temps = [
-                {
-                    emp_id: "241210001",
-                    emp_name: "김예은",
-                    emp_role: "팀장",
-                    emp_firstDate: "2024.12.10",
-                    emp_group: "백엔드",
-                    emp_birthDate: "2001.05.07",
-                    emp_phone: "010-0000-0000",
-                    emp_email: "temp@gmail.com",
-                    created_at: "2024.12.10"
-                },
-                {
-                    emp_id: "241210002",
-                    emp_name: "안지운",
-                    emp_role: "부팀장",
-                    emp_firstDate: "2024.12.10",
-                    emp_group: "프론트엔드",
-                    emp_birthDate: "1999.11.23",
-                    emp_phone: "010-0000-0000",
-                    emp_email: "temp@gmail.com",
-                    created_at: "2024.12.10"
-                },
-                {
-                    emp_id: "241210003",
-                    emp_name: "김현웅",
-                    emp_role: "사원",
-                    emp_firstDate: "2024.12.10",
-                    emp_group: "프론트엔드",
-                    emp_birthDate: "1999.01.20",
-                    emp_phone: "010-0000-0000",
-                    emp_email: "temp@gmail.com",
-                    created_at: "2024.12.10"
-                },
-                {
-                    emp_id: "241210004",
-                    emp_name: "전석현",
-                    emp_role: "사원",
-                    emp_firstDate: "2024.12.10",
-                    emp_group: "백엔드",
-                    emp_birthDate: "1997.12.26",
-                    emp_phone: "010-0000-0000",
-                    emp_email: "temp@gmail.com",
-                    created_at: "2024.12.10"
-                },
-                {
-                    emp_id: "241210005",
-                    emp_name: "김민정",
-                    emp_role: "사원",
-                    emp_firstDate: "2024.12.10",
-                    emp_group: "백엔드",
-                    emp_birthDate: "1993.04.21",
-                    emp_phone: "010-0000-0000",
-                    emp_email: "temp@gmail.com",
-                    created_at: "2024.12.10"
-                },
-                {
-                    emp_id: "241210006",
-                    emp_name: "강인오",
-                    emp_role: "사원",
-                    emp_firstDate: "2024.12.10",
-                    emp_group: "프론트엔드",
-                    emp_birthDate: "1991.02.25",
-                    emp_phone: "010-0000-0000",
-                    emp_email: "temp@gmail.com",
-                    created_at: "2024.12.10"
-                }
-            ];
-            setEmployeeData(temps);
+        } catch (error) {
+            // JSON 파싱에 실패한 경우
+            console.error("Error parsing JSON:", error);
+        
+            // 필요하다면 기본 데이터로 초기화
+            // setEmployeeData(temps); 
         }
     }, []);
 
