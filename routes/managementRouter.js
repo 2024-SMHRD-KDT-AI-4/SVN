@@ -233,12 +233,12 @@ managementRouter.get('/getWork', async (req, res) => {
 
 // 근무 데이터를 추가하는 라우터
 managementRouter.post('/addWork', async (req, res) => {
-    const { work_id, work_name, work_salary_type, work_days, work_default_rule, work_max_rule, work_type } = req.body;
+    const { work_id, work_name, work_start, work_end, work_break, work_days, work_default_rule, work_max_rule, work_type, work_desc } = req.body;
     const sql = `
-    INSERT INTO ${workTB} (work_id, work_name, work_salary_type, work_days, work_default_rule, work_max_rule, work_type) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    INSERT INTO ${workTB} (work_id, work_name, work_start, work_end, work_break, work_days, work_default_rule, work_max_rule, work_type, work_desc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
     try {
-        conn.query(sql, [work_id, work_name, work_salary_type, work_days, work_default_rule, work_max_rule, work_type], (error, result) => {
+        conn.query(sql, [work_id, work_name, work_start, work_end, work_break, work_days, work_default_rule, work_max_rule, work_type, work_desc], (error, result) => {
             if (error) {
                 console.error('근무 추가 중 오류:', error);
                 res.status(500).json({ message: '그룹 추가 실패', error: error.message });

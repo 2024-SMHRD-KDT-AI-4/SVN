@@ -196,9 +196,12 @@ const Main = () => {
                 console.error("근무 데이터를 가져오는 데 실패했습니다.", error);
                 const tempWorks = [
                     {
+
                         work_id: "DE01",
                         work_name: "오픈",
-                        work_salary_type: "월급",
+                        work_start: "09:00",
+                        work_end: "18:00",
+                        work_break: "60",
                         work_days: "월,화,수,목,금",
                         work_default_rule: "주 40시간",
                         work_max_rule: "주 52시간",
@@ -209,7 +212,9 @@ const Main = () => {
                     {
                         work_id: "OE01",
                         work_name: "오픈",
-                        work_salary_type: "월급",
+                        work_start: "09:00",
+                        work_end: "18:00",
+                        work_break: "60",
                         work_days: "월,화,수,목,금",
                         work_default_rule: "주 40시간",
                         work_max_rule: "주 52시간",
@@ -220,22 +225,26 @@ const Main = () => {
                     {
                         work_id: "ME01",
                         work_name: "미들",
-                        work_salary_type: "시급",
+                        work_start: "09:00",
+                        work_end: "18:00",
+                        work_break: "60",
                         work_days: "월,수,금",
                         work_default_rule: "주 24시간",
                         work_max_rule: "주 30시간",
-                        work_type: "계약직",
+                        work_type: "파트타임",
                         work_desc: "청소/재고관리",
                         created_at: "2025.03.11"
                     },
                     {
                         work_id: "CE01",
                         work_name: "마감",
-                        work_salary_type: "시급",
+                        work_start: "09:00",
+                        work_end: "14:00",
+                        work_break: "60",
                         work_days: "목,금",
                         work_default_rule: "주 8시간",
                         work_max_rule: "주 8시간",
-                        work_type: "인턴",
+                        work_type: "파트타임",
                         work_desc: "교육중",
                         created_at: "2025.03.11"
                     }
