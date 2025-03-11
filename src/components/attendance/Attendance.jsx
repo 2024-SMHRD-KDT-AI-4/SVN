@@ -41,15 +41,17 @@ const Attendance = () => {
           <span>오늘은</span>
           <AttTodayPlan />
         </div>
-        <div>
-          <span><img src="#" alt="근무체크" /></span>
-          <span>근무체크</span>
-          <AttTodayCheck />
-        </div>
+        
         <div>
           <span><img src="#" alt="경고" /></span>
           <span>경고</span>
           <AttAlert />
+        </div>
+
+        <div>
+          <span><img src="#" alt="근무체크" /></span>
+          <span>근무체크</span>
+          <AttTodayCheck />
         </div>
       </div>
     </div>

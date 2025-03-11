@@ -187,7 +187,7 @@ const ManWork = () => {
         try {
             // 서버에 삭제 요청
             const response = await axios.post("/management/dltWork", { ids: selectedWorks });
-            console.log("서버에 보낸 데이터:", selectedGroups);
+            console.log("서버에 보낸 데이터:", selectedWorks);
 
             // 서버 응답 확인
             const returnData = response.data;
