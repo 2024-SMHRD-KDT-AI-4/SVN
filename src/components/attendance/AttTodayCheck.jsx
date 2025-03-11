@@ -1,133 +1,86 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 const AttTodayCheck = () => {
-  const [currentTime, setCurrentTime] = useState(new Date()); // 실시간 시계
-  const [startTime, setStartTime] = useState(null); // 출근시간
-  const [endTime, setEndTime] = useState(null);     // 퇴근시간
+  const videoRef = useRef(null);
+  const [streaming, setStreaming] = useState(false);
+  const [mode, setMode] = useState(null); // 출근 or 퇴근
+  const [result, setResult] = useState("");
+  const [checkInTime, setCheckInTime] = useState("?? : ?? : ??");
+  const [checkOutTime, setCheckOutTime] = useState("?? : ?? : ??");
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-  // [A] 매초마다 currentTime 업데이트 (실시간 시계)
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(intervalId);
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
-  // [B] '출근하기' 버튼
-  const handleCheckIn = async () => {
-    try {
-      // 서버로 출근 요청
-      const res = await fetch('/attendance/checkin', { method: 'POST' });
-      const data = await res.json();
+  useEffect(() => {
+    if (mode) startCameraAndAutoCapture(); // 출근/퇴근 버튼 누르면 카메라 + 자동캡처
+  }, [mode]);
 
-      if (res.ok) {
-        // data.time: 서버가 준 출근 시각(ISO 형태)
-        // 화면에 표시하기 위해 Date 객체로 변환
-        const dateObj = new Date(data.time);
-        setStartTime(dateObj); // 출근 시간 상태를 업데이트
-      } else {
-        console.error('출근 실패:', data.message);
-      }
-    } catch (error) {
-      console.error('출근 처리 중 오류:', error);
+  const startCameraAndAutoCapture = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      videoRef.current.srcObject = stream;
+      videoRef.current.play();
+      setStreaming(true);
+
+      setTimeout(() => captureImage(stream), 3000); // 3초 뒤 자동 캡처
+    } catch (err) {
+      console.error('카메라 오류:', err);
     }
   };
 
-  // [C] '퇴근하기' 버튼
-  const handleCheckOut = async () => {
-    try {
-      const res = await fetch('/attendance/checkout', { method: 'POST' });
-      const data = await res.json();
+  const captureImage = (stream) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+    canvas.toBlob((blob) => sendImageToServer(blob), 'image/jpeg');
 
-      if (res.ok) {
-        const dateObj = new Date(data.time);
-        setEndTime(dateObj); // 퇴근 시간 상태를 업데이트
-      } else {
-        console.error('퇴근 실패:', data.message);
-      }
-    } catch (error) {
-      console.error('퇴근 처리 중 오류:', error);
-    }
+    stream.getTracks().forEach(track => track.stop()); // 카메라 끄기
+    setStreaming(false);
   };
 
-  // [D] 화면에 표시할 시각 문자열 만들기
-  // 실시간 시계: HH:MM:SS
-  const clockString = currentTime.toLocaleTimeString('ko-KR', {
-    hour12: false,
-  });
+  const sendImageToServer = async (imageBlob) => {
+    const formData = new FormData();
+    formData.append('image', imageBlob);
 
-  // 출근시간 있으면 표시, 없으면 ??
-  const startString = startTime
-    ? startTime.toLocaleTimeString('ko-KR', { hour12: false })
-    : '?? : ?? : ??';
+    try {
+      const res = await fetch('/api/face-check', { method: 'POST', body: formData });
+      const data = await res.json();
 
-  // 퇴근시간 있으면 표시, 없으면 ??
-  const endString = endTime
-    ? endTime.toLocaleTimeString('ko-KR', { hour12: false })
-    : '?? : ?? : ??';
+      if (data.recognizedId !== 'Unknown') {
+        const now = new Date().toLocaleTimeString('ko-KR');
+        if (mode === '출근') {
+          setCheckInTime(now);
+          await fetch('/api/checkin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ wo_id: data.recognizedId }) });
+        } else if (mode === '퇴근') {
+          setCheckOutTime(now);
+          await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ wo_id: data.recognizedId }) });
+        }
+        setResult(`[${mode} 성공] 직원 ID: ${data.recognizedId}, 정확도: ${data.accuracy}`);
+      } else {
+        setResult(`[${mode} 실패] 얼굴 인식 실패`);
+      }
+    } catch (err) {
+      console.error(err);
+      setResult("서버 전송 에러");
+    }
+
+    setMode(null); // 모드 초기화
+  };
 
   return (
-    <div
-      style={{
-        width: "500px",
-        height: "400px",
-        border: "1px solid #ccc",
-        borderRadius: "10px",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        backgroundColor: "#fff",
-        padding: "10px",
-      }}
-    >
-      <div style={{ fontSize: "20px" }}>
-        {/* 가운데 크게 보이는 실시간 시계 */}
-        <div style={{ textAlign: "center", margin: "50px", fontSize: "40px" }}>
-          {clockString}
-        </div>
-
-        {/* 출근시간/퇴근시간 표시 영역 */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          {/* 왼쪽: 출근 시간 */}
-          <div style={{ flex: 1, textAlign: "center" }}>
-            <span>출근시간</span>
-            <br /><br />
-            <span>{startString}</span>
-          </div>
-
-          <div></div>
-          <div>
-            <hr
-              style={{
-                border: "none",
-                borderLeft: "2px solid grey",
-                height: "80",
-              }}
-            />
-          </div>
-
-          {/* 오른쪽: 퇴근 시간 */}
-          <div style={{ flex: 1, textAlign: "center" }}>
-            <span>퇴근시간</span>
-            <br /><br />
-            <span>{endString}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 버튼들 */}
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <button onClick={handleCheckIn}>출근하기</button>
-        <button onClick={handleCheckOut} style={{ marginLeft: '10px' }}>
-          퇴근하기
-        </button>
-      </div>
+    <div style={{ width: '100%', padding: '10px', textAlign: 'center' }}>
+      <h3>{currentTime.toLocaleTimeString("ko-KR")}</h3>
+      <p>출근시간: {checkInTime}</p>
+      <p>퇴근시간: {checkOutTime}</p>
+      <button onClick={() => setMode('출근')}>출근하기</button>
+      <button onClick={() => setMode('퇴근')}>퇴근하기</button>
+      {streaming && <video ref={videoRef} autoPlay style={{ width: '100%', maxWidth: '400px' }} />}
+      {result && <p style={{ color: "red" }}>{result}</p>}
     </div>
   );
 };

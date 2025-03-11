@@ -1,41 +1,64 @@
-// routes/attendanceRouter.js
 const express = require('express');
 const router = express.Router();
-const conn = require('../config/db');
+const { spawn } = require('child_process');
+const conn = require('../config/db'); // DB 연결
 
-// [출근하기]
+// 출근
 router.post('/checkin', (req, res) => {
-  // 버튼 누른 서버 시점
-  const now = new Date();
+  const python = spawn('python', ['face_recognition/f_auto_recog.py']);
+  let resultData = '';
 
-  // 임시: 직원 ID "E001" (로그인 세션 등에서 받아와도 됨)
-  const wo_id = 'E001';
+  python.stdout.on('data', (data) => {
+    resultData += data.toString();
+  });
 
-  // DB INSERT (테이블명은 팀 내에서 합의된 이름 사용)
-  const sql = 'INSERT INTO test_table (wo_id, start_time) VALUES (?, ?)';
-  conn.query(sql, [wo_id, now], (error, result) => {
-    if (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'DB 오류', error });
+  python.stderr.on('data', (data) => {
+    console.error('[Python 오류]', data.toString());
+  });
+
+  python.on('close', (code) => {
+    const recognizedId = resultData.trim();
+    const now = new Date();
+
+    if (!recognizedId || recognizedId === 'Unknown') {
+      return res.status(400).json({ message: '얼굴 인식 실패' });
     }
-    // DB 저장 후, 프론트에도 now 전달
-    return res.json({ message: '출근 처리 완료', time: now });
+
+    const sql = 'INSERT INTO work_history (wo_id, start_time) VALUES (?, ?)';
+    conn.query(sql, [recognizedId, now], (err) => {
+      if (err) return res.status(500).json({ message: 'DB 오류' });
+      return res.json({ message: '출근 성공', wo_id: recognizedId, time: `${now.getHours()}시 ${now.getMinutes()}분 ${now.getSeconds()}초` });
+    });
   });
 });
 
-// [퇴근하기]
+// 퇴근
 router.post('/checkout', (req, res) => {
-  const now = new Date();
-  const wo_id = 'E001';
+  const python = spawn('python', ['face_recognition/f_auto_recog.py']);
+  let resultData = '';
 
-  // DB UPDATE (end_time 컬럼 세팅)
-  const sql = 'UPDATE test_table SET end_time=? WHERE wo_id=? AND end_time IS NULL';
-  conn.query(sql, [now, wo_id], (error, result) => {
-    if (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'DB 오류', error });
+  python.stdout.on('data', (data) => {
+    resultData += data.toString();
+  });
+
+  python.stderr.on('data', (data) => {
+    console.error('[Python 오류]', data.toString());
+  });
+
+  python.on('close', (code) => {
+    const recognizedId = resultData.trim();
+    const now = new Date();
+
+    if (!recognizedId || recognizedId === 'Unknown') {
+      return res.status(400).json({ message: '얼굴 인식 실패' });
     }
-    return res.json({ message: '퇴근 처리 완료', time: now });
+
+    const sql = 'UPDATE work_history SET end_time=? WHERE wo_id=? AND end_time IS NULL';
+    conn.query(sql, [now, recognizedId], (err, result) => {
+      if (err) return res.status(500).json({ message: 'DB 오류' });
+      if (result.affectedRows === 0) return res.status(400).json({ message: '퇴근 기록 없음' });
+      return res.json({ message: '퇴근 성공', wo_id: recognizedId, time: `${now.getHours()}시 ${now.getMinutes()}분 ${now.getSeconds()}초` });
+    });
   });
 });
 
