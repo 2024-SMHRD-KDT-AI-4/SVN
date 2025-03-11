@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
     // sessionStorage에서 가져온 데이터가 올바른 JSON 문자열인지 확인
     const storedGroups = sessionStorage.getItem('groupData');
-    const parsedData = JSON.parse(storedGroups);
-    //console.log("일반조직데이터 :", parsedData);
+    const parsedData = JSON.parse(storedGroups).map(item => item.group_name);
+    console.log("조직의 종류 :", parsedData);
 
     // 폼 데이터 상태 관리
     const [formData, setFormData] = useState({

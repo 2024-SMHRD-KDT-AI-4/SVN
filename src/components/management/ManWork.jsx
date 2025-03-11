@@ -31,7 +31,7 @@ const ManWork = () => {
         try {
             // storedWorkers가 항상 JSON 문자열로 들어온다고 가정
             parsedData = JSON.parse(storedWorks);
-            console.log("일반근무데이터 :", parsedData);
+            //console.log("일반근무데이터 :", parsedData);
         
             // 상태 업데이트
             setWorkData(parsedData);
