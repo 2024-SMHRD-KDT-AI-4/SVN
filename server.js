@@ -24,12 +24,16 @@ app.use('/system', subRouter);  // 서브 페이지는 /esports로 처리
 const userRouter = require('./routes/userRouter.js');
 app.use('/user', userRouter);  // 유저 페이지는 /user 처리
 
-const managementRouter = require('./routes/managementRouter.js');
-app.use('/management', managementRouter);  // 관리하기 페이지는 /maintain 처리
+const maintainRouter = require('./routes/maintainRouter.js');
+app.use('/management', maintainRouter);  // 관리하기 페이지는 /maintain 처리
 
-// ✅ 근무 스케줄 라우터 추가
+// 근무 스케줄 라우터 추가
 const workScheduleRouter = require('./routes/workSchedule.js');
 app.use('/work-schedule', workScheduleRouter);  // 근무 시간/유형 관리
+
+// 요청 (휴가/근무변경) 라우터 추가
+const requestRouter = require('./routes/requestRouter.js');
+app.use('/request', requestRouter);
 
 // 서버 실행
 app.listen(PORT, () => {
