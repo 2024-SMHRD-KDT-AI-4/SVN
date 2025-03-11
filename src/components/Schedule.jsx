@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import React from "react";  // 🔥 React import 추가 (필수!)
+import styles from "../Calendar.module.css";
+import Calendar from "./Calendar";
+
 
 
 const WeeklyTableCalendar = () => {
@@ -10,7 +13,7 @@ const WeeklyTableCalendar = () => {
   const [startTime, setStartTime] = useState("시작 시간"); // 시작 시간
   const [endTime, setEndTime] = useState("끝 시간"); // 끝난 시간
   const [schedules, setSchedules] = useState([]); // 일정 목록
-  
+  const [view, setView] = useState("Schedule");
 
   // 📌 컴포넌트가 처음 렌더링될 때 실행 (주간 시작 날짜 설정)
   useEffect(() => {
@@ -121,10 +124,19 @@ const WeeklyTableCalendar = () => {
   // 📌 현재 주간의 날짜 목록 가져오기
   const weekDays = getWeekDays(startDate);
 
+  if (view === "Calendar") {
+    return <Calendar goBack={() => setView("Schedule")} />;
+}
+
   return (
-    <div className="w-full max-w-[1600px] mx-auto bg-white shadow-lg rounded-lg p-4">
-      {/* 제목 */}
-      <h1 className="text-2xl font-bold mb-4 text-center">주간 근무 일정표</h1>
+    
+    <div className={styles.calendar}>
+    <div className={styles.calendarChanges}>
+        {/* 🔥 onClick 이벤트 추가 (주간 버튼 클릭 시 Schedule로 전환) */}
+        <span className={styles.weekBtn} onClick={() => setView("Calendar")}>월간</span>
+        <span className={styles.monthBtn}>주간</span>
+    </div>
+
 
       {/* 주간 이동 버튼 */}
       <div className="flex justify-between mb-4">

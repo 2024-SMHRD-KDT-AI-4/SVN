@@ -1,10 +1,12 @@
 import { React, useState } from "react";
 import styles from "../Calendar.module.css";
+import Schedule from './Schedule';
 
 
 const Calendar = () => { // 현 컴포넌트의 함수실행
     const [currentDate, setCurrentDate] = useState(new Date()); //  오늘의 날짜를 담을 State 변수
     // %주의% new Date() : Date라는 클래스를 이용해서 생성한 인스턴스(인스턴스 명 : currentDate)
+    const [view, setView] = useState("Calendar");
 
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
     const [selectedDate, setSelectedDate] = useState(null); // 선택한 날짜 저장
@@ -106,7 +108,7 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
                                 <span key={index} className={styles.event} title={event}>{event}</span>
                             ))
                         }
-            
+
                         {/* ✅ '... 외 n개'를 항상 가장 아래로 */}
                         {events[formattedDate] && events[formattedDate].length > 5 && (
                             <span className={styles.moreEvents}>
@@ -131,11 +133,18 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
         return days;
     };
 
+    // 📌 🔥 조건부 렌더링 추가 (주간 버튼 클릭 시 `Schedule` 렌더링)
+    if (view === "Schedule") {
+        return <Schedule goBack={() => setView("Calendar")} />;
+    }
+
     return (
         <div className={styles.calendar}>
             <div className={styles.calendarChanges}>
+                
+                {/* 🔥 onClick 이벤트 추가 (주간 버튼 클릭 시 Schedule로 전환) */}
+                <span className={styles.weekBtn} onClick={() => setView("Schedule")}>주간</span>
                 <span className={styles.monthBtn}>월간</span>
-                <span className={styles.weekBtn}>주간</span>
             </div>
             <div className={styles.header}>
                 <button onClick={() => changeMonth(-1)}>◀</button>
