@@ -84,7 +84,7 @@ const ManWork = () => {
         // 새로운 그룹 정보 변수 선언
         let temp01 = newWork.wrkId + `${workData.length + 1}` || `T${workData.length + 1}`;  // 그룹 ID 변수
         let temp02 = newWork.wrkName || `테스트그룹`;  // 그룹 이름 변수
-        let temp03 = newWork.salaryType || `테스트그룹장`;  // 그룹장 ID 변수
+        let temp03 = newWork.salaryType || `테스트그룹장`;  // 근로시간
         let temp04 = newWork.wrkDays || `테스트 그룹 설명`;  // 그룹 설명 변수
         let temp05 = newWork.wrkDfRule || 40;  // 조직 위치 변수
         let temp06 = newWork.wrkMxRule || 52;  // 그룹 인원 수 변수
@@ -253,6 +253,7 @@ const ManWork = () => {
                             work.work_id,
                             work.work_name,
                             work.work_salary_type,
+                            work.work_days,
                             work.work_default_rule,
                             work.work_max_rule,
                             work.work_type,

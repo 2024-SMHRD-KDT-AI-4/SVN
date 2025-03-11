@@ -1,27 +1,31 @@
 import React, { useState } from 'react';
 
 const AddWorkModal = ({ isOpen, onClose, onSubmit }) => {
-    const fieldAttributes  = {
-        element1: { htmlFor: "wrkId", name: "wrkId", id: "wrkId", placeholder: "근무번호" },
-        element2: { htmlFor: "wrkName", name: "wrkName", id: "wrkName", placeholder: "근로명" },
-        element3: { htmlFor: "salaryType", name: "salaryType", id: "salaryType", placeholder: "급여타입" },
-        element4: { htmlFor: "wrkDays", name: "wrkDays", id: "wrkDays", placeholder: "근무요일" },
-        element5: { htmlFor: "wrkDfRule", name: "wrkDfRule", id: "wrkDfRule", placeholder: "소정근로규칙" },
-        element6: { htmlFor: "wrkMxRule", name: "wrkMxRule", id: "wrkMxRule", placeholder: "최대근로규칙" },
-        element7: { htmlFor: "wrkType", name: "wrkType", id: "wrkType", placeholder: "근무타입" },
-        element8: { htmlFor: "wrkDesc", name: "wrkDesc", id: "wrkDesc", placeholder: "비고란" },
+    const fieldAttributes = {
+        element01: { htmlFor: "wrkId", name: "wrkId", id: "wrkId", placeholder: "근무번호" },
+        element02: { htmlFor: "wrkName", name: "wrkName", id: "wrkName", placeholder: "근로명" },
+        element03: { htmlFor: "wrkTimeStart", name: "wrkTimeStart", id: "wrkTimeStart", placeholder: "시작시간" }, 
+        element04: { htmlFor: "wrkTimeEnd", name: "wrkTimeEnd", id: "wrkTimeEnd", placeholder: "종료시간" },
+        element05: { htmlFor: "breakTime", name: "breakTime", id: "breakTime", placeholder: "휴식시간" }, 
+        element06: { htmlFor: "wrkDays", name: "wrkDays", id: "wrkDays", placeholder: "근무요일" }, //
+        element07: { htmlFor: "wrkDfRule", name: "wrkDfRule", id: "wrkDfRule", placeholder: "소정근로규칙" }, // 7
+        element08: { htmlFor: "wrkMxRule", name: "wrkMxRule", id: "wrkMxRule", placeholder: "최대근로규칙" }, // 8
+        element09: { htmlFor: "wrkType", name: "wrkType", id: "wrkType", placeholder: "근무타입" } , // 9
+        element10: { htmlFor: "wrkDesc", name: "wrkDesc", id: "wrkDesc", placeholder: "비고란" },// 10
     };
 
     // 폼 데이터 상태 관리
     const [formData, setFormData] = useState({
         wrkId: "",
         wrkName: "",
-        salaryType: "",
+        wrkTimeStart: "", // 근무 시작 시간
+        wrkTimeEnd: "",    // 근무 종료 시간
         wrkDays: "",
         wrkDfRule: "",
         wrkMxRule: "",
         wrkType: "",
-        wrkDesc: ""
+        wrkDesc: "",
+
     });
 
     // 입력값 변경 처리 함수
@@ -36,12 +40,13 @@ const AddWorkModal = ({ isOpen, onClose, onSubmit }) => {
         setFormData({
             wrkId: "",
             wrkName: "",
-            salaryType: "",
+            wrkTimeStart: "", // 근무 시작 시간
+            wrkTimeEnd: "",    // 근무 종료 시간
             wrkDays: "",
             wrkDfRule: "",
             wrkMxRule: "",
             wrkType: "",
-            wrkDesc: ""
+            wrkDesc: "",
         });
     };
 
@@ -49,7 +54,8 @@ const AddWorkModal = ({ isOpen, onClose, onSubmit }) => {
         const testData = {
             wrkId: "T",
             wrkName: "테스트",
-            salaryType: "월급",
+            wrkTimeStart: "09:00", // 근무 시작 시간
+            wrkTimeEnd: "16:00",    // 근무 종료 시간
             wrkDays: "월,화,수,목,금",
             wrkDfRule: 40,
             wrkMxRule: 52,
@@ -61,12 +67,28 @@ const AddWorkModal = ({ isOpen, onClose, onSubmit }) => {
         setFormData({
             wrkId: "",
             wrkName: "",
-            salaryType: "",
+            wrkTimeStart: "", // 근무 시작 시간
+            wrkTimeEnd: "",    // 근무 종료 시간
             wrkDays: "",
             wrkDfRule: "",
             wrkMxRule: "",
             wrkType: "",
-            wrkDesc: ""
+            wrkDesc: "",
+        });
+    };
+
+    const handleCheckboxChange = (event) => {
+        const { value, checked } = event.target;
+        setFormData((prevState) => {
+            // 현재 선택된 요일들을 배열로 변환
+            const selectedDays = prevState.wrkDays ? prevState.wrkDays.split(",") : [];
+
+            const updatedDays = checked
+                ? [...selectedDays, value] // 체크된 경우 추가
+                : selectedDays.filter((day) => day !== value); // 체크 해제된 경우 제거
+
+            // 배열을 문자열로 변환하여 저장
+            return { ...prevState, wrkDays: updatedDays.join(",") };
         });
     };
 
@@ -84,96 +106,137 @@ const AddWorkModal = ({ isOpen, onClose, onSubmit }) => {
                 <h3>조직 추가하기</h3>
                 {/* 근무번호 */}
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor={fieldAttributes.element1.htmlFor}>근무번호</label>
+                    <label htmlFor={fieldAttributes.element01.htmlFor}>근무번호</label>
                     <input
                         type="text"
-                        name={fieldAttributes.element1.name}
-                        id={fieldAttributes.element1.id}
-                        placeholder={fieldAttributes.element1.placeholder}
+                        name={fieldAttributes.element01.name}
+                        id={fieldAttributes.element01.id}
+                        placeholder={fieldAttributes.element01.placeholder}
                         value={formData.wrkId}
                         onChange={handleChange}
                     />
                 </div>
                 {/* 조직명 */}
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor={fieldAttributes.element2.htmlFor}>조직명</label>
+                    <label htmlFor={fieldAttributes.element02.htmlFor}>조직명</label>
                     <input
                         type="text"
-                        name={fieldAttributes.element2.name}
-                        id={fieldAttributes.element2.id}
-                        placeholder={fieldAttributes.element2.placeholder}
+                        name={fieldAttributes.element02.name}
+                        id={fieldAttributes.element02.id}
+                        placeholder={fieldAttributes.element02.placeholder}
                         value={formData.wrkName}
                         onChange={handleChange}
                     />
                 </div>
-                {/* 월급/시급 */}
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor={fieldAttributes.element3.htmlFor}>월급/시급</label>
-                    <input
-                        type="text"
-                        name={fieldAttributes.element3.name}
-                        id={fieldAttributes.element3.id}
-                        placeholder={fieldAttributes.element3.placeholder}
-                        value={formData.salaryType}
-                        onChange={handleChange}
-                    />
+                    <label htmlFor={fieldAttributes.element03.htmlFor}>근무시간 및 휴식시간</label>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        {/* 근무시간 */}
+                        <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                            <input
+                                type="time" // 시간 입력 전용
+                                name={fieldAttributes.element03.name}
+                                id={fieldAttributes.element03.id}
+                                placeholder={fieldAttributes.element03.placeholder}
+                                value={formData.wrkTimeStart || ""} // 기본값 처리
+                                onChange={handleChange}
+                                style={{ width: "100px" }} // 적절한 크기 설정
+                            />
+                            <span>~</span>
+                            <input
+                                type="time" // 시간 입력 전용
+                                name={fieldAttributes.element04.name}
+                                id={fieldAttributes.element04.id}
+                                placeholder={fieldAttributes.element04.placeholder}
+                                value={formData.wrkTimeEnd || ""} // 기본값 처리
+                                onChange={handleChange}
+                                style={{ width: "100px" }} // 적절한 크기 설정
+                            />
+                        </div>
+                        {/* 휴식시간 */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                            <label htmlFor={fieldAttributes.element05.htmlFor} style={{ whiteSpace: "nowrap" }}>휴식:</label>
+                            <select
+                                name={fieldAttributes.element05.name}
+                                id={fieldAttributes.element05.id}
+                                value={formData.breakTime || "0"} // 기본값 처리
+                                onChange={handleChange}
+                                style={{
+                                    padding: "5px",
+                                    width: "80px", // 드롭다운 너비 제한
+                                    boxSizing: "border-box",
+                                }}
+                            >
+                                <option value="0">0분</option>
+                                <option value="30">30분</option>
+                                <option value="60">1시간</option>
+                                <option value="90">1시간 30분</option>
+                                <option value="120">2시간</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+
                 {/* 근무요일 */}
-                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor={fieldAttributes.element4.htmlFor}>근무요일</label>
-                    <input
-                        type="text"
-                        name={fieldAttributes.element4.name}
-                        id={fieldAttributes.element4.id}
-                        placeholder={fieldAttributes.element4.placeholder}
-                        value={formData.wrkDays}
-                        onChange={handleChange}
-                    />
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                    {["월", "화", "수", "목", "금", "토", "일"].map((day) => (
+                        <label key={day} style={{ display: "flex", alignItems: "center" }}>
+                            <input
+                                type="checkbox"
+                                name={fieldAttributes.element06.name}
+                                id={fieldAttributes.element06.id}
+                                value={day}
+                                checked={formData.wrkDays.includes(day)} // 선택 여부 확인
+                                onChange={handleCheckboxChange} // 체크박스 상태 변경
+                            />
+                            {day}
+                        </label>
+                    ))}
                 </div>
                 {/* 소정근로규칙 */}
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor={fieldAttributes.element5.htmlFor}>소정근로규칙</label>
+                    <label htmlFor={fieldAttributes.element07.htmlFor}>소정근로규칙</label>
                     <input
                         type="text"
-                        name={fieldAttributes.element5.name}
-                        id={fieldAttributes.element5.id}
-                        placeholder={fieldAttributes.element5.placeholder}
+                        name={fieldAttributes.element07.name}
+                        id={fieldAttributes.element07.id}
+                        placeholder={fieldAttributes.element07.placeholder}
                         value={formData.wrkDfRule}
                         onChange={handleChange}
                     />
                 </div>
                 {/* 최대근로규칙 */}
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor={fieldAttributes.element6.htmlFor}>최대근로규칙</label>
+                    <label htmlFor={fieldAttributes.element08.htmlFor}>최대근로규칙</label>
                     <input
                         type="text"
-                        name={fieldAttributes.element6.name}
-                        id={fieldAttributes.element6.id}
-                        placeholder={fieldAttributes.element6.placeholder}
+                        name={fieldAttributes.element08.name}
+                        id={fieldAttributes.element08.id}
+                        placeholder={fieldAttributes.element08.placeholder}
                         value={formData.wrkMxRule}
                         onChange={handleChange}
                     />
                 </div>
                 {/* 근무타입 */}
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor={fieldAttributes.element7.htmlFor}>근무타입</label>
+                    <label htmlFor={fieldAttributes.element09.htmlFor}>근무타입</label>
                     <input
                         type="text"
-                        name={fieldAttributes.element7.name}
-                        id={fieldAttributes.element7.id}
-                        placeholder={fieldAttributes.element7.placeholder}
+                        name={fieldAttributes.element09.name}
+                        id={fieldAttributes.element09.id}
+                        placeholder={fieldAttributes.element09.placeholder}
                         value={formData.wrkType}
                         onChange={handleChange}
                     />
                 </div>
                 {/* 비고란 */}
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor={fieldAttributes.element8.htmlFor}>비고란</label>
+                    <label htmlFor={fieldAttributes.element10.htmlFor}>비고란</label>
                     <input
                         type="text"
-                        name={fieldAttributes.element8.name}
-                        id={fieldAttributes.element8.id}
-                        placeholder={fieldAttributes.element8.placeholder}
+                        name={fieldAttributes.element10.name}
+                        id={fieldAttributes.element10.id}
+                        placeholder={fieldAttributes.element10.placeholder}
                         value={formData.wrkDesc}
                         onChange={handleChange}
                     />
