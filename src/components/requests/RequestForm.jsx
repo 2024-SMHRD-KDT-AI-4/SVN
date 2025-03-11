@@ -12,8 +12,7 @@ const RequestForm = () => {
         { startDate: "25-03-06", endDate: "25-03-06", days: "1", reason: "병가", confirm: true },
         { startDate: "25-03-06", endDate: "25-03-06", days: "1", reason: "병가", confirm: true },
         { startDate: "25-03-06", endDate: "25-03-06", days: "1", reason: "병가", confirm: false },
-        { startDate: "25-03-06", endDate: "25-03-06", days: "1", reason: "병가", confirm: true },
-        { startDate: "25-03-06", endDate: "25-03-06", days: "1", reason: "병가", confirm: false },
+        { startDate: "25-03-06", endDate: "25-03-06", days: "1", reason: "병가", confirm: true }
     ])
     const [selectedLists, setSelectedLists] = useState([]); // 선택된 항목을 저장
 
