@@ -28,7 +28,7 @@ const RequestForm = () => {
 
     // 삭제 버튼 클릭 시 선택된 항목 제거하는 함수
     const handleDelete = () => {
-        setCompletes((prevCompletes) => 
+        setCompletes((prevCompletes) =>
             prevCompletes.filter((_, index) => !selectedLists.includes(index))
         );
         setSelectedLists([]); // 삭제 후 선택 초기화
@@ -40,6 +40,12 @@ const RequestForm = () => {
         <div>
             <h4>요청하기</h4>
             <div style={{ display: "flex", flexDirection: "row", alignContent: "space-around", gap: "20px", marginTop: "50px" }}>
+                <div style={{ display: "center", flexDirection: "column", gap: "20px" }}>
+                    <div>
+                        <ReqSpace />
+                    </div>
+                </div>
+
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                     {/* 휴가 및 병가 */}
                     <div>
@@ -50,19 +56,9 @@ const RequestForm = () => {
                         <ReqShiftChange />
                     </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                    {/* 공지 등 추가 예정 */}
-                    <div>
-                        <ReqSpace />
-                    </div>
-                    <div>
-                        <ReqSpace />
-                    </div>
-                </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px", background: "#fafafa" }}>
                     <div>
                         <span>내역</span>
-                        <button>수정</button>
                         {/* 삭제 버튼 클릭 시 선택된 항목 삭제 */}
                         <button onClick={handleDelete}>삭제</button>
                     </div>
