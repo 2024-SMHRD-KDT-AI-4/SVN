@@ -1,3 +1,10 @@
+import sys
+import io
+
+# ====== stdout을 UTF-8로 재설정 (한글 깨짐 방지) ======
+sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
+
 import cv2
 import face_recognition
 import pickle
@@ -50,17 +57,17 @@ while True:
         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
         best_match_index = np.argmin(face_distances)
         accuracy = (1 - face_distances[best_match_index]) * 100
+        accuracy_text = f"{accuracy:.2f}%"
 
+        # 인식/미인식 판단
         if matches[best_match_index] and accuracy >= 70:
             employee_id = known_face_ids[best_match_index]
-            accuracy_text = f"{accuracy:.2f}%"
             recognized = True
         else:
             employee_id = "Unknown"
-            accuracy_text = f"{accuracy:.2f}%"
             recognized = False
 
-        # === 5) 화면 표시 (프레임에 텍스트, 박스 그리기) ===
+        # === 5) 디버그용: 프레임에 텍스트, 박스 그리기 ===
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
         cv2.putText(frame, f"{employee_id} ({accuracy_text})", (left, top - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
@@ -69,13 +76,13 @@ while True:
         if recognized:
             print(f"[인식 완료] {employee_id}, 정확도: {accuracy_text}")
             cv2.imshow("Auto Face Recognition", frame)
-            cv2.waitKey(3000)  # 3초 대기 (화면 확인용)
+            cv2.waitKey(3000)  # 3초 대기 (화면 확인)
 
             cap.release()
             cv2.destroyAllWindows()
             print(f"{employee_id} 직원의 인식이 완료되었습니다.")
 
-            # ★ Node.js가 파싱할 수 있도록 직원 ID만 추가로 print
+            # Node.js가 이 ID값을 파싱할 수 있도록 추가 print
             print(employee_id)  
             exit()
 
