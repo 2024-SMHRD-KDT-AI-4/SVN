@@ -47,12 +47,12 @@ const AddWorkModal = ({ isOpen, onClose, onSubmit }) => {
 
     const testSubmit = () => {
         const testData = {
-            wrkId: "T9",
+            wrkId: "T",
             wrkName: "테스트",
             salaryType: "월급",
             wrkDays: "월,화,수,목,금",
-            wrkDfRule: "주40시간",
-            wrkMxRule: "주52시간",
+            wrkDfRule: 40,
+            wrkMxRule: 52,
             wrkType: "정규직",
             wrkDesc: "테스트용"
         };

@@ -87,7 +87,7 @@ const Main = () => {
                 // 서버에 GET 요청을 보내 근무 데이터를 가져옴
                 const response = await axios.get('/management/getWork');
                 const fetchedWorkData = JSON.stringify(response.data.data, null, 2); // 서버에서 받은 근무 데이터
-                console.log("근무 데이터:", fetchedWorkData);
+                //console.log("근무 데이터:", fetchedWorkData);
                 // 4. 받은 근무 데이터를 세션 저장소에 저장
                 sessionStorage.setItem('workData', fetchedWorkData);
 

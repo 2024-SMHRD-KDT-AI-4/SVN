@@ -27,7 +27,7 @@ const ManWork = () => {
         //console.log("한번실행")
         if (storedWorks) {
             const parsedData = JSON.parse(storedWorks);
-            console.log("근무 데이터 :", parsedData);
+            //console.log("근무 데이터 :", parsedData);
             setWorkData(parsedData);
         } else {
             // 로그인되지 않은 상태 처리 (필요시)
@@ -123,14 +123,14 @@ const ManWork = () => {
 
     const handleAddWork = async (newWork) => {
         // 새로운 그룹 정보 변수 선언
-        let temp01 = newWork.wrkId + `${workData.length}` || `group001`;  // 그룹 ID 변수
+        let temp01 = newWork.wrkId + `${workData.length + 1}` || `T${workData.length + 1}`;  // 그룹 ID 변수
         let temp02 = newWork.wrkName || `테스트그룹`;  // 그룹 이름 변수
         let temp03 = newWork.salaryType || `테스트그룹장`;  // 그룹장 ID 변수
         let temp04 = newWork.wrkDays || `테스트 그룹 설명`;  // 그룹 설명 변수
-        let temp05 = newWork.wrkDfRule || `테스트 위치`;  // 조직 위치 변수
-        let temp06 = newWork.wrkMxRule || 999;  // 그룹 인원 수 변수
-        let temp07 = newWork.wrkType || 999;  // 그룹 인원 수 변수
-        let temp08 = newWork.wrkDesc || 999;  // 그룹 인원 수 변수
+        let temp05 = newWork.wrkDfRule || 40;  // 조직 위치 변수
+        let temp06 = newWork.wrkMxRule || 52;  // 그룹 인원 수 변수
+        let temp07 = newWork.wrkType || "정규직";  // 그룹 인원 수 변수
+        let temp08 = newWork.wrkDesc || "테스트용";  // 그룹 인원 수 변수
 
         try {
             // DB에 새 그룹 추가 요청
@@ -180,14 +180,14 @@ const ManWork = () => {
 
     const handleDeleteWork = async (confirm) => {
         if (!confirm) {
-            //console.log("삭제가 취소됨");
+            console.log("삭제가 취소됨");
             return; // 아무 동작도 하지 않음
         }
 
         try {
             // 서버에 삭제 요청
             const response = await axios.post("/management/dltWork", { ids: selectedWorks });
-            //console.log("서버에 보낸 데이터:", selectedGroups);
+            console.log("서버에 보낸 데이터:", selectedGroups);
 
             // 서버 응답 확인
             const returnData = response.data;
@@ -196,7 +196,7 @@ const ManWork = () => {
             // 응답이 성공적일 경우
             if (response.status === 200) {
                 // 상태 업데이트
-                const updatedWorkData = workData.filter((work) => !selectedWorks.includes(work.group_id));
+                const updatedWorkData = workData.filter((work) => !selectedWorks.includes(work.work_id));
                 //console.log("업데이트된 직원 데이터:", updatedGroupData);
 
                 sessionStorage.setItem('workData', JSON.stringify(updatedWorkData)); // 세션 저장소에 저장

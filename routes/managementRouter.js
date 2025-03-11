@@ -262,7 +262,7 @@ managementRouter.post('/addWork', async (req, res) => {
 // 그룹 데이터를 삭제하는 라우터
 managementRouter.post('/dltWork', async (req, res) => {
     const { ids } = req.body; // req.body에서 ids라는 배열로 여러 ID를 전달받음
-
+    console.log(req.body);
     // 요청받은 데이터가 문자열일 경우 파싱
     if (typeof ids === 'string') {
         try {
