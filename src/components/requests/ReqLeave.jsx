@@ -1,11 +1,31 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios"; // axios 라이브러리
 
 const ReqLeave = () => {
+    const [empId, setEmpId] = useState(""); // ✅ emp_id 상태값
     const [startDate, setStartDate] = useState(""); // 시작 날짜
     const [endDate, setEndDate] = useState(""); // 종료 날짜
     const [days, setDays] = useState(0); // 신청 일수
     const [reason, setReason] = useState(""); // 사유
+    const [type, setType] = useState("휴가"); // ✅ 휴가 유형
     const [isSubmitted, setIsSubmitted] = useState(false); // 신청 완료 상태
+
+    // ✅ sessionStorage에서 직원 데이터 불러오기
+    useEffect(() => {
+        const storedEmployeeData = sessionStorage.getItem("employeeData");
+        if (storedEmployeeData) {
+            const employees = JSON.parse(storedEmployeeData);
+            if (employees.length > 0) {
+                setEmpId(employees[0].emp_id); // ✅ 첫 번째 직원의 emp_id 가져오기 (실제 로그인 유저 정보 필요)
+            }
+            console.log(empId);
+        }
+    }, []);
+
+    // ✅ emp_id가 변경될 때마다 콘솔에서 확인 !!!!!!!!!
+    useEffect(() => {
+        console.log("현재 로그인된 직원 ID:", empId); // ✅ 콘솔 로그 추가
+    }, [empId]);
 
     // 신청 일수 계산
     useEffect(() => {
@@ -22,6 +42,8 @@ const ReqLeave = () => {
 
     // 신청하기 버튼 클릭 (DB 연결)
     const handleSubmit = async () => {
+        console.log("✅ [프론트엔드] handleSubmit 실행됨"); // 클릭 확인
+
         if (!startDate || !endDate || !reason) {
             alert("모든 항목을 입력해 주세요!");
             return;
@@ -33,37 +55,39 @@ const ReqLeave = () => {
         }
 
         try {
-            const response = await fetch("https://your-api-endpoint.com/leave", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    startDate,
-                    endDate,
-                    days,
-                    reason,
-                }), // ✅ 입력 데이터 전송
+            // 콘솔 확인용!!!!!!
+            console.log("보낼 데이터:", {emp_id: empId, start_date: startDate,
+                end_date: endDate, reason, type });
+
+            // axios.post() 방식
+            const response = await axios.post("/request/leave", { 
+                req_idx : null,
+                req_type : type, // 휴가 유형
+                req_content :  reason,
+                emp_id: empId, // 로그인한 사용자 ID
+                start_date: startDate,
+                end_date: endDate,
             });
 
-            if (!response.ok) {
-                throw new Error("서버 오류 발생! 다시 시도해 주세요.");
-            }
+            // 확인용!!!!!
+            console.log("✅ [프론트엔드] 서버 응답:", response.data);
 
-            const result = await response.json();
+
 
             // ✅ 성공적으로 전송되면 alert 창 띄우기
-            alert(`휴가 신청 완료! 신청 ID: ${result.id}`);
+            alert(`휴가 신청 완료! 상세 내용: ${response.data.detail}`);
 
             // ✅ 입력값 초기화
             setStartDate("");
             setEndDate("");
             setDays(0);
             setReason("");
+            setType("휴가"); // ✅ 초기화 시 기본값 설정
+            setIsSubmitted(true);
 
             setIsSubmitted(true); // 신청 완료 상태 변경
         } catch (error) {
-            console.error("휴가 신청 실패:", error);
+            console.error("❌ [프론트엔드] 요청 실패:", error);
             alert("휴가 신청 실패! 다시 시도해 주세요.");
         }
     };
@@ -73,6 +97,14 @@ const ReqLeave = () => {
             <h3>휴가 / 병가 신청</h3>
 
             <div style={styles.formGroup}>
+                <div style={styles.inputGroup}>
+                    <label>휴가 유형:</label> 
+                    <select value={type} onChange={(e) => setType(e.target.value)} style={styles.select}>
+                        <option value="휴가">휴가</option>
+                        <option value="병가">병가</option>
+                    </select>
+                </div>
+
                 <div style={styles.inputGroup}>
                     <label>시작 날짜:</label>
                     <input
@@ -131,7 +163,7 @@ const styles = {
     formGroup: {
         display: "flex",
         flexDirection: "column",
-        gap: "15px", // 요소 간격 자동 조정
+        gap: "10px", // 요소 간격 자동 조정
     },
     inputGroup: {
         display: "flex",
@@ -145,6 +177,10 @@ const styles = {
     fullInput: {
         width: "250px",
         padding: "5px",
+    },
+    select: { 
+        width: "250px" ,
+        padding: "5px" 
     },
     boldText: {
         width: "200px",
