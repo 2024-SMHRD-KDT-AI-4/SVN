@@ -16,7 +16,6 @@ const buildPath = path.join(__dirname, 'build');
 app.use(express.json());  // JSON 형식의 body 파싱
 app.use(express.urlencoded({ extended: true }));  // URL 인코딩된 데이터 파싱
 
-
 // 정적 파일 서빙
 //app.use(express.static(buildPath));  // build 폴더 내의 모든 파일을 서빙
 
@@ -45,6 +44,13 @@ app.use('/attendance', attendanceRouter);
 const requestRouter = require('./routes/requestRouter.js');
 app.use('/request', requestRouter);
 
+// 요청 얼굴인식 라우터 추가
+const alertRouter = require('./routes/alertRouter.js');  // ✅ 얼굴 인식 추가
+app.use('/alert', alertRouter);  // ✅ 이거 꼭 추가!
+
+// 요청 얼굴인식 라우터 추가
+const faceRouter = require('./routes/faceRouter.js'); // 추가
+app.use('/face', faceRouter); // 추가
 
 // 서버 실행
 app.listen(PORT, () => {

@@ -1,24 +1,20 @@
-// src/components/attendance/AttAlert.jsx
 import React, { useState } from 'react';
+import axios from 'axios';
 
-function AttAlert() {
-  const [message, setMessage] = useState('');
+const AttAlert = () => {
+  const [result, setResult] = useState('');
 
-  const handleFaceCheck = async () => {
+  const handleFaceRecognition = async () => {
     try {
-      // Node 서버의 /alert/face-check 라우트로 POST
-      const res = await fetch('/alert/face-check', { method: 'POST' });
-      const data = await res.json();
-
-      if (res.ok) {
-        setMessage(`[인식 성공] 직원 ID: ${data.wo_id}, 정확도: ${data.accuracy}`);
+      const response = await axios.post('/alert/face-check');
+      if (response.data.success) {
+        setResult(`[인식 성공] 직원 ID: ${response.data.wo_id}`);
       } else {
-        // 400, 500 등
-        setMessage(`[인식 실패] ${data.message}`);
+        setResult(`[인식 실패] ${response.data.message}`);
       }
-    } catch (err) {
-      console.error(err);
-      setMessage('에러 발생');
+    } catch (error) {
+      console.error('서버 오류:', error);
+      setResult('서버 오류 발생');
     }
   };
 
@@ -31,13 +27,19 @@ function AttAlert() {
         borderRadius: "10px",
         backgroundColor: "#fff",
         padding: "10px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
       }}
     >
       <h4>경고</h4>
-      <button onClick={handleFaceCheck}>얼굴인식</button>
-      <div style={{ marginTop: '10px', color: 'red' }}>{message}</div>
+      <button onClick={handleFaceRecognition} style={{ marginBottom: '10px' }}>
+        얼굴 인식
+      </button>
+      <div style={{ color: "red" }}>{result}</div>
     </div>
   );
-}
+};
 
 export default AttAlert;

@@ -1,15 +1,26 @@
-import cv2
+import pickle
+import os
 
-# 여러 장치 번호와 백엔드 조합 시도
-device_ids = [0, 1, 2]
-backends = [cv2.CAP_DSHOW, cv2.CAP_MSMF, cv2.CAP_ANY]  # 다양한 백엔드
+# 파일 경로
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # 현재 파일이 있는 경로
+pkl_path = os.path.join(BASE_DIR, 'face_encodings.pkl')  # 같은 폴더에 있다고 가정
 
-for backend in backends:
-    for device_id in device_ids:
-        print(f"장치번호: {device_id}, 백엔드: {backend} 시도 중...")
-        cap = cv2.VideoCapture(device_id, backend)
-        if cap.isOpened():
-            print(f"✅ [성공] 장치번호 {device_id}, 백엔드 {backend} 연결됨!")
-            cap.release()
-        else:
-            print(f"❌ [실패] 장치번호 {device_id}, 백엔드 {backend} 연결 안 됨.")
+# 파일 읽어서 구조 확인
+try:
+    with open(pkl_path, 'rb') as f:
+        data = pickle.load(f)
+
+    print("✅ 파일 로드 성공!")
+    print("파일 데이터 타입:", type(data))  # 딕셔너리인지 리스트인지
+    if isinstance(data, dict):
+        print("딕셔너리 키 목록:", data.keys())
+    elif isinstance(data, list):
+        print("리스트 길이:", len(data))
+        print("리스트 첫번째 항목 타입:", type(data[0]))
+    else:
+        print("기타 데이터 타입")
+
+except FileNotFoundError:
+    print("[ERROR] 파일을 찾을 수 없습니다.")
+except Exception as e:
+    print(f"[ERROR] 파일 읽기 실패: {e}")
