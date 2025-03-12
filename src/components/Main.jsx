@@ -60,7 +60,7 @@ const Main = () => {
         //////////////////////////////////////////////////
 
         // 3. DB에서 직원 데이터를 가져오는 함수
-        const fetchEmployeeData = async () => {
+        const fetchEmployeeData = async (consoleOn = "C") => {
 
             if (account.id !== "tester") {
                 try {
@@ -152,12 +152,16 @@ const Main = () => {
                 // 객체를 문자열로 변환하여 sessionStorage에 저장
                 sessionStorage.setItem('employeeData', JSON.stringify(tempEmployees));
             }
-            console.log("직원 저장 완료", JSON.parse(sessionStorage.getItem('employeeData')));
+            if(consoleOn === "Y")
+            {
+                console.log("직원 저장 완료", JSON.parse(sessionStorage.getItem('employeeData')));
+            }
+            
         }
 
 
         // 4. DB에서 조직 데이터를 가져오는 함수
-        const fetchGroupData = async () => {
+        const fetchGroupData = async (consoleOn = "C") => {
             //console.log("그룹 데이터 가져오기")
             if (account.id !== "tester") {
                 try {
@@ -208,12 +212,15 @@ const Main = () => {
             }
             // 6. 서버에서 데이터를 가져오는 데 실패한 경우 오류 처리
             //console.error("조직 데이터를 가져오는 데 실패했습니다.", error);
-
-            console.log("조직 저장 완료", JSON.parse(sessionStorage.getItem('groupData')))
+            if(consoleOn === "Y")
+            {
+                console.log("조직 저장 완료", JSON.parse(sessionStorage.getItem('groupData')))
+            }
+            
         }
 
         // 4. DB에서 근무 데이터를 가져오는 함수
-        const fetchWorkData = async () => {
+        const fetchWorkData = async (consoleOn = "C") => {
             //console.log("근무 데이터 가져오기")
             if (account.id !== "tester") {
                 try {
@@ -290,11 +297,15 @@ const Main = () => {
                 // 객체를 문자열로 변환하여 sessionStorage에 저장
                 sessionStorage.setItem('workData', JSON.stringify(tempWorks));
             }
-            console.log("근무 저장 완료", JSON.parse(sessionStorage.getItem('workData')));
+            if(consoleOn === "Y")
+            {
+                console.log("근무 저장 완료", JSON.parse(sessionStorage.getItem('workData')));
+            }
+            
         }
 
         // 5. DB에서 휴가 데이터를 가져오는 함수
-        const fetchVacationData = async () => {
+        const fetchVacationData = async (consoleOn = "C") => {
             //console.log("휴가 데이터 가져오기")
             if (account.id !== "tester") {
                 try {
@@ -356,14 +367,18 @@ const Main = () => {
                 // 객체를 문자열로 변환하여 sessionStorage에 저장
                 sessionStorage.setItem('vacationData', JSON.stringify(vacations));
             }
-            console.log("휴가 저장 완료", JSON.parse(sessionStorage.getItem('vacationData')))
+            if(consoleOn === "Y")
+            {
+                console.log("휴가 저장 완료", JSON.parse(sessionStorage.getItem('vacationData')))
+            }
+            
         }
 
         // 7. 페이지 로드 시 데이터들을 가져오는 함수 호출
-        fetchEmployeeData();
-        fetchGroupData();
-        fetchWorkData();
-        fetchVacationData();
+        fetchEmployeeData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchGroupData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchWorkData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchVacationData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
     }, [account])
 
 

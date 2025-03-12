@@ -230,7 +230,7 @@ const ManWork = () => {
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            onChange={(e) => setSelectedWorks(e.target.checked ? workData.map((w) => w[0]) : [])}
+                            onChange={(e) => setSelectedWorks(e.target.checked ? workData.map((w) => w.work_id) : [])}
                             checked={selectedWorks.length === workData.length && workData.length > 0}
                         />
                     </span>
