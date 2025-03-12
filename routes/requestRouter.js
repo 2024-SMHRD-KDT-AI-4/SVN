@@ -27,7 +27,7 @@ requestRouter.post("/leave", (request, response) => {
         return response.status(400).json({ error: "❌ 종료 날짜가 시작 날짜보다 빠를 수 없습니다." });
     }
 
-    //const content = `${start_date} ~ ${end_date} (${reason})`;
+    //const content = `${start_date} ~ ${end_date} (${req_content})`;
 
     const sql = `
         INSERT INTO tb_request (req_idx ,req_type, req_content, emp_id, start_date, end_date)
@@ -58,32 +58,31 @@ requestRouter.post("/leave", (request, response) => {
 //-----------------------------
 // [2] 근무 교대 요청
 //-----------------------------
-// requestRouter.post("/shift-change", (request, response) => {
-//     console.log(request.body);
+requestRouter.post("/shifts", (request, response) => {
+    console.log("✅ [백엔드] 변경 신청 요청 받음");  // 백엔드 요청 확인
+    console.log("받은 데이터:",request.body); // 받은 데이터 확인
 
-//     const { emp_id, current_date, current_shift, target_date, target_shift } = request.body;
+    const { req_idx ,req_type, req_content, emp_id, origin_date, origin_time, change_date, change_time } = request.body;
+    // req_idx, req_type, req_content, emp_id, origin_date, origin_time, change_date, change_time, created_at, req_status
 
-//     if (!emp_id || !current_date || !current_shift || !target_date || !target_shift) {
-//         return response.status(400).json({ error: "❌ 필수 데이터 누락" });
-//     }
+    const sql = `
+        INSERT INTO tb_request (req_idx ,req_type, req_content, emp_id, origin_date, origin_time, change_date, change_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-//     const content = `변경 요청: ${current_date} '${current_shift}' → ${target_date} '${target_shift}'`;
+    // 확인용 !!!!!!!!
+    // console.log(conn);
 
-//     const sql = `
-//         INSERT INTO tb_request (req_type, req_content, emp_id, created_at, req_status)
-//         VALUES ('근무변경', ?, ?, NOW(), '대기')
-//     `;
+    conn.query(sql, [req_idx ,req_type, req_content, emp_id, origin_date, origin_time, change_date, change_time], (error, result) => {
+        if (error) {
+            console.error("❌ 근무 변경 요청 실패:", error);
+            return response.status(500).json({ error: "DB 오류" });
+        }
 
-//     conn.query(sql, [content, emp_id], (error, result) => {
-//         if (error) {
-//             console.error("❌ 근무 변경 요청 실패:", error);
-//             return response.status(500).json({ error: "DB 오류" });
-//         }
-
-//         console.log("✅ 근무 변경 요청 성공:", result);
-//         response.json({ message: "✅ 근무 교대 요청 완료!", detail: content });
-//     });
-// });
+        console.log("✅ 근무 변경 요청 성공:", result);
+        response.json({ message: "✅ 근무 교대 요청 완료!", detail: result });
+    });
+});
 
 //-----------------------------
 // [3] 요청 내역 조회

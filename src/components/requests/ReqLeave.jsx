@@ -126,11 +126,13 @@ const ReqLeave = () => {
                     />
                 </div>
 
+                {/* 신청 일 수  */}
                 <div style={styles.inputGroup}>
-                    <label>신청 일수:</label>
+                    <label>신청일 수:</label>
                     <span style={styles.boldText}>{days} 일</span>
                 </div>
 
+                {/* 변경 사유 입력 */}
                 <div style={styles.inputGroup}>
                     <label>사유:</label>
                     <input
@@ -141,6 +143,7 @@ const ReqLeave = () => {
                     />
                 </div>
 
+                {/* 신청 버튼 */}
                 <button style={styles.button} onClick={handleSubmit}>
                     신청하기
                 </button>
