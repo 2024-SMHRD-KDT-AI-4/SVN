@@ -46,13 +46,6 @@ const requestRouter = require('./routes/requestRouter.js');
 app.use('/request', requestRouter);
 
 
-
-
-// 프론트에서 보낸 이미지 받아서 파이썬으로 넘겨 얼굴 인식 결과 반환
-const faceRouter = require('./routes/faceRouter'); // 경로 확인
-app.use('/api', faceRouter);
-
-
 // 서버 실행
 app.listen(PORT, () => {
   console.log(`서버 실행 중: http://localhost:${PORT}`);
