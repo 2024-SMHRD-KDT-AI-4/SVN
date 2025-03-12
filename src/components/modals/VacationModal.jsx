@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 const VacationModal = ({ isOpen, onClose, code, select, onSubmit }) => {
 
     //const [review, setReview] = useState({incomeCode : code, incomeSelect : select})
 
     const handleConfirm = () => {
-        onSubmit(code, select); // 삭제 확정
+        onSubmit(code, select , true); // 삭제 확정
         onClose(); // 모달 닫기
     };
 
     const handleCancel = () => {
-        onSubmit(code, select); // 삭제 취소
+        onSubmit(code, select , false); // 삭제 취소
         onClose(); // 모달 닫기
     };
 

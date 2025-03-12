@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from 'react';
+import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
 import Modal from '../modals/VacationModal';
-import { Button } from '@mui/material';
+//import { Button } from '@mui/material';
 
 const ManVacation = () => {
     const [vacationData, setVacationData] = useState([]);
@@ -24,8 +25,8 @@ const ManVacation = () => {
         const aa = JSON.parse(sessionStorage.getItem("user"));
         const storedEmployeeData = JSON.parse(sessionStorage.getItem("employeeData"));
 
-        const hrEmployees = storedEmployeeData.filter(emp => emp.emp_name === aa.name);
-        setEmpId(hrEmployees[0].emp_id);
+        //const hrEmployees = storedEmployeeData.filter(emp => emp.emp_name === aa.name);
+        setEmpId(aa.id);
     }, []);
 
     useEffect(() => {
@@ -54,11 +55,12 @@ const ManVacation = () => {
                     <span style={{ width: "140px", textAlign: "right" }}>{vStatus}</span>
                     <span style={{ width: "140px", textAlign: "right" }}>{vAdminID}</span>
                     <span style={{ width: "140px", textAlign: "right" }}>{vApproval}</span>
-                    {vStatus === "N" && 
+                    {vStatus === "N" ? 
                     <span style={{ width: "140px", textAlign: "right" }}>
                         <button onClick={() => btnReviewVacation(vCode, true)}>승인</button>
                         <button onClick={() => btnReviewVacation(vCode, false)}>반려</button>
-                    </span>
+                    </span> :
+                    <span style={{ width: "140px", textAlign: "right" }}>처리완료</span>
                     }
                 </div>
                 <hr />
@@ -79,16 +81,53 @@ const ManVacation = () => {
         setModalData({ code, select }); // 휴가 ID와 select 값 전달
     };
 
-    const handleVacation = (code, result) => {
-        console.log(`휴가번호 ${code}의 ${result} 처리`)
-        setIsModalOpen(false); // 모달 닫기
+    const handleVacation = async(code, result , confirm) => {
+        console.log(`휴가번호 ${code}의 ${result} 처리 ${confirm === true ? "허가": "취소"}`)
+
+        if (!confirm) {
+            //console.log("삭제가 취소됨");
+            return; // 아무 동작도 하지 않음
+        }
+
+        try {
+            // 서버에 삭제 요청
+            const response = await axios.post("/management/checkVacation", { ids: code , who : empId });
+            //console.log("서버에 보낸 데이터:", selectedGroups);
+
+            // 서버 응답 확인
+            const returnData = response.data;
+            console.log("서버에서 받은 데이터:", returnData.data[0]);
+
+            // 응답이 성공적일 경우
+            if (response.status === 200) {
+                // 상태 업데이트
+                const updatedVacationData = vacationData.filter((vacation) => vacation.req_idx == code);
+                console.log("업데이트된 직원 데이터:", updatedVacationData);
+
+                // sessionStorage.setItem('groupData', JSON.stringify(updatedGroupData)); // 세션 저장소에 저장
+
+                //setVacationData(updatedGroupData); // React 상태 업데이트
+                //setSelectedGroups([]); // 선택 초기화
+                setIsModalOpen(false); // 모달 닫기
+            } else {
+                console.error("서버 응답 오류:", response.data);
+                alert("휴가 처리 요청이 실패했습니다. 서버의 응답을 확인하세요.");
+            }
+        } catch (error) {
+            console.error("직원 삭제 요청 중 오류 발생:", error);
+            alert("휴가를 처리하는 데 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
+        }
+
+
+
+        
         // 처리 로직을 여기에 추가 (예: 서버로 승인/반려 데이터 전송)
     };
 
     return (
         <div style={{ width: "1600px" }}>
             <h2 style={{ margin: 0, marginRight: "20px" }}>휴가관리</h2>
-            <hr />
+
             <div>
                 <span>총 휴가요청 수 : {vacationData.length}</span>
                 <hr />
@@ -112,7 +151,7 @@ const ManVacation = () => {
                 </div>
                 <hr style={{ marginBottom: "25px" }} />
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {vacationData.map(work => vacationLine(work.req_idx, work.req_type, work.emp_id, work.start_date, work.end_date, work.req_content, work.req_status, work.approved_at, work.admin_id))}
+                    {vacationData.map(vac => vacationLine(vac.req_idx, vac.req_type, vac.emp_id, vac.start_date, vac.end_date, vac.req_content, vac.req_status, vac.approved_at, vac.admin_id))}
                 </div>
             </div>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} code={modalData.code} select={modalData.select} onSubmit={handleVacation} />

@@ -328,5 +328,65 @@ managementRouter.get('/getVacation', async (req, res) => {
     }
 });
 
+// 휴가 데이터를 처리하는 라우터
+managementRouter.post('/checkVacation', async (req, res) => {
+    const { ids, who } = req.body; // req.body에서 ids와 who를 받음
+    console.log("휴가 처리할 관리자의 관리자id",who);
+    // 처리수행 쿼리문
+    const updateSql = `
+        UPDATE tb_request
+        SET 
+            approved_at = NOW(),
+            admin_id = ?,
+            req_status = 'Y'
+        WHERE req_idx IN (?)
+    `;
+
+    const selectSql = `
+        SELECT 
+            req_idx, 
+            req_type, 
+            req_content, 
+            emp_id, 
+            start_date, 
+            end_date, 
+            created_at, 
+            req_status, 
+            approved_at, 
+            admin_id
+        FROM tb_request
+        WHERE req_idx IN (?)
+    `;
+
+    try {
+        conn.query(updateSql, [who, ids], (updateError, updateResult) => {
+            if (updateError) {
+                console.error('휴가 처리 중 오류:', updateError);
+                return res.status(500).json({ message: '휴가 처리 오류', error: updateError.message });
+            }
+
+            if (updateResult.affectedRows > 0) {
+                // 업데이트된 데이터를 조회
+                conn.query(selectSql, [ids], (selectError, rows) => {
+                    if (selectError) {
+                        console.error('처리된 데이터 조회 중 오류:', selectError);
+                        return res.status(500).json({ message: '처리된 데이터 조회 오류', error: selectError.message });
+                    }
+
+                    // 처리된 데이터를 응답으로 반환
+                    res.status(200).json({ 
+                        message: '휴가 처리 성공', 
+                        data: rows 
+                    });
+                });
+            } else {
+                res.status(404).json({ message: '처리할 휴가가 없습니다.', data: null });
+            }
+        });
+    } catch (error) {
+        console.error('휴가 처리 중 예외:', error);
+        res.status(500).json({ message: '휴가 처리 중 서버 오류', error: error.message });
+    }
+});
 
 module.exports = managementRouter;
