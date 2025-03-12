@@ -1,47 +1,72 @@
+# 직원 얼굴 등록 (MySQL 저장)
+import face_recognition
 import cv2
+import mysql.connector
+import json
 import os
-from PIL import Image
 
-employee_id = input("저장할 직원 ID를 입력하세요 (예: E_001): ")
+# 📌 MySQL 연결 설정
+db = mysql.connector.connect(
+    host="project-db-cgi.smhrd.com",
+    port=3307,
+    user="cgi_24K_AI4_p2_3",
+    password="smhrd3",
+    database="cgi_24K_AI4_p2_3"
+)
+cursor = db.cursor()
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SAVE_DIR = os.path.join(BASE_DIR, 'face_data')
+DATASET_DIR = "dataset"
 
-if not os.path.exists(SAVE_DIR):
-    os.makedirs(SAVE_DIR)
-    print(f"[폴더 생성 완료] {SAVE_DIR}")
+if not os.path.exists(DATASET_DIR):
+    os.makedirs(DATASET_DIR)
 
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-if not cap.isOpened():
-    print("[❌오류] 카메라 연결 실패")
-    exit()
+def register_employee(name):
+    """웹캠으로 직원 얼굴을 등록하고, MySQL에 저장하는 함수"""
+    
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    print(f"📸 {name}님의 얼굴을 등록합니다. 카메라를 응시하세요!")
 
-print("[안내] 직원 얼굴 등록 시작 (ESC로 종료, Space로 촬영)")
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("❌ 카메라 오류!")
+            break
 
-count = 0
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        print("[❌오류] 프레임 수신 실패")
-        break
+        cv2.imshow("Face Registration - Press SPACE to Capture", frame)
 
-    frame = cv2.flip(frame, 1)  # 좌우반전
-    cv2.imshow("직원 얼굴 등록", frame)
-    key = cv2.waitKey(1) & 0xFF
+        if cv2.waitKey(1) & 0xFF == 32:
+            file_path = f"{DATASET_DIR}/{name}.jpg"
+            cv2.imwrite(file_path, frame)
+            print(f"✅ {name}.jpg 저장 완료!")
+            break
 
-    if key == 32:  # Space bar 촬영
-        count += 1
-        file_name = f"{employee_id}_{count}.jpg"
-        file_path = os.path.join(SAVE_DIR, file_name)
+    cap.release()
+    cv2.destroyAllWindows()
 
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        Image.fromarray(frame_rgb).save(file_path)
+    # 📌 얼굴 인코딩 생성
+    image = face_recognition.load_image_file(file_path)
+    encodings = face_recognition.face_encodings(image)
 
-        print(f"[저장 완료] {file_path}")
+    if len(encodings) > 0:
+        encoding = json.dumps(encodings[0].tolist())  # JSON 문자열 변환
+        save_employee_encoding(name, encoding)
+    else:
+        print("❌ 얼굴 감지 실패. 다시 시도해주세요.")
 
-    elif key == 27:  # ESC
-        print("[종료] 촬영 종료")
-        break
+def save_employee_encoding(name, encoding):
+    """MySQL에 얼굴 인코딩을 저장하는 함수"""
+    
+    try:
+        sql = "INSERT INTO employees (name, face_encoding) VALUES (%s, %s)"
+        cursor.execute(sql, (name, encoding))
+        db.commit()
+        print(f"✅ {name}님의 얼굴이 MySQL에 등록되었습니다!")
+    except Exception as e:
+        print(f"❌ 오류 발생: {e}")
 
-cap.release()
-cv2.destroyAllWindows()
+if __name__ == "__main__":
+    name = input("👤 직원 이름을 입력하세요: ")
+    register_employee(name)
+
+cursor.close()
+db.close()

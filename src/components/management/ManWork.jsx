@@ -45,7 +45,7 @@ const ManWork = () => {
     }, []);
 
 
-    const workLine = (code, wName, salary, workDates, defTime, limtTime, type, comment) => {
+    const workLine = (code, wName, workDates, defTime, limtTime, type, comment) => {
         return (
             <div>
                 <div style={{ display: "flex", gap: "25px" }}>
@@ -58,7 +58,7 @@ const ManWork = () => {
                     </span>
                     <span style={{ width: "150px", textAlign: "right" }}>{code}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{wName}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{salary}</span>
+                    {/* <span style={{ width: "150px", textAlign: "right" }}>{salary}</span> */}
                     <span style={{ width: "150px", textAlign: "right" }}>{workDates}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{defTime}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{limtTime}</span>
@@ -84,24 +84,28 @@ const ManWork = () => {
         // 새로운 그룹 정보 변수 선언
         let temp01 = newWork.wrkId + `${workData.length + 1}` || `T${workData.length + 1}`;  // 그룹 ID 변수
         let temp02 = newWork.wrkName || `테스트그룹`;  // 그룹 이름 변수
-        let temp03 = newWork.salaryType || `테스트그룹장`;  // 그룹장 ID 변수
-        let temp04 = newWork.wrkDays || `테스트 그룹 설명`;  // 그룹 설명 변수
-        let temp05 = newWork.wrkDfRule || 40;  // 조직 위치 변수
-        let temp06 = newWork.wrkMxRule || 52;  // 그룹 인원 수 변수
-        let temp07 = newWork.wrkType || "정규직";  // 그룹 인원 수 변수
-        let temp08 = newWork.wrkDesc || "테스트용";  // 그룹 인원 수 변수
-
+        let temp03 = newWork.wrkTimeStart || `테스트그룹장`;  // 근로시간
+        let temp04 = newWork.wrkTimeEnd || `테스트그룹장`;  // 근로시간
+        let temp05 = newWork.wrkbreakTime || `테스트그룹장`;  // 근로시간
+        let temp06 = newWork.wrkDays || `테스트 그룹 설명`;  // 그룹 설명 변수 6
+        let temp07 = newWork.wrkDfRule || 40.0;  // 조직 위치 변수 7
+        let temp08 = newWork.wrkMxRule || 52.0;  // 그룹 인원 수 변수 8
+        let temp09 = newWork.wrkType || "정규직";  // 그룹 인원 수 변수 9 
+        let temp10 = newWork.wrkDesc || "테스트용";  // 그룹 인원 수 변수 10
+        
         try {
             // DB에 새 그룹 추가 요청
             const response = await axios.post("/management/addwork", {
                 work_id: temp01,
                 work_name: temp02,
-                work_salary_type: temp03,
-                work_days: temp04,
-                work_default_rule: temp05,
-                work_max_rule: temp06,
-                work_type: temp07,
-                work_desc: temp08
+                work_start: temp03,
+                work_end: temp04,
+                work_break: temp05,
+                work_days: temp06,
+                work_default_rule: temp07,
+                work_max_rule: temp08,
+                work_type: temp09,
+                work_desc: temp10
             });
             // 서버로부터 저장된 데이터를 가져옴
             const incomingGroup = response.data;
@@ -113,12 +117,14 @@ const ManWork = () => {
                 {
                     work_id: temp01,
                     work_name: temp02,
-                    work_salary_type: temp03,
-                    work_days: temp04,
-                    work_default_rule: temp05,
-                    work_max_rule: temp06,
-                    work_type: temp07,
-                    work_desc: temp08,
+                    work_start: temp03,
+                    work_end: temp04,
+                    work_break: temp05,
+                    work_days: temp06,
+                    work_default_rule: temp07,
+                    work_max_rule: temp08,
+                    work_type: temp09,
+                    work_desc: temp10,
                     created_at: new Date().toISOString() // 현재 시간
                 }
             ];
@@ -237,7 +243,7 @@ const ManWork = () => {
                     </span>
                     <span style={{ width: "150px", textAlign: "right" }}>근로번호</span>
                     <span style={{ width: "150px", textAlign: "right" }}>근로명</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>월급/시급</span>
+                    {/* <span style={{ width: "150px", textAlign: "right" }}>월급/시급</span> */}
                     <span style={{ width: "150px", textAlign: "right" }}>소정근로요일</span>
                     <span style={{ width: "150px", textAlign: "right" }}>소정근로규칙</span>
                     <span style={{ width: "150px", textAlign: "right" }}>최대근로규칙</span>
@@ -252,7 +258,8 @@ const ManWork = () => {
                         workData.map(work => workLine(
                             work.work_id,
                             work.work_name,
-                            work.work_salary_type,
+                            // work.work_salary_type,
+                            work.work_days,
                             work.work_default_rule,
                             work.work_max_rule,
                             work.work_type,

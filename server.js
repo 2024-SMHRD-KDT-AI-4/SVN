@@ -45,9 +45,8 @@ app.use('/attendance', attendanceRouter);
 const requestRouter = require('./routes/requestRouter.js');
 app.use('/request', requestRouter);
 
-// [새로 추가] 경고+얼굴인식 라우터
-const alertRouter = require('./routes/alertRouter.js');
-app.use('/alert', alertRouter);
+
+
 
 // 서버 실행
 app.listen(PORT, () => {

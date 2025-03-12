@@ -75,24 +75,24 @@ const WeeklyTableCalendar = () => {
       alert("모든 입력값을 입력해주세요!");
       return;
     }
-  
+
     const startIdx = timeSlots1.indexOf(startTime);
     const endIdx = timeSlots2.indexOf(endTime);
-  
+
     if (startIdx === -1 || endIdx === -1 || startIdx >= endIdx) {
       alert("시간 입력이 잘못되었습니다.");
       return;
     }
-  
+
     const formattedDate = new Date(date).toISOString().split("T")[0];
-  
+
     // ✅ 기존: 이름과 날짜만 비교 → 일정 중복 발생!
     // ✅ 수정: 이름 + 날짜 + 시작시간 + 끝시간까지 비교
     if (schedules.some((s) => s.name === name && s.date === formattedDate && s.startTime === startTime && s.endTime === endTime)) {
       alert("같은 이름, 같은 시간의 일정이 이미 존재합니다!");
       return;
     }
-  
+
     const newSchedule = {
       name,
       date: formattedDate,
@@ -102,7 +102,7 @@ const WeeklyTableCalendar = () => {
       endIndex: endIdx,
       color: getColorForName(name),
     };
-  
+
     setSchedules([...schedules, newSchedule]);
   };
 
@@ -112,12 +112,12 @@ const WeeklyTableCalendar = () => {
     for (let i = 0; i < name.length; i++) {
       hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
-  
+
     // 🔥 기존 방식 대신 HSL 색상 생성 (무지개 색상 유지)
     const hue = Math.abs(hash) % 360; // 0~359도 사이의 색상 (무지개 범위)
     const saturation = 70 + (Math.abs(hash) % 20); // 70%~90% 사이의 채도
     const lightness = 80 - (Math.abs(hash) % 10); // 70%~80% 사이의 밝기 (파스텔 느낌)
-  
+
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`; // 🎨 파스텔 무지개 색 반환
   };
 
@@ -126,16 +126,16 @@ const WeeklyTableCalendar = () => {
 
   if (view === "Calendar") {
     return <Calendar goBack={() => setView("Schedule")} />;
-}
+  }
 
   return (
-    
+
     <div className={styles.calendar}>
-    <div className={styles.calendarChanges}>
+      <div className={styles.calendarChanges}>
         {/* 🔥 onClick 이벤트 추가 (주간 버튼 클릭 시 Schedule로 전환) */}
         <span className={styles.weekBtn} onClick={() => setView("Calendar")}>월간</span>
         <span className={styles.monthBtn}>주간</span>
-    </div>
+      </div>
 
 
       {/* 주간 이동 버튼 */}
@@ -160,32 +160,32 @@ const WeeklyTableCalendar = () => {
 
       {/* 근무 일정 테이블 */}
       <table className="w-full max-w-[1600px] border-collapse border" style={{ width: '1600px', tableLayout: "fixed" }}>
-  <thead>
-    <tr className="border">
-      <th className="border p-2" style={{ width: "100px" }}>시간</th>
-      {weekDays.map((day) => (
-        <th
-          key={day.fullDate}
-          className="border p-2"
-          style={{
-            width: "150px", // ✅ `th` 크기 고정 (늘어나지 않음)
-            backgroundColor: day.fullDate === today ? 'pink' : 'transparent',
-            whiteSpace: "nowrap", // ✅ 줄바꿈 방지
-            overflow: "hidden", // ✅ 넘치는 텍스트 숨김
-            textOverflow: "ellipsis", // ✅ 초과된 부분 '...' 표시
-          }}
-        >
-          {day.date}
-        </th>
-      ))}
-    </tr>
-  </thead>
-  <tbody>
+        <thead>
+          <tr className="border">
+            <th className="border p-2" style={{ width: "100px" }}>시간</th>
+            {weekDays.map((day) => (
+              <th
+                key={day.fullDate}
+                className="border p-2"
+                style={{
+                  width: "150px", // ✅ `th` 크기 고정 (늘어나지 않음)
+                  backgroundColor: day.fullDate === today ? 'pink' : 'transparent',
+                  whiteSpace: "nowrap", // ✅ 줄바꿈 방지
+                  overflow: "hidden", // ✅ 넘치는 텍스트 숨김
+                  textOverflow: "ellipsis", // ✅ 초과된 부분 '...' 표시
+                }}
+              >
+                {day.date}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
   {timeSlots.map((time, i) => (
     <React.Fragment key={i}>
-      <tr className="border-b-2 border-gray-800">
+      <tr className="border-b border-gray-400" style={{ borderBottom: "1px solid black" }}>
         {/* 시간 셀 */}
-        <td className="border relative h-12" style={{ width: '100px', textAlign: "center", height: "50px" }}>
+        <td className="border relative h-12" style={{ width: "100px", textAlign: "center", height: "50px" }}>
           {time}
         </td>
 
@@ -194,34 +194,33 @@ const WeeklyTableCalendar = () => {
           <td key={day.fullDate} className="border relative h-12 flex flex-col">
             {schedules
               .filter((schedule) => {
-                const startIdx = timeSlots1.indexOf(schedule.startTime) - 1; // 🔥 -1을 추가하여 올바른 인덱스 계산
+                const startIdx = timeSlots1.indexOf(schedule.startTime) - 1;
                 const endIdx = timeSlots2.indexOf(schedule.endTime) - 1;
                 return schedule.date === day.fullDate && i >= startIdx && i < endIdx;
               })
               .map((schedule, index) => (
                 <span
-                key={`schedule-${index}`}
-                className="p-1 text-white font-bold rounded-md flex items-center justify-center"
-                style={{
-                  backgroundColor: schedule.color, // ✅ 기존 색상 유지
-                  marginBottom: "4px",
-                  whiteSpace: "nowrap", // ✅ 한 줄 유지 (줄바꿈 방지)
-                  overflow: "hidden", // ✅ 넘치는 텍스트 숨김
-                  textOverflow: "ellipsis", // ✅ 초과된 부분 '...' 표시
-                  maxWidth: "100%", // ✅ 부모 요소에 맞춰 자동 조정
-                }}
-              >
-
+                  key={`schedule-${index}`}
+                  className="p-1 text-white font-bold rounded-md flex items-center justify-center"
+                  style={{
+                    backgroundColor: schedule.color,
+                    marginBottom: "4px",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: "100%",
+                  }}
+                >
                   {schedule.name}
                 </span>
               ))}
           </td>
         ))}
       </tr>
-
     </React.Fragment>
   ))}
 </tbody>
+
 
       </table>
     </div>

@@ -57,7 +57,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
 
         // 상태 업데이트 후 부모에게 데이터 전달
         onSubmit(testData);
-        
+
         // 폼 데이터 초기화
         setFormData({
             name: "",
@@ -106,12 +106,29 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
                         value={formData.joinDate} onChange={handleChange}  // joinDate 필드 변경 시 handleChange 호출
                     />
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                {/* <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
                     <label htmlFor="department">부서</label>
                     <input
                         type="text" name="department" id="department" placeholder="부서"
                         value={formData.department} onChange={handleChange}  // department 필드 변경 시 handleChange 호출
                     />
+                </div> */}
+
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="department">부서</label>
+                    <select
+                        name="department"
+                        id="department"
+                        value={formData.department} // 선택된 값
+                        onChange={handleChange} // 선택 변경 시 호출
+                    >
+                        <option value="">부서를 선택하세요</option> {/* 기본값 */}
+                        {parsedData.map((department, index) => (
+                            <option key={index} value={department}>
+                                {department}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
                     <label htmlFor="dob">생년월일</label>
