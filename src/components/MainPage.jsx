@@ -36,8 +36,8 @@ const MainPage = () => {
     const editerLogin = async () => {
         //e.preventDefault(); // 폼의 기본 제출 동작 방지
         // id와 pw를 자동으로 입력
-        const id = 'god';
-        const pw = 'god';
+        const id = 'kanginoh';
+        const pw = '12345';
 
         try {
             // 로그인 요청: id, pw을 서버로 전송

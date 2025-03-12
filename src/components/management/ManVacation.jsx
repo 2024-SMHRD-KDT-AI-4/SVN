@@ -1,12 +1,14 @@
 import { React, useState } from 'react'
 import AddGroupModal from '../modals/AddGroupModal'
+import { Button } from '@mui/material';
 
 const ManVacation = () => {
     const [workData, setWorkData] = useState([
-        ["DE01", "오픈", "월급", "월,화,수,목,금", "주 40시간", "주 52시간", "정규직","매장관리자"],
-        ["OE01", "오픈", "월급", "월,화,수,목,금", "주 40시간", "주 52시간", "정규직", "오픈직원"],
-        ["ME01", "미들", "시급", "월,수,금", "주 24시간", "주 30시간", "계약직", "청소/재고관리"],
-        ["CE01", "마감", "시급", "목,금", "주 8시간", "주 8시간", "인턴", "교육중"],
+        ["휴가", "안지운", "2025.03.12", "2025.03.12", "내맘이지구리", "검토 중", "", ""],
+        ["휴가", "안지운", "2025.03.13", "2025.03.13", "내맘이지구리", "검토 중", "", ""],
+        ["휴가", "안지운", "2025.03.14", "2025.03.14", "내맘이지구리", "검토 중", "", ""],
+        ["휴가", "안지운", "2025.03.15", "2025.03.15", "내맘이지구리", "검토 중", "", ""],
+
     ]);
     // 근로번호
     // 근로명
@@ -19,7 +21,7 @@ const ManVacation = () => {
     const [selectedWorks, setSelectedWorks] = useState([]); // 체크된 조직들의 ID를 관리
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const groupLine = (code, wName, salary, workDates, defTime, limtTime, type, comment) => {
+    const vacationLine = (code, wName, salary, workDates, defTime, limtTime, type, comment) => {
         return (
             <div>
                 <div style={{ display: "flex", gap: "25px" }}>
@@ -30,14 +32,15 @@ const ManVacation = () => {
                             onChange={() => handleCheckboxChange(code)} // 상태 변경
                         />
                     </span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{code}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{wName}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{salary}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{workDates}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{defTime}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{limtTime}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{type}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{comment}</span>
+                    <span style={{ width: "100px", textAlign: "right" }}>{code}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{wName}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{salary}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{workDates}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{defTime}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{limtTime}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{type}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{comment}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}> <button>승인</button><button>반려</button></span>
                 </div>
 
                 <hr />
@@ -77,7 +80,8 @@ const ManVacation = () => {
     return (
         <div style={{ width: "1600px" }}>
             <h2 style={{ margin: 0, marginRight: "20px" }}>휴가관리</h2>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "20px" }}>
+            <hr />
+            {/* <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "20px" }}>
                 <span
                     style={{
                         display: "inline-block",
@@ -112,9 +116,9 @@ const ManVacation = () => {
                 >
                     + 근로 추가하기
                 </span>
-            </div>
+            </div> */}
             <div>
-                <span>총 근로 수 : {workData.length}</span>
+                <span>총 휴가요청 수 : {workData.length}</span>
                 <hr />
                 <div style={{ display: "flex", gap: "25px" }}>
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
@@ -124,28 +128,25 @@ const ManVacation = () => {
                             checked={selectedWorks.length === workData.length && workData.length > 0}
                         />
                     </span>
-                    <span style={{ width: "150px", textAlign: "right" }}>근로번호</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>근로명</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>월급/시급</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>소정근로요일</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>소정근로규칙</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>최대근로규칙</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>계약유형</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>비고란</span>
+                    <span style={{ width: "100px", textAlign: "right" }}>요청종류</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>요청자</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>부터</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>까지</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>사유</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>처리여부</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>처리날짜</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>처리자</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>승인처리</span>
 
                 </div>
                 <hr style={{ marginBottom: "25px" }} />
                 {/* 실질적인 직원 표시 */}
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {workData.map(works => groupLine(works[0], works[1], works[2], works[3], works[4], works[5],works[6],works[7]))}
+                    {workData.map(works => vacationLine(works[0], works[1], works[2], works[3], works[4], works[5],works[6],works[7]))}
                 </div>
             </div>
             {/* AddWorkerModal 컴포넌트를 렌더링 */}
-            <AddGroupModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)} // 모달 닫기
-                onSubmit={handleAddGroup} // 모달에서 직원 추가하기
-            />
+            <AddGroupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddGroup}/>
         </div>
     )
 }

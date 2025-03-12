@@ -27,6 +27,7 @@ const Main = () => {
         const storedUser = sessionStorage.getItem('user');
         if (storedUser) {
             const userData = JSON.parse(storedUser); // 세션 저장소에 저장된 사용자 데이터 파싱
+            //console.log(userData);
             setAccount({
                 id: "temp", // 기본적으로 "temp"로 설정
                 name: userData?.name || 'Unknown', // 이름이 없으면 기본값 "Unknown"
@@ -254,10 +255,68 @@ const Main = () => {
             }
         };
 
+        // 5. DB에서 휴가 데이터를 가져오는 함수
+        const fetchVacationData = async () => {
+            //console.log("휴가 데이터 가져오기")
+            try {
+                // 서버에 GET 요청을 보내 휴가 데이터를 가져옴
+                const response = await axios.get('/management/getVacation');
+                const fetchedVacationData = JSON.stringify(response.data.data, null, 2); // 서버에서 받은 휴가 데이터
+                //console.log("휴가 데이터:", fetchedVacationData);
+                // 4. 받은 휴가 데이터를 세션 저장소에 저장
+                sessionStorage.setItem('vacationData', fetchedVacationData);
+
+            } catch (error) {
+                // 6. 서버에서 데이터를 가져오는 데 실패한 경우 오류 처리
+                console.error("휴가 데이터를 가져오는 데 실패했습니다.", error);
+                const vacations = [
+                    {
+                        req_idx: "1",
+                        req_type: "휴가",
+                        req_content: "1111",
+                        emp_id: "241210001",
+                        start_date: "2025.03.11",
+                        end_date: "2025.03.12",
+                        created_at: "2025.03.11",
+                        req_status: "N",
+                        approved_at: "",
+                        admin_id: ""
+                    },
+                    {
+                        req_idx: "2",
+                        req_type: "휴가",
+                        req_content: "집에가고싶어요",
+                        emp_id: "241210001",
+                        start_date: "2025.03.11",
+                        end_date: "2025.03.12",
+                        created_at: "2025.03.11",
+                        req_status: "N",
+                        approved_at: "",
+                        admin_id: ""
+                    },
+                    {
+                        req_idx: "3",
+                        req_type: "휴가",
+                        req_content: "테스트",
+                        emp_id: "241210001",
+                        start_date: "2025.03.12",
+                        end_date: "2025.03.13",
+                        created_at: "2025.03.11",
+                        req_status: "N",
+                        approved_at: "",
+                        admin_id: ""
+                    },
+                ];
+                // 객체를 문자열로 변환하여 sessionStorage에 저장
+                sessionStorage.setItem('workData', JSON.stringify(vacations));
+            }
+        };
+
         // 7. 페이지 로드 시 데이터들을 가져오는 함수 호출
         fetchEmployeeData();
         fetchGroupData();
         fetchWorkData();
+        fetchVacationData();
 
     }, []); // 빈 배열이므로 이 useEffect는 컴포넌트가 처음 렌더링될 때만 실행됩니다.
 

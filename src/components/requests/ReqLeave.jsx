@@ -12,20 +12,21 @@ const ReqLeave = () => {
 
     // ✅ sessionStorage에서 직원 데이터 불러오기
     useEffect(() => {
-        const storedEmployeeData = sessionStorage.getItem("employeeData");
-        if (storedEmployeeData) {
-            const employees = JSON.parse(storedEmployeeData);
-            if (employees.length > 0) {
-                setEmpId(employees[0].emp_id); // ✅ 첫 번째 직원의 emp_id 가져오기 (실제 로그인 유저 정보 필요)
-            }
-            console.log(empId);
-        }
+        const aa = JSON.parse(sessionStorage.getItem("user")); // 현재 로그인한 유저
+        const storedEmployeeData = JSON.parse(sessionStorage.getItem("employeeData")); // 현재 등록된 직원들
+
+        //console.log('테스트1', aa)
+        //console.log('테스트2', storedEmployeeData)
+
+        const hrEmployees = storedEmployeeData.filter(emp => emp.emp_name === aa.name);
+        //console.log("체크", hrEmployees); // emp_id 값만 담긴 배열 출력
+        setEmpId(hrEmployees[0].emp_id)
     }, []);
 
-    // ✅ emp_id가 변경될 때마다 콘솔에서 확인 !!!!!!!!!
-    useEffect(() => {
-        console.log("현재 로그인된 직원 ID:", empId); // ✅ 콘솔 로그 추가
-    }, [empId]);
+    //✅ emp_id가 변경될 때마다 콘솔에서 확인 !!!!!!!!!
+    // useEffect(() => {
+    //     console.log("현재 로그인된 직원 ID:", empId); // ✅ 콘솔 로그 추가
+    // }, [empId]);
 
     // 신청 일수 계산
     useEffect(() => {
@@ -56,14 +57,16 @@ const ReqLeave = () => {
 
         try {
             // 콘솔 확인용!!!!!!
-            console.log("보낼 데이터:", {emp_id: empId, start_date: startDate,
-                end_date: endDate, reason, type });
+            console.log("보낼 데이터:", {
+                emp_id: empId, start_date: startDate,
+                end_date: endDate, reason, type
+            });
 
             // axios.post() 방식
-            const response = await axios.post("/request/leave", { 
-                req_idx : null,
-                req_type : type, // 휴가 유형
-                req_content :  reason,
+            const response = await axios.post("/request/leave", {
+                req_idx: null,
+                req_type: type, // 휴가 유형
+                req_content: reason,
                 emp_id: empId, // 로그인한 사용자 ID
                 start_date: startDate,
                 end_date: endDate,
@@ -98,7 +101,7 @@ const ReqLeave = () => {
 
             <div style={styles.formGroup}>
                 <div style={styles.inputGroup}>
-                    <label>휴가 유형:</label> 
+                    <label>휴가 유형:</label>
                     <select value={type} onChange={(e) => setType(e.target.value)} style={styles.select}>
                         <option value="휴가">휴가</option>
                         <option value="병가">병가</option>
@@ -181,9 +184,9 @@ const styles = {
         width: "250px",
         padding: "5px",
     },
-    select: { 
-        width: "250px" ,
-        padding: "5px" 
+    select: {
+        width: "250px",
+        padding: "5px"
     },
     boldText: {
         width: "200px",
