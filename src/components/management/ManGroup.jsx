@@ -25,22 +25,16 @@ const ManGroup = () => {
     useEffect(() => {
         const storedGroups = sessionStorage.getItem('groupData'); // 저장된 사용자 정보 가져오기
         //console.log("한번실행")
-        //console.log(storedWorkers)
+        //console.log(storedGroups)
         let parsedData = null;
 
-        try {
+        if(storedGroups) {
             // storedWorkers가 항상 JSON 문자열로 들어온다고 가정
             parsedData = JSON.parse(storedGroups);
             //console.log("일반조직데이터 :", parsedData);
         
             // 상태 업데이트
             setGroupData(parsedData);
-        } catch (error) {
-            // JSON 파싱에 실패한 경우
-            console.error("Error parsing JSON:", error);
-        
-            // 필요하다면 기본 데이터로 초기화
-            // setEmployeeData(temps); 
         }
     }, []);
 

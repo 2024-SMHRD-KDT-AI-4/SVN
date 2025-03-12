@@ -31,7 +31,7 @@ managementRouter.get('/getEmployees', async (req, res) => {
                 //console.log('직원 데이터 로드 완료:', result);
                 res.status(200).json({ message: '직원 데이터 로드 완료', data: result });
             } else {
-                console.log('직원 데이터 없음');
+                //console.log('직원 데이터 없음');
                 res.status(404).json({ message: '직원 데이터 없음', data: null });
             }
         });
@@ -128,7 +128,7 @@ managementRouter.get('/getGroup', async (req, res) => {
                 //console.log('직원 데이터 로드 완료:', result);
                 res.status(200).json({ message: '그룹 데이터 로드 완료', data: result });
             } else {
-                console.log('그룹 데이터 없음');
+                //console.log('그룹 데이터 없음');
                 res.status(404).json({ message: '그룹 데이터 없음', data: null });
             }
         });
@@ -156,7 +156,7 @@ managementRouter.post('/addGroup', async (req, res) => {
                 //console.log('직원 추가 성공:', result);
                 res.status(201).json({ message: '그룹 추가 성공', data: result });
             } else {
-                console.log('직원 추가 실패: 변화 없음');
+                console.log('그룹 추가 실패: 변화 없음');
                 res.status(500).json({ message: '그룹 추가 실패', data: null });
             }
         });
@@ -218,11 +218,11 @@ managementRouter.get('/getWork', async (req, res) => {
             }
 
             if (result?.length > 0) {
-                // 직원 데이터가 성공적으로 반환되었을 때
-                //console.log('직원 데이터 로드 완료:', result);
+                // 근무 데이터가 성공적으로 반환되었을 때
+                //console.log('근무 데이터 로드 완료:', result);
                 res.status(200).json({ message: '근무 데이터 로드 완료', data: result });
             } else {
-                console.log('그룹 데이터 없음');
+                //console.log('근무 데이터 없음');
                 res.status(404).json({ message: '근무 데이터 없음', data: null });
             }
         });

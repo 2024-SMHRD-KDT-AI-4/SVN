@@ -1,15 +1,9 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import AddGroupModal from '../modals/AddGroupModal'
 import { Button } from '@mui/material';
 
 const ManVacation = () => {
-    const [workData, setWorkData] = useState([
-        ["휴가", "안지운", "2025.03.12", "2025.03.12", "내맘이지구리", "검토 중", "", ""],
-        ["휴가", "안지운", "2025.03.13", "2025.03.13", "내맘이지구리", "검토 중", "", ""],
-        ["휴가", "안지운", "2025.03.14", "2025.03.14", "내맘이지구리", "검토 중", "", ""],
-        ["휴가", "안지운", "2025.03.15", "2025.03.15", "내맘이지구리", "검토 중", "", ""],
-
-    ]);
+    const [workData, setWorkData] = useState([]);
     // 근로번호
     // 근로명
     // 월급/시급
@@ -20,26 +14,47 @@ const ManVacation = () => {
 
     const [selectedWorks, setSelectedWorks] = useState([]); // 체크된 조직들의 ID를 관리
     const [isModalOpen, setIsModalOpen] = useState(false);
+    useEffect(() => {
+        const storedVacations = sessionStorage.getItem('vacationData'); // 저장된 사용자 정보 가져오기
+        //console.log("한번실행")
+        //console.log(storedVacations)
+        let parsedData = null;
 
-    const vacationLine = (code, wName, salary, workDates, defTime, limtTime, type, comment) => {
+        try {
+            // storedVacations 항상 JSON 문자열로 들어온다고 가정
+            parsedData = JSON.parse(storedVacations);
+            //console.log("일반휴가데이터 :", parsedData);
+
+            // 상태 업데이트
+            setWorkData(parsedData);
+        } catch (error) {
+            // JSON 파싱에 실패한 경우
+            console.error("Error parsing JSON:", error);
+
+            // 필요하다면 기본 데이터로 초기화
+            // setWorkData(temps); 
+        }
+    }, []);
+
+    const vacationLine = (vCode,vType, vEmp, vStart, vEnd, vContent, vStatus, vAdminID, vApproval) => {
         return (
             <div>
                 <div style={{ display: "flex", gap: "25px" }}>
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            checked={selectedWorks.includes(code)} // 체크 상태 관리
-                            onChange={() => handleCheckboxChange(code)} // 상태 변경
+                            checked={selectedWorks.includes(vCode)} // 체크 상태 관리
+                            onChange={() => handleCheckboxChange(vCode)} // 상태 변경
                         />
                     </span>
-                    <span style={{ width: "100px", textAlign: "right" }}>{code}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{wName}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{salary}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{workDates}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{defTime}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{limtTime}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{type}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{comment}</span>
+                    <span style={{ width: "100px", textAlign: "right" }}>{vType}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{vEmp}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{vStart}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{vEnd}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{vContent}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{vStatus}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{vAdminID}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{vApproval}</span>
                     <span style={{ width: "140px", textAlign: "right" }}> <button>승인</button><button>반려</button></span>
                 </div>
 
@@ -137,16 +152,17 @@ const ManVacation = () => {
                     <span style={{ width: "140px", textAlign: "right" }}>처리날짜</span>
                     <span style={{ width: "140px", textAlign: "right" }}>처리자</span>
                     <span style={{ width: "140px", textAlign: "right" }}>승인처리</span>
+                    {/*  */}
 
                 </div>
                 <hr style={{ marginBottom: "25px" }} />
                 {/* 실질적인 직원 표시 */}
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {workData.map(works => vacationLine(works[0], works[1], works[2], works[3], works[4], works[5],works[6],works[7]))}
+                    {workData.map(work => vacationLine(work.req_idx, work.req_type, work.emp_id, work.start_date, work.end_date, work.req_content, work.req_status, work.approved_at, work.admin_id))}
                 </div>
             </div>
             {/* AddWorkerModal 컴포넌트를 렌더링 */}
-            <AddGroupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddGroup}/>
+            <AddGroupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddGroup} />
         </div>
     )
 }

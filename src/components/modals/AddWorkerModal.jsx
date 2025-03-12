@@ -4,8 +4,11 @@ import React, { useState } from 'react';
 const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
     // sessionStorage에서 가져온 데이터가 올바른 JSON 문자열인지 확인
     const storedGroups = sessionStorage.getItem('groupData');
-    const parsedData = JSON.parse(storedGroups).map(item => item.group_name);
-    console.log("조직의 종류 :", parsedData);
+    let parsedData = null
+    if(storedGroups){
+        parsedData = JSON.parse(storedGroups).map(item => item.group_name);
+        //console.log("조직의 종류 :", parsedData);
+    }
 
     // 폼 데이터 상태 관리
     const [formData, setFormData] = useState({
@@ -123,7 +126,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
                         onChange={handleChange} // 선택 변경 시 호출
                     >
                         <option value="">부서를 선택하세요</option> {/* 기본값 */}
-                        {parsedData.map((department, index) => (
+                        {parsedData?.map((department, index) => (
                             <option key={index} value={department}>
                                 {department}
                             </option>

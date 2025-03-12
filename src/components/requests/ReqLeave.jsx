@@ -15,8 +15,8 @@ const ReqLeave = () => {
         const aa = JSON.parse(sessionStorage.getItem("user")); // 현재 로그인한 유저
         const storedEmployeeData = JSON.parse(sessionStorage.getItem("employeeData")); // 현재 등록된 직원들
 
-        //console.log('테스트1', aa)
-        //console.log('테스트2', storedEmployeeData)
+        console.log('테스트1', aa)
+        console.log('테스트2', storedEmployeeData)
 
         const hrEmployees = storedEmployeeData.filter(emp => emp.emp_name === aa.name);
         //console.log("체크", hrEmployees); // emp_id 값만 담긴 배열 출력

@@ -10,24 +10,18 @@ const ManEmplyee = () => {
     const [isDltModalOpen, setIsDltModalOpen] = useState(false);
 
     useEffect(() => {
-        const storedWorkers = sessionStorage.getItem('employeeData'); // 저장된 사용자 정보 가져오기
+        const storedEmployees = sessionStorage.getItem('employeeData'); // 저장된 사용자 정보 가져오기
         //console.log("한번실행")
-        //console.log(storedWorkers)
+        //console.log(storedEmployees)
         let parsedData = null;
 
-        try {
+        if (storedEmployees) {
             // storedWorkers가 항상 JSON 문자열로 들어온다고 가정
-            parsedData = JSON.parse(storedWorkers);
-            //console.log("일반직원데이터 :", parsedData);
-        
+            parsedData = JSON.parse(storedEmployees);
+            //console.log("일반조직데이터 :", parsedData);
+
             // 상태 업데이트
             setEmployeeData(parsedData);
-        } catch (error) {
-            // JSON 파싱에 실패한 경우
-            console.error("Error parsing JSON:", error);
-        
-            // 필요하다면 기본 데이터로 초기화
-            // setEmployeeData(temps); 
         }
     }, []);
 
@@ -235,7 +229,7 @@ const ManEmplyee = () => {
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
                     {/* 객체를 배열처리해줘야  map함수 사용 가능 */}
                     <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                        {employeeData.map(worker => employLine(
+                        {employeeData?.map(worker => employLine(
                             worker.emp_id,
                             worker.emp_name,
                             worker.emp_role,

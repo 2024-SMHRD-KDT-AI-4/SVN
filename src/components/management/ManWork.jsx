@@ -25,25 +25,18 @@ const ManWork = () => {
     useEffect(() => {
         const storedWorks = sessionStorage.getItem('workData'); // 저장된 사용자 정보 가져오기
         //console.log("한번실행")
-        //console.log(storedWorkers)
+        //console.log(storedWorks)
         let parsedData = null;
 
-        try {
+        if (storedWorks) {
             // storedWorkers가 항상 JSON 문자열로 들어온다고 가정
             parsedData = JSON.parse(storedWorks);
-            //console.log("일반근무데이터 :", parsedData);
-        
+            //console.log("일반조직데이터 :", parsedData);
+
             // 상태 업데이트
             setWorkData(parsedData);
-        } catch (error) {
-            // JSON 파싱에 실패한 경우
-            console.error("Error parsing JSON:", error);
-        
-            // 필요하다면 기본 데이터로 초기화
-            // setEmployeeData(temps); 
         }
     }, []);
-
 
     const workLine = (code, wName, workDates, defTime, limtTime, type, comment) => {
         return (
@@ -92,7 +85,7 @@ const ManWork = () => {
         let temp08 = newWork.wrkMxRule || 52.0;  // 그룹 인원 수 변수 8
         let temp09 = newWork.wrkType || "정규직";  // 그룹 인원 수 변수 9 
         let temp10 = newWork.wrkDesc || "테스트용";  // 그룹 인원 수 변수 10
-        
+
         try {
             // DB에 새 그룹 추가 요청
             const response = await axios.post("/management/addwork", {
