@@ -78,7 +78,7 @@ const ReqLeave = () => {
 
 
             // ✅ 성공적으로 전송되면 alert 창 띄우기
-            alert(`휴가 신청 완료! 상세 내용: ${response.data.detail}`);
+            alert(`휴가 신청 완료!`);
 
             // ✅ 입력값 초기화
             setStartDate("");

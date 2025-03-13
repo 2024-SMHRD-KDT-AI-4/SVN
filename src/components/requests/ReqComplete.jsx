@@ -11,11 +11,11 @@ const ReqComplete = () => {
         const aa = JSON.parse(sessionStorage.getItem("user")); // 현재 로그인한 유저
         const storedEmployeeData = JSON.parse(sessionStorage.getItem("employeeData")); // 현재 등록된 직원들
 
-        console.log('테스트c', aa)
-        console.log('테스트c2', storedEmployeeData)
+        // console.log('테스트c', aa)
+        // console.log('테스트c2', storedEmployeeData)
 
         const hrEmployees = storedEmployeeData.filter(emp => emp.emp_name === aa.name);
-        console.log("체크c", hrEmployees); // emp_id 값만 담긴 배열 출력
+        // console.log("체크c", hrEmployees); // emp_id 값만 담긴 배열 출력
 
         setEmpId(hrEmployees[0].emp_id)
     }, []);
@@ -65,7 +65,7 @@ const ReqComplete = () => {
                                     🔄{req.req_type} : {dayjs(req.origin_date).format("YYYY-MM-DD")} {req.origin_time}
                                     ➝ {dayjs(req.change_date).format("YYYY-MM-DD")} {req.change_time}
                                 </span>
-                                <span>(사유: {req.req_content})</span>
+                                <p>(사유: {req.req_content})</p>
                                 </div>
                                 
                             ) : (
@@ -75,7 +75,7 @@ const ReqComplete = () => {
                                         ⏸{req.req_type} : {dayjs(req.start_date).format("YYYY-MM-DD")} ~
                                         {dayjs(req.end_date).format("YYYY-MM-DD")}
                                     </span>
-                                    <span>(사유: {req.req_content})</span>
+                                    <p>(사유: {req.req_content})</p>
                                 </div>
                             )}
 

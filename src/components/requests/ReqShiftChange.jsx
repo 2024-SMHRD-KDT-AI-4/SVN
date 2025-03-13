@@ -61,7 +61,7 @@ const ReqShiftChange = () => {
       console.log("✅ [프론트엔드] 서버 응답:", response.data);
 
       // ✅ 성공적으로 전송되면 alert 창 띄우기
-      alert(`휴가 신청 완료! 상세 내용: ${response.data.detail}`);
+      alert(`근무 변경 신청 완료!`);
 
 
       // ✅ 입력값 초기화
