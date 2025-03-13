@@ -1,26 +1,24 @@
-import pickle
-import os
+import cv2
 
-# 파일 경로
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # 현재 파일이 있는 경로
-pkl_path = os.path.join(BASE_DIR, 'face_encodings.pkl')  # 같은 폴더에 있다고 가정
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # 내장 카메라
+# cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # 외장 카메라 (필요시)
 
-# 파일 읽어서 구조 확인
-try:
-    with open(pkl_path, 'rb') as f:
-        data = pickle.load(f)
+if not cap.isOpened():
+    print("❌ 카메라 열기 실패")
+    exit()
 
-    print("✅ 파일 로드 성공!")
-    print("파일 데이터 타입:", type(data))  # 딕셔너리인지 리스트인지
-    if isinstance(data, dict):
-        print("딕셔너리 키 목록:", data.keys())
-    elif isinstance(data, list):
-        print("리스트 길이:", len(data))
-        print("리스트 첫번째 항목 타입:", type(data[0]))
-    else:
-        print("기타 데이터 타입")
+print("✅ 카메라 열기 성공")
 
-except FileNotFoundError:
-    print("[ERROR] 파일을 찾을 수 없습니다.")
-except Exception as e:
-    print(f"[ERROR] 파일 읽기 실패: {e}")
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("❌ 프레임 읽기 실패")
+        break
+
+    cv2.imshow("테스트 카메라", frame)
+
+    if cv2.waitKey(1) & 0xFF == 27:  # ESC 누르면 종료
+        break
+
+cap.release()
+cv2.destroyAllWindows()

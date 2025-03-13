@@ -1,43 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 
 const AttAlert = () => {
-  const [result, setResult] = useState('');
-
-  const handleFaceRecognition = async () => {
+  
+  // 버튼 클릭 시 실행되는 함수
+  const handleFaceCheck = async () => {
     try {
-      const response = await axios.post('/alert/face-check');
-      if (response.data.success) {
-        setResult(`[인식 성공] 직원 ID: ${response.data.wo_id}`);
+      const res = await axios.post('/alert/face-check');  // 서버의 alertRouter와 연결
+
+      // 성공 여부 체크
+      if (res.data.success) {
+        const empId = res.data.wo_id;
+
+        // ✅ 현재 시간 구하기 (프론트에서 실시간 시간 생성)
+        const now = new Date();
+        const formattedTime = now.toLocaleString();  // "YYYY-MM-DD 오전/오후 HH:MM:SS"
+
+        // ✅ 인식 성공 alert
+        alert(`${empId}님 얼굴 인식 시간은 ${formattedTime} 입니다.`);
+        
+        // 추후 DB 저장을 위한 자리 (미완성)
+        // await axios.post('/attendance/record', { empId, time: formattedTime });
+
       } else {
-        setResult(`[인식 실패] ${response.data.message}`);
+        // ❌ 미등록 사용자 등 실패 시
+        alert(`인식 실패: ${res.data.message}`);
       }
+
     } catch (error) {
-      console.error('서버 오류:', error);
-      setResult('서버 오류 발생');
+      // ⚙️ 서버 오류
+      alert(`서버 오류: ${error.response?.data?.message || '알 수 없는 오류'}`);
     }
   };
 
   return (
-    <div
-      style={{
-        width: "300px",
-        height: "200px",
-        border: "1px solid #ccc",
-        borderRadius: "10px",
-        backgroundColor: "#fff",
-        padding: "10px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center"
-      }}
-    >
-      <h4>경고</h4>
-      <button onClick={handleFaceRecognition} style={{ marginBottom: '10px' }}>
-        얼굴 인식
-      </button>
-      <div style={{ color: "red" }}>{result}</div>
+    <div>
+      <h3>출근 얼굴 인식</h3>
+      <button onClick={handleFaceCheck}>얼굴 인식</button>
     </div>
   );
 };
