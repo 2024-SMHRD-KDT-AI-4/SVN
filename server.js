@@ -45,8 +45,24 @@ app.use('/attendance', attendanceRouter);
 const requestRouter = require('./routes/requestRouter.js');
 app.use('/request', requestRouter);
 
-
-// 서버 실행
-app.listen(PORT, () => {
+// ---------------------- 서버 + 소켓.io 실행 ----------------------
+const server = app.listen(PORT, () => {
   console.log(`서버 실행 중: http://localhost:${PORT}`);
 });
+
+// 소켓 설정
+const socket = require('./config/socket');
+const io = socket.init(server); // io 초기화
+
+// 클라이언트 연결 확인 (선택)
+io.on('connection', (socket) => {
+  console.log('🟢 새 클라이언트 접속:', socket.id);
+
+  socket.on('disconnect', () => {
+    console.log('🔴 클라이언트 접속 해제:', socket.id);
+  });
+});
+
+// ---------------------- 소켓 주입 라우터 (이거만 남기기!!) ----------------------
+const scheduleAlertRouter = require('./routes/scheduleAlertRouter')(io); // io 주입
+app.use('/schedule-alert', scheduleAlertRouter);  // 스케줄 알림 처리

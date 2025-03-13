@@ -1,0 +1,15 @@
+### 스케줄 생성 테스트 (schedule-create)
+POST http://localhost:5067/schedule-alert/schedule/create
+Content-Type: application/json
+
+{
+  "sche_title": "회의",
+  "sche_content": "팀 회의",
+  "st_dt": "2025-03-12",
+  "st_tm": "09:00:00",
+  "ed_dt": "2025-03-12",
+  "ed_tm": "10:00:00",
+  "sche_status": "예정",
+  "emp_id": "E001",
+  "chat_name": "관리자"
+}

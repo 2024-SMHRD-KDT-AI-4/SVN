@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
 import '../Chatting.css';
+
+// Socket.io 연결 (서버 주소 확인 필요)
+const socket = io('http://localhost:5067');
 
 const Chatting = () => {
   // 채팅 그룹 목록 예시
@@ -14,6 +18,32 @@ const Chatting = () => {
   const [chatInput, setChatInput] = useState('');
   const [messages, setMessages] = useState({});
 
+ //  Socket.io로 실시간 스케줄 알림 받기
+ useEffect(() => {
+  socket.on('scheduleAlert', (message) => {
+    console.log(' 받은 알림:', message);
+
+    // 선택된 그룹에 실시간 알림 추가
+    setMessages((prevMessages) => {
+      const updatedMessages = { ...prevMessages };
+      // 현재 그룹이 선택되어 있으면 거기에 추가
+      if (selectedGroup) {
+        updatedMessages[selectedGroup] = [
+          ...(updatedMessages[selectedGroup] || []),
+          `[알림] ${message}`, // 알림 메시지 형식
+        ];
+      }
+      return updatedMessages;
+    });
+  });
+
+  // 언마운트 시 연결 해제
+  return () => {
+    socket.off('scheduleAlert');
+  };
+}, [selectedGroup]); // 그룹이 바뀔 때마다 리스너 유지
+
+ // 그룹 클릭 시 그룹 선택 및 메시지 초기화
   const handleGroupClick = (groupId) => {
     setSelectedGroup(groupId);
     if (!messages[groupId]) {
@@ -21,6 +51,7 @@ const Chatting = () => {
     }
   };
 
+  // 메시지 전송 버튼 클릭 시
   const handleSendMessage = () => {
     if (!chatInput.trim()) return; // 빈 입력 방지
 
