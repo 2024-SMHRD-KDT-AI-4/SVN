@@ -1,50 +1,50 @@
-import { React, useState, useEffect } from 'react'
-import AddGroupModal from '../modals/AddGroupModal'
-import { Button } from '@mui/material';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 가져오기
+import Modal from '../modals/VacationModal';
+//import { Button } from '@mui/material';
 
 const ManVacation = () => {
-    const [workData, setWorkData] = useState([]);
-    // 근로번호
-    // 근로명
-    // 월급/시급
-    // 소정근로요일
-    // 소정근로규칙
-    // 최대근로규칙
-    // 계약유형
-
-    const [selectedWorks, setSelectedWorks] = useState([]); // 체크된 조직들의 ID를 관리
+    const [vacationData, setVacationData] = useState([]);
+    const [empId, setEmpId] = useState("");
+    const [selectedWorks, setSelectedVacations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalData, setModalData] = useState({ code: null, select: null });
+
     useEffect(() => {
-        const storedVacations = sessionStorage.getItem('vacationData'); // 저장된 사용자 정보 가져오기
-        //console.log("한번실행")
-        //console.log(storedVacations)
+        const storedVacations = sessionStorage.getItem('vacationData');
         let parsedData = null;
-
         try {
-            // storedVacations 항상 JSON 문자열로 들어온다고 가정
             parsedData = JSON.parse(storedVacations);
-            //console.log("일반휴가데이터 :", parsedData);
-
-            // 상태 업데이트
-            setWorkData(parsedData);
+            setVacationData(parsedData);
         } catch (error) {
-            // JSON 파싱에 실패한 경우
             console.error("Error parsing JSON:", error);
-
-            // 필요하다면 기본 데이터로 초기화
-            // setWorkData(temps); 
         }
     }, []);
 
-    const vacationLine = (vCode,vType, vEmp, vStart, vEnd, vContent, vStatus, vAdminID, vApproval) => {
+    useEffect(() => {
+        const aa = JSON.parse(sessionStorage.getItem("user"));
+        const storedEmployeeData = JSON.parse(sessionStorage.getItem("employeeData"));
+
+        //const hrEmployees = storedEmployeeData.filter(emp => emp.emp_name === aa.name);
+        setEmpId(aa.id);
+    }, []);
+
+    useEffect(() => {
+        if (modalData.code !== null) {
+            console.log(modalData.code, modalData.select)
+            setIsModalOpen(true); // modalData가 변경되면 모달을 열도록 설정
+        }
+    }, [modalData]); // modalData가 변경될 때마다 실행
+
+    const vacationLine = (vCode, vType, vEmp, vStart, vEnd, vContent, vStatus, vAdminID, vApproval) => {
         return (
             <div>
                 <div style={{ display: "flex", gap: "25px" }}>
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            checked={selectedWorks.includes(vCode)} // 체크 상태 관리
-                            onChange={() => handleCheckboxChange(vCode)} // 상태 변경
+                            checked={selectedWorks.includes(vCode)}
+                            onChange={() => handleCheckboxChange(vCode)}
                         />
                     </span>
                     <span style={{ width: "100px", textAlign: "right" }}>{vType}</span>
@@ -55,92 +55,88 @@ const ManVacation = () => {
                     <span style={{ width: "140px", textAlign: "right" }}>{vStatus}</span>
                     <span style={{ width: "140px", textAlign: "right" }}>{vAdminID}</span>
                     <span style={{ width: "140px", textAlign: "right" }}>{vApproval}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}> <button>승인</button><button>반려</button></span>
+                    {vStatus === "N" ? 
+                    <span style={{ width: "140px", textAlign: "right" }}>
+                        <button onClick={() => btnReviewVacation(vCode, true)}>승인</button>
+                        <button onClick={() => btnReviewVacation(vCode, false)}>반려</button>
+                    </span> :
+                    <span style={{ width: "140px", textAlign: "right" }}>처리완료</span>
+                    }
                 </div>
-
                 <hr />
             </div>
-
         );
     };
+
     const handleCheckboxChange = (code) => {
-        setSelectedWorks((prev) =>
+        setSelectedVacations((prev) =>
             prev.includes(code)
-                ? prev.filter((id) => id !== code) // 이미 체크된 경우 제거
-                : [...prev, code] // 체크되지 않은 경우 추가
+                ? prev.filter((id) => id !== code)
+                : [...prev, code]
         );
     };
-    const btnRemoveGroup = () => {
-        setWorkData(workData.filter((group) => !selectedWorks.includes(group[0])));
-        setSelectedWorks([]); // 삭제 후 선택 초기화
+
+    const btnReviewVacation = (code, select) => {
+        console.log(code, select);
+        setModalData({ code, select }); // 휴가 ID와 select 값 전달
     };
 
-    const handleAddGroup = (newWork) => {
-        setWorkData([
-            ...workData,
-            [
-                newWork.dpId || "T0000", // 팀번호
-                newWork.dpName || "테스트팀", // 팀이름
-                newWork.dpHead || "테스트장", // 팀장
-                newWork.description || "테스트용", // 이름
-                newWork.location || "8호실", // 이름
-                newWork.number || "999", // 이름
-            ],
-        ]);
-        setIsModalOpen(false); // 모달 닫기
+    const handleVacation = async(code, result , confirm) => {
+        console.log(`휴가번호 ${code}의 ${result} 처리 ${confirm === true ? "허가": "취소"}`)
+
+        if (!confirm) {
+            //console.log("삭제가 취소됨");
+            return; // 아무 동작도 하지 않음
+        }
+
+        try {
+            // 서버에 삭제 요청
+            const response = await axios.post("/management/checkVacation", { ids: code , who : empId });
+            //console.log("서버에 보낸 데이터:", selectedGroups);
+
+            // 서버 응답 확인
+            const returnData = response.data;
+            console.log("서버에서 받은 데이터:", returnData.data[0]);
+
+            // 응답이 성공적일 경우
+            if (response.status === 200) {
+                // 상태 업데이트
+                const updatedVacationData = vacationData.filter((vacation) => vacation.req_idx == code);
+                console.log("업데이트된 직원 데이터:", updatedVacationData);
+
+                // sessionStorage.setItem('groupData', JSON.stringify(updatedGroupData)); // 세션 저장소에 저장
+
+                //setVacationData(updatedGroupData); // React 상태 업데이트
+                //setSelectedGroups([]); // 선택 초기화
+                setIsModalOpen(false); // 모달 닫기
+            } else {
+                console.error("서버 응답 오류:", response.data);
+                alert("휴가 처리 요청이 실패했습니다. 서버의 응답을 확인하세요.");
+            }
+        } catch (error) {
+            console.error("직원 삭제 요청 중 오류 발생:", error);
+            alert("휴가를 처리하는 데 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
+        }
+
+
+
+        
+        // 처리 로직을 여기에 추가 (예: 서버로 승인/반려 데이터 전송)
     };
-    const btnAddGroup = () => {
-        setIsModalOpen(true); // 모달 열기
-    };
+
     return (
         <div style={{ width: "1600px" }}>
             <h2 style={{ margin: 0, marginRight: "20px" }}>휴가관리</h2>
-            <hr />
-            {/* <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "20px" }}>
-                <span
-                    style={{
-                        display: "inline-block",
-                        padding: "10px 20px",
-                        backgroundColor: "#007BFF",
-                        color: "#fff",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        textAlign: "center",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        marginLeft: "10px",
-                    }}
-                    onClick={btnRemoveGroup}
-                >
-                    - 근로 삭제하기
-                </span>
-                <span
-                    style={{
-                        display: "inline-block",
-                        padding: "10px 20px",
-                        backgroundColor: "#007BFF",
-                        color: "#fff",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        textAlign: "center",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        marginLeft: "10px",
-                    }}
-                    onClick={btnAddGroup}
-                >
-                    + 근로 추가하기
-                </span>
-            </div> */}
+
             <div>
-                <span>총 휴가요청 수 : {workData.length}</span>
+                <span>총 휴가요청 수 : {vacationData.length}</span>
                 <hr />
                 <div style={{ display: "flex", gap: "25px" }}>
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            onChange={(e) => setSelectedWorks(e.target.checked ? workData.map((w) => w[0]) : [])}
-                            checked={selectedWorks.length === workData.length && workData.length > 0}
+                            onChange={(e) => setSelectedVacations(e.target.checked ? vacationData.map((w) => w.req_idx) : [])}
+                            checked={selectedWorks.length === vacationData.length && vacationData.length > 0}
                         />
                     </span>
                     <span style={{ width: "100px", textAlign: "right" }}>요청종류</span>
@@ -152,19 +148,15 @@ const ManVacation = () => {
                     <span style={{ width: "140px", textAlign: "right" }}>처리날짜</span>
                     <span style={{ width: "140px", textAlign: "right" }}>처리자</span>
                     <span style={{ width: "140px", textAlign: "right" }}>승인처리</span>
-                    {/*  */}
-
                 </div>
                 <hr style={{ marginBottom: "25px" }} />
-                {/* 실질적인 직원 표시 */}
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {workData.map(work => vacationLine(work.req_idx, work.req_type, work.emp_id, work.start_date, work.end_date, work.req_content, work.req_status, work.approved_at, work.admin_id))}
+                    {vacationData.map(vac => vacationLine(vac.req_idx, vac.req_type, vac.emp_id, vac.start_date, vac.end_date, vac.req_content, vac.req_status, vac.approved_at, vac.admin_id))}
                 </div>
             </div>
-            {/* AddWorkerModal 컴포넌트를 렌더링 */}
-            <AddGroupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddGroup} />
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} code={modalData.code} select={modalData.select} onSubmit={handleVacation} />
         </div>
-    )
-}
+    );
+};
 
-export default ManVacation
+export default ManVacation;

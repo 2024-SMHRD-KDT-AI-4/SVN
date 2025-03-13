@@ -1,11 +1,14 @@
 const tempData = {
     employees: [
-        { emp_id: "241210001", emp_name: "김예은", emp_role: "팀장", emp_group: "백엔드"},
-        { emp_id: "241210002", emp_name: "안지운", emp_role: "부팀장", emp_group: "프론트엔드" },
-        { emp_id: "241210003", emp_name: "김현웅", emp_role: "사원", emp_group: "프론트엔드" },
-        { emp_id: "241210004", emp_name: "전석현", emp_role: "사원", emp_group: "백엔드" },
-        { emp_id: "241210005", emp_name: "김민정", emp_role: "사원", emp_group: "백엔드" },
-
+        { emp_id: "241210001", emp_name: "김예은", emp_role: "팀장", emp_group: "백엔드", emp_grade: '상'},
+        { emp_id: "241210002", emp_name: "안지운", emp_role: "부팀장", emp_group: "프론트엔드" , emp_grade: '중'},
+        { emp_id: "241210003", emp_name: "김현웅", emp_role: "사원", emp_group: "프론트엔드", emp_grade: '하' },
+        { emp_id: "241210004", emp_name: "전석현", emp_role: "사원", emp_group: "백엔드", emp_grade: '상' },
+        { emp_id: "241210005", emp_name: "김민정", emp_role: "사원", emp_group: "백엔드", emp_grade: '중'},
+        { emp_id: "241210004", emp_name: "전석환", emp_role: "사원", emp_group: "백엔드", emp_grade: '상' },
+        { emp_id: "241210005", emp_name: "김민장", emp_role: "사원", emp_group: "백엔드", emp_grade: '중'},
+        { emp_id: "241210006", emp_name: "김예연", emp_role: "훈련생", emp_group: "백엔드", emp_grade: '하'},
+        { emp_id: "241210006", emp_name: "김예안", emp_role: "훈련생", emp_group: "백엔드", emp_grade: '하'},
     ],
 
     groups: [

@@ -1,15 +1,24 @@
 import cv2
 
-# 여러 장치 번호와 백엔드 조합 시도
-device_ids = [0, 1, 2]
-backends = [cv2.CAP_DSHOW, cv2.CAP_MSMF, cv2.CAP_ANY]  # 다양한 백엔드
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # 내장 카메라
+# cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # 외장 카메라 (필요시)
 
-for backend in backends:
-    for device_id in device_ids:
-        print(f"장치번호: {device_id}, 백엔드: {backend} 시도 중...")
-        cap = cv2.VideoCapture(device_id, backend)
-        if cap.isOpened():
-            print(f"✅ [성공] 장치번호 {device_id}, 백엔드 {backend} 연결됨!")
-            cap.release()
-        else:
-            print(f"❌ [실패] 장치번호 {device_id}, 백엔드 {backend} 연결 안 됨.")
+if not cap.isOpened():
+    print("❌ 카메라 열기 실패")
+    exit()
+
+print("✅ 카메라 열기 성공")
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("❌ 프레임 읽기 실패")
+        break
+
+    cv2.imshow("테스트 카메라", frame)
+
+    if cv2.waitKey(1) & 0xFF == 27:  # ESC 누르면 종료
+        break
+
+cap.release()
+cv2.destroyAllWindows()

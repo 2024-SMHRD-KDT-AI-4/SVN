@@ -1,40 +1,19 @@
-import os
 import face_recognition
-import pickle
-from PIL import Image
-import numpy as np
-import re
+import cv2
+import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'face_data')
+def load_faces(directory):
+    known_face_encodings = []
+    known_face_names = []
 
-known_faces = {}
+    for filename in os.listdir(directory):
+        if filename.endswith('.jpg') or filename.endswith('.png'):
+            image_path = os.path.join(directory, filename)
+            image = face_recognition.load_image_file(image_path)
+            encoding = face_recognition.face_encodings(image)
 
-for file_name in os.listdir(DATA_DIR):
-    if file_name.endswith(('.jpg', '.png')):
-        match = re.match(r'(E_\d{3}|L_\d{3})', file_name)
-        if match:
-            employee_id = match.group(1)
-        else:
-            print(f"[경고] 파일명에서 ID 추출 실패: {file_name}")
-            continue
+            if encoding:  # 얼굴 인식에 성공한 경우만
+                known_face_encodings.append(encoding[0])
+                known_face_names.append(os.path.splitext(filename)[0])  # 확장자 제거한 파일명 = 이름
 
-        file_path = os.path.join(DATA_DIR, file_name)
-        image = Image.open(file_path).convert('RGB')
-        image_np = np.array(image)
-
-        encodings = face_recognition.face_encodings(image_np)
-        
-        if encodings:
-            if employee_id not in known_faces:
-                known_faces[employee_id] = []
-            known_faces[employee_id].append(encodings[0])
-            print(f"[로딩 완료] {employee_id}: {file_name}")
-        else:
-            print(f"[경고] 얼굴 인식 실패: {file_name}")
-
-# ✅ 인코딩 데이터 저장 (pickle)
-with open('face_encodings.pkl', 'wb') as f:
-    pickle.dump(known_faces, f)
-
-print("[인코딩 저장 완료] face_encodings.pkl")
+    return known_face_encodings, known_face_names

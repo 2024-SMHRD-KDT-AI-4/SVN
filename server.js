@@ -16,7 +16,6 @@ const buildPath = path.join(__dirname, 'build');
 app.use(express.json());  // JSON 형식의 body 파싱
 app.use(express.urlencoded({ extended: true }));  // URL 인코딩된 데이터 파싱
 
-
 // 정적 파일 서빙
 //app.use(express.static(buildPath));  // build 폴더 내의 모든 파일을 서빙
 
