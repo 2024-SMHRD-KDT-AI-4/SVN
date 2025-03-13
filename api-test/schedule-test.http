@@ -10,6 +10,6 @@ Content-Type: application/json
   "ed_dt": "2025-03-12",
   "ed_tm": "10:00:00",
   "sche_status": "예정",
-  "emp_id": "E001",
+  "emp_id": "241210006",
   "chat_name": "관리자"
 }
