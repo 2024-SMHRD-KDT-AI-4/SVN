@@ -38,7 +38,7 @@ const ManWork = () => {
         }
     }, []);
 
-    const workLine = (code, wName, workDates, defTime, limtTime, type, comment) => {
+    const workLine = (code, wName, wstart, wEnd, workDates, defTime, limtTime, type, comment) => {
         return (
             <div>
                 <div style={{ display: "flex", gap: "25px" }}>
@@ -49,14 +49,15 @@ const ManWork = () => {
                             onChange={() => handleCheckboxChange(code)} // 상태 변경
                         />
                     </span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{code}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{wName}</span>
-                    {/* <span style={{ width: "150px", textAlign: "right" }}>{salary}</span> */}
-                    <span style={{ width: "150px", textAlign: "right" }}>{workDates}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{defTime}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{limtTime}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{type}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{comment}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{code}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{wName}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{wstart}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{wEnd}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{workDates}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{defTime}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{limtTime}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{type}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{comment}</span>
                 </div>
 
                 <hr />
@@ -234,24 +235,27 @@ const ManWork = () => {
                             checked={selectedWorks.length === workData.length && workData.length > 0}
                         />
                     </span>
-                    <span style={{ width: "150px", textAlign: "right" }}>근로번호</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>근로명</span>
-                    {/* <span style={{ width: "150px", textAlign: "right" }}>월급/시급</span> */}
-                    <span style={{ width: "150px", textAlign: "right" }}>소정근로요일</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>소정근로규칙</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>최대근로규칙</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>계약유형</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>비고란</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>근로번호</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>근로명</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>출근시간</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>퇴근시간</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>소정근로요일</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>소정근로규칙</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>최대근로규칙</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>계약유형</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>비고란</span>
 
                 </div>
                 <hr style={{ marginBottom: "25px" }} />
                 {/* 실질적인 직원 표시 */}
+
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
                     {
                         workData.map(work => workLine(
                             work.work_id,
                             work.work_name,
-                            // work.work_salary_type,
+                            work.work_start,
+                            work.work_end,
                             work.work_days,
                             work.work_default_rule,
                             work.work_max_rule,

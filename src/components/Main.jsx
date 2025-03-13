@@ -243,7 +243,7 @@ const Main = () => {
                 </div>
             </div>
             <hr />
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', width: "320px" }}>
                 <div id='buttonGroup'>
                     {/* ✅ MenuList 추가 */}
                     <MenuList

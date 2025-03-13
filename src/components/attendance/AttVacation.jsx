@@ -47,20 +47,20 @@ const AttVacation = () => {
                             height: "100%", // 부모 컨테이너의 전체 높이 사용
                         }}
                     >
-                        <hr
+                        {/* <hr
                             style={{
                                 border: "none",
                                 borderLeft: "2px solid grey", // 두께와 색상
                                 height: "80%", // 수직선의 길이
                             }}
-                        />
+                        /> */}
                     </div>
 
 
                     {/* 휴가신청 버튼 */}
-                    <div style={{ flex: 1, textAlign: "center" }}>
+                    {/* <div style={{ flex: 1, textAlign: "center" }}>
                         <button>휴가신청</button>
-                    </div>
+                    </div> */}
                 </div>
 
 

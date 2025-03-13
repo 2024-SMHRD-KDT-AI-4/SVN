@@ -305,7 +305,7 @@ managementRouter.get('/getVacation', async (req, res) => {
     // DB에서 '휴가' 데이터만 가져오기
     const sql = `
     SELECT 
-    req_idx, req_type, req_content, emp_id, start_date, end_date, created_at, req_status, approved_at, admin_id 
+    req_idx, req_type, req_content, emp_id, start_date, end_date, created_at, req_status, approved_at, admin_id, req_final 
     FROM cgi_24K_AI4_p2_3.${requestTB} 
     WHERE req_type = '휴가'`;
 
@@ -330,7 +330,7 @@ managementRouter.get('/getVacation', async (req, res) => {
 
 // 휴가 데이터를 처리하는 라우터
 managementRouter.post('/checkVacation', async (req, res) => {
-    const { ids, who } = req.body; // req.body에서 ids와 who를 받음
+    const { ids, what, who } = req.body; // req.body에서 ids와 who를 받음
     console.log("휴가 처리할 관리자의 관리자id",who);
     // 처리수행 쿼리문
     const updateSql = `
@@ -338,7 +338,8 @@ managementRouter.post('/checkVacation', async (req, res) => {
         SET 
             approved_at = NOW(),
             admin_id = ?,
-            req_status = 'Y'
+            req_status = 'Y',
+            req_final = ?
         WHERE req_idx IN (?)
     `;
 
@@ -353,13 +354,14 @@ managementRouter.post('/checkVacation', async (req, res) => {
             created_at, 
             req_status, 
             approved_at, 
-            admin_id
+            admin_id,
+            req_final
         FROM tb_request
         WHERE req_idx IN (?)
     `;
 
     try {
-        conn.query(updateSql, [who, ids], (updateError, updateResult) => {
+        conn.query(updateSql, [who, what ,ids], (updateError, updateResult) => {
             if (updateError) {
                 console.error('휴가 처리 중 오류:', updateError);
                 return res.status(500).json({ message: '휴가 처리 오류', error: updateError.message });

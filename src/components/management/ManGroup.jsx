@@ -173,7 +173,7 @@ const ManGroup = () => {
 
     return (
         <div style={{ width: "1600px" }}>
-            <h2 style={{ margin: 0, marginRight: "20px" }}>조직관리</h2>
+            <h2 style={{ margin: 0, marginRight: "20px" }}>직책관리</h2>
             <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "20px" }}>
                 <span
                     style={{
@@ -190,7 +190,7 @@ const ManGroup = () => {
                     }}
                     onClick={btnRemoveGroup}
                 >
-                    - 조직 삭제하기
+                    - 직책 삭제하기
                 </span>
                 <span
                     style={{
@@ -207,11 +207,11 @@ const ManGroup = () => {
                     }}
                     onClick={btnAddGroup}
                 >
-                    + 조직 추가하기
+                    + 직책 추가하기
                 </span>
             </div>
             <div>
-                <span>총 조직 수 : {groupData.length}</span>
+                <span>총 직책 수 : {groupData.length}</span>
                 <hr />
                 <div style={{ display: "flex", gap: "25px" }}>
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
@@ -221,12 +221,12 @@ const ManGroup = () => {
                             checked={selectedGroups.length === groupData.length && groupData.length > 0}
                         />
                     </span>
-                    <span style={{ width: "150px", textAlign: "right" }}>조직번호</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>조직명</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>조직장</span>
+                    <span style={{ width: "150px", textAlign: "right" }}>직책번호</span>
+                    <span style={{ width: "150px", textAlign: "right" }}>직책명</span>
+                    {/* <span style={{ width: "150px", textAlign: "right" }}>조직장</span> */}
                     <span style={{ width: "150px", textAlign: "right" }}>설명</span>
                     <span style={{ width: "150px", textAlign: "right" }}>위치</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>인원수</span>
+                    {/* <span style={{ width: "150px", textAlign: "right" }}>인원수</span> */}
 
                 </div>
                 <hr style={{ marginBottom: "25px" }} />

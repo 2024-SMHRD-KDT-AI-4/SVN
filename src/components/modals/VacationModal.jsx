@@ -1,16 +1,16 @@
 import React from 'react'
 
-const VacationModal = ({ isOpen, onClose, code, select, onSubmit }) => {
+const VacationModal = ({ isOpen, onClose, code, decision ,select, onSubmit }) => {
 
     //const [review, setReview] = useState({incomeCode : code, incomeSelect : select})
 
     const handleConfirm = () => {
-        onSubmit(code, select , true); // 삭제 확정
+        onSubmit(code, decision , true); // 삭제 확정
         onClose(); // 모달 닫기
     };
 
     const handleCancel = () => {
-        onSubmit(code, select , false); // 삭제 취소
+        onSubmit(code, decision, false); // 삭제 취소
         onClose(); // 모달 닫기
     };
 
@@ -43,7 +43,7 @@ const VacationModal = ({ isOpen, onClose, code, select, onSubmit }) => {
                 }}
             >
                 <h3>휴가 처리하기</h3>
-                <div>휴가번호 : {code}, 승인여부 : {select === true ? "승인": "반려"}</div>
+                <div>휴가번호 : {code}, 승인여부 : {decision}</div>
                 <div
                     style={{
                         display: "flex",

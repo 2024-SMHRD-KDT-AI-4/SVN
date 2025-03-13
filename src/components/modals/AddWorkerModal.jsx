@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
     // sessionStorage에서 가져온 데이터가 올바른 JSON 문자열인지 확인
     const storedGroups = sessionStorage.getItem('groupData');
+    let parsePos = ["관리자","매니저","직원","인턴"];
     let parsedData = null
-    if(storedGroups){
+    if (storedGroups) {
         parsedData = JSON.parse(storedGroups).map(item => item.group_name);
         //console.log("조직의 종류 :", parsedData);
     }
@@ -47,7 +48,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
         // 테스트 데이터로 설정
         const testData = {
             name: "테스트맨",
-            position: "테스트",
+            position: "직원",
             joinDate: "2025.03.06",
             department: "테스트부서",
             dob: "2025.03.06",
@@ -95,12 +96,28 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
                         value={formData.name} onChange={handleChange}  // name 필드 변경 시 handleChange 호출
                     />
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                {/* <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
                     <label htmlFor="position">직책</label>
                     <input
                         type="text" name="position" id="position" placeholder="직책"
                         value={formData.position} onChange={handleChange}  // position 필드 변경 시 handleChange 호출
                     />
+                </div> */}
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="position">직책</label>
+                    <select
+                        name="position"
+                        id="position"
+                        value={formData.position} // 선택된 값
+                        onChange={handleChange} // 선택 변경 시 호출
+                    >
+                        <option value="">직책을 선택하세요</option> {/* 기본값 */}
+                        {parsePos?.map((position, index) => (
+                            <option key={index} value={position}>
+                                {position}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
                     <label htmlFor="joinDate">입사일</label>
@@ -118,14 +135,14 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
                 </div> */}
 
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-                    <label htmlFor="department">부서</label>
+                    <label htmlFor="department">조직</label>
                     <select
                         name="department"
                         id="department"
                         value={formData.department} // 선택된 값
                         onChange={handleChange} // 선택 변경 시 호출
                     >
-                        <option value="">부서를 선택하세요</option> {/* 기본값 */}
+                        <option value="">조직을 선택하세요</option> {/* 기본값 */}
                         {parsedData?.map((department, index) => (
                             <option key={index} value={department}>
                                 {department}

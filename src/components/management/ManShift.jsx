@@ -3,19 +3,19 @@ import axios from 'axios'; // axios를 사용하여 서버로부터 데이터 �
 import Modal from '../modals/VacationModal';
 //import { Button } from '@mui/material';
 
-const ManVacation = () => {
-    const [vacationData, setVacationData] = useState([]);
+const ManShift = () => {
+    const [shiftData, setShiftData] = useState([]);
     const [empId, setEmpId] = useState("");
     const [selectedWorks, setSelectedVacations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalData, setModalData] = useState({ code: null, result: null, select: null });
 
     useEffect(() => {
-        const storedVacations = sessionStorage.getItem('vacationData');
+        const storedShifts = sessionStorage.getItem('shfitData');
         let parsedData = null;
         try {
-            parsedData = JSON.parse(storedVacations);
-            setVacationData(parsedData);
+            parsedData = JSON.parse(storedShifts);
+            setShiftData(parsedData);
         } catch (error) {
             console.error("Error parsing JSON:", error);
         }
@@ -31,7 +31,7 @@ const ManVacation = () => {
 
     useEffect(() => {
         if (modalData.code !== null) {
-            console.log('변경된 휴가 코드 : ', modalData.code, ' 변경된 처리내용 : ', modalData.result, ' 변경된 처리 결정 : ', modalData.select)
+            console.log('변경된 근무변경 코드 : ', modalData.code, ' 변경된 처리내용 : ', modalData.result, ' 변경된 처리 결정 : ', modalData.select)
             setIsModalOpen(true); // modalData가 변경되면 모달을 열도록 설정
         }
     }, [modalData]); // modalData가 변경될 때마다 실행
@@ -120,7 +120,7 @@ const ManVacation = () => {
                 let parsedData = null;
                 try {
                     parsedData = JSON.parse(updatingVacations);
-                    setVacationData(parsedData);
+                    setShiftData(parsedData);
                 } catch (error) {
                     console.error("Error parsing JSON:", error);
                 }
@@ -146,14 +146,14 @@ const ManVacation = () => {
             <h2 style={{ margin: 0, marginRight: "20px" }}>휴가관리</h2>
 
             <div>
-                <span>총 휴가요청 수 : {vacationData.length}</span>
+                <span>총 휴가요청 수 : {shiftData.length}</span>
                 <hr />
                 <div style={{ display: "flex", gap: "25px" }}>
                     <span style={{ width: "50px", display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "25px" }}>
                         <input
                             type="checkbox"
-                            onChange={(e) => setSelectedVacations(e.target.checked ? vacationData.map((w) => w.req_idx) : [])}
-                            checked={selectedWorks.length === vacationData.length && vacationData.length > 0}
+                            onChange={(e) => setSelectedVacations(e.target.checked ? shiftData.map((w) => w.req_idx) : [])}
+                            checked={selectedWorks.length === shiftData.length && shiftData.length > 0}
                         />
                     </span>
                     <span style={{ width: "100px", textAlign: "right" }}>요청종류</span>
@@ -168,7 +168,7 @@ const ManVacation = () => {
                 </div>
                 <hr style={{ marginBottom: "25px" }} />
                 <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-                    {vacationData.map(vac => vacationLine(vac.req_idx, vac.req_type, vac.emp_id, vac.start_date, vac.end_date, vac.req_content, vac.req_status, vac.approved_at, vac.admin_id, vac.req_final))}
+                    {shiftData.map(vac => vacationLine(vac.req_idx, vac.req_type, vac.emp_id, vac.start_date, vac.end_date, vac.req_content, vac.req_status, vac.approved_at, vac.admin_id, vac.req_final))}
                 </div>
             </div>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} code={modalData.code} decision={modalData.decision} onSubmit={handleVacation} />
@@ -176,4 +176,4 @@ const ManVacation = () => {
     );
 };
 
-export default ManVacation;
+export default ManShift;
