@@ -19,7 +19,7 @@ const Management = () => {
             {/* 탭 버튼들 */}
             <div className={styles.manageBtns}>
                 <span className={styles.workerTab} onClick={() => onClickTab(0)}>직원</span>
-                <span className={styles.groupTab} onClick={() => onClickTab(1)}>조직</span>
+                <span className={styles.groupTab} onClick={() => onClickTab(1)}>직책</span>
                 <span className={styles.groupTab} onClick={() => onClickTab(2)}>근로</span>
                 <span className={styles.groupTab} onClick={() => onClickTab(3)}>휴가</span>
                 {/* <span className={styles.groupTab} onClick={() => onClickTab(4)}>근무변경</span> */}

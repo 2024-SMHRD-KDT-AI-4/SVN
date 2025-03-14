@@ -27,7 +27,7 @@
 #changableView {
     border: '1px solid black';
     display: flex;
-    justify-content: center;
+    justify-content:left;
     /* 수평 가운데 정렬 */
     gap: 10px;
     /* 컴포넌트 간 간격 */

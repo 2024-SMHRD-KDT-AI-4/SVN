@@ -4,11 +4,20 @@ import React, { useState } from 'react';
 const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
     // sessionStorage에서 가져온 데이터가 올바른 JSON 문자열인지 확인
     const storedGroups = sessionStorage.getItem('groupData');
-    let parsePos = ["관리자","매니저","직원","인턴"];
-    let parsedData = null
+    const storedWorks = sessionStorage.getItem('workData');
+    //let parsePos = ["관리자","매니저","직원","인턴"];
+    let parsePos = null;
+    let parsedWork = null;
     if (storedGroups) {
-        parsedData = JSON.parse(storedGroups).map(item => item.group_name);
-        //console.log("조직의 종류 :", parsedData);
+        //console.log(JSON.parse(storedGroups));
+        parsePos = JSON.parse(storedGroups).map(item => item.group_name);
+        //console.log("직책의 종류 :", parsePos);
+    }
+    if(storedWorks){
+        //console.log(JSON.parse(storedWorks));
+        parsedWork = JSON.parse(storedWorks).map(item => item.work_name);
+        //console.log("조직의 종류 :", parsedWork);
+        
     }
 
     // 폼 데이터 상태 관리
@@ -143,7 +152,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
                         onChange={handleChange} // 선택 변경 시 호출
                     >
                         <option value="">조직을 선택하세요</option> {/* 기본값 */}
-                        {parsedData?.map((department, index) => (
+                        {parsedWork?.map((department, index) => (
                             <option key={index} value={department}>
                                 {department}
                             </option>

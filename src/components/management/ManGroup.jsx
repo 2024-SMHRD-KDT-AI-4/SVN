@@ -28,11 +28,11 @@ const ManGroup = () => {
         //console.log(storedGroups)
         let parsedData = null;
 
-        if(storedGroups) {
+        if (storedGroups) {
             // storedWorkers가 항상 JSON 문자열로 들어온다고 가정
             parsedData = JSON.parse(storedGroups);
             //console.log("일반조직데이터 :", parsedData);
-        
+
             // 상태 업데이트
             setGroupData(parsedData);
         }
@@ -51,10 +51,10 @@ const ManGroup = () => {
                     </span>
                     <span style={{ width: "150px", textAlign: "right" }}>{code}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{dpName}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{dpHeader}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{description}</span>
+                    {/* <span style={{ width: "150px", textAlign: "right" }}>{dpHeader}</span> */}
+                    <span style={{ width: "200px", textAlign: "right" }}>{description}</span>
                     <span style={{ width: "150px", textAlign: "right" }}>{location}</span>
-                    <span style={{ width: "150px", textAlign: "right" }}>{number}</span>
+                    {/* <span style={{ width: "150px", textAlign: "right" }}>{number}</span> */}
                 </div>
 
                 <hr />
@@ -73,27 +73,46 @@ const ManGroup = () => {
     const handleAddGroup = async (newGroup) => {
 
         // 새로운 그룹 정보 변수 선언
-        let temp_groupId = newGroup.dpId + `${groupData.length}` || `group001`;  // 그룹 ID 변수
-        let temp_groupName = newGroup.dpName || `테스트그룹`;  // 그룹 이름 변수
-        let temp_groupHead = newGroup.dpHead || `테스트그룹장`;  // 그룹장 ID 변수
-        let temp_groupDesc = newGroup.description || `테스트 그룹 설명`;  // 그룹 설명 변수
-        let temp_groupPos = newGroup.location || `테스트 위치`;  // 조직 위치 변수
-        let temp_groupCount = newGroup.number || 999;  // 그룹 인원 수 변수
+        let temp_groupId = newGroup.dpId;  // 그룹 ID 변수
+        let temp_groupName = newGroup.dpName;  // 그룹 이름 변수
+        //let temp_groupHead = newGroup.dpHead;  // 그룹장 ID 변수
+        let temp_groupDesc = newGroup.description;  // 그룹 설명 변수
+        let temp_groupPos = newGroup.location;  // 조직 위치 변수
+        // 현재 시간을 ISO 8601 형식의 문자열로 생성 (예: '2025-03-14T04:09:09.427Z')
+        let temp_time = new Date().toISOString()
+            .slice(0, 19) // 초과된 정보(밀리초 '.427' 및 'Z' 타임존 정보)를 제거 (결과: '2025-03-14T04:09:09')
+            .replace('T', ' '); // 'T'를 공백으로 변경하여 MySQL TIMESTAMP 형식에 맞춤 (결과: '2025-03-14 04:09:09')
+
+        // 상세 설명:
+        // 1. `new Date()`
+        //    - 현재 시간을 JavaScript의 `Date` 객체로 생성합니다.
+        // 2. `.toISOString()`
+        //    - ISO 8601 형식(UTC 기준)의 문자열로 변환합니다.
+        //    - 반환값 예: '2025-03-14T04:09:09.427Z'
+        //    - 이 형식은 MySQL에서 직접 지원하지 않으므로 수정이 필요합니다.
+        // 3. `.slice(0, 19)`
+        //    - 문자열의 처음부터 19번째 문자까지만 가져옵니다.
+        //    - 결과: '2025-03-14T04:09:09'
+        //    - 여기서 밀리초('.427')와 타임존 정보('Z')를 제거합니다.
+        // 4. `.replace('T', ' ')`
+        //    - ISO 8601 형식의 'T'(날짜와 시간 구분자)를 공백(' ')으로 바꿉니다.
+        //    - 결과: '2025-03-14 04:09:09' (MySQL TIMESTAMP 형식)
+
 
         try {
             // DB에 새 그룹 추가 요청
             const response = await axios.post("/management/addGroup", {
                 group_id: temp_groupId,
                 group_name: temp_groupName,
-                group_head: temp_groupHead,
+                //group_head: temp_groupHead,
                 group_desc: temp_groupDesc,
                 group_pos: temp_groupPos,
-                group_count: temp_groupCount
+                created_at: temp_time
             });
 
             // 서버로부터 저장된 데이터를 가져옴
             const incomingGroup = response.data;
-            //console.log("서버 요청 결과 : ", incomingGroup);
+            console.log("서버 요청 결과 : ", incomingGroup);
 
             // 새로운 직원 데이터를 세션 저장소에 먼저 저장
             const updatedGroupData = [
@@ -101,11 +120,11 @@ const ManGroup = () => {
                 {
                     group_id: temp_groupId,
                     group_name: temp_groupName,
-                    group_head: temp_groupHead,
+                    //group_head: temp_groupHead,
                     group_desc: temp_groupDesc,
                     group_pos: temp_groupPos,
-                    group_count: temp_groupCount,
-                    created_at: new Date().toISOString() // 현재 시간
+                    //group_count: temp_groupCount,
+                    created_at: temp_time // 현재 시간
                 }
             ];
 
@@ -116,8 +135,14 @@ const ManGroup = () => {
             setGroupData(updatedGroupData); // 상태 업데이트
             setIsAddModalOpen(false); // 모달 닫기
         } catch (error) {
-            console.error("Failed to add worker:", error);
-            alert("그룹을 추가하는 데 실패했습니다. 다시 시도해주세요.");
+            if(error.message === "Request failed with status code 500")
+            {
+                alert("직책코드가 중복입니다. 다시 시도해주세요.");
+                return;
+            }
+
+            //console.error("Failed to add worker:", error);
+            alert("조직을 추가하는 데 실패했습니다. 다시 시도해주세요.");
         }
 
         setIsAddModalOpen(false); // 모달 닫기
@@ -150,11 +175,11 @@ const ManGroup = () => {
                 setIsAddModalOpen(false); // 모달 닫기
             } else {
                 console.error("서버 응답 오류:", response.data);
-                alert("직원 삭제 요청이 실패했습니다. 서버의 응답을 확인하세요.");
+                alert("조직 삭제 요청이 실패했습니다. 서버의 응답을 확인하세요.");
             }
         } catch (error) {
             console.error("직원 삭제 요청 중 오류 발생:", error);
-            alert("직원을 삭제하는 데 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
+            alert("조직 삭제하는 데 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.");
         }
     };
 
@@ -224,7 +249,7 @@ const ManGroup = () => {
                     <span style={{ width: "150px", textAlign: "right" }}>직책번호</span>
                     <span style={{ width: "150px", textAlign: "right" }}>직책명</span>
                     {/* <span style={{ width: "150px", textAlign: "right" }}>조직장</span> */}
-                    <span style={{ width: "150px", textAlign: "right" }}>설명</span>
+                    <span style={{ width: "200px", textAlign: "right" }}>설명</span>
                     <span style={{ width: "150px", textAlign: "right" }}>위치</span>
                     {/* <span style={{ width: "150px", textAlign: "right" }}>인원수</span> */}
 
@@ -246,7 +271,7 @@ const ManGroup = () => {
             {/* AddWorkerModal 컴포넌트를 렌더링 */}
             <AddGroupModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onSubmit={handleAddGroup} />
             {/* <DeleteGroupModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteGroup} /> */}
-            <DeleteConfirmModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteGroup} isType={"조직"} />
+            <DeleteConfirmModal isOpen={isDltModalOpen} onClose={() => setIsDltModalOpen(false)} onSubmit={handleDeleteGroup} isType={"직책"} />
         </div>
     )
 }

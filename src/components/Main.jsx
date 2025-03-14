@@ -42,7 +42,7 @@ const Main = () => {
                 name: '안지운', // 로그인하지 않은 경우 기본 이름
                 role: '관리자' // 기본 역할 설정
             }
-            sessionStorage.setItem('user',JSON.stringify(kk));
+            sessionStorage.setItem('user', JSON.stringify(kk));
             setAccount(kk);
         }
 
@@ -84,11 +84,10 @@ const Main = () => {
                 // 객체를 문자열로 변환하여 sessionStorage에 저장
                 sessionStorage.setItem('employeeData', JSON.stringify(tempDataStore.employees));
             }
-            if(consoleOn === "Y")
-            {
+            if (consoleOn === "Y") {
                 console.log("직원 저장 완료", JSON.parse(sessionStorage.getItem('employeeData')));
             }
-            
+
         }
 
 
@@ -118,11 +117,10 @@ const Main = () => {
             }
             // 6. 서버에서 데이터를 가져오는 데 실패한 경우 오류 처리
             //console.error("조직 데이터를 가져오는 데 실패했습니다.", error);
-            if(consoleOn === "Y")
-            {
+            if (consoleOn === "Y") {
                 console.log("조직 저장 완료", JSON.parse(sessionStorage.getItem('groupData')))
             }
-            
+
         }
 
         // 4. DB에서 근무 데이터를 가져오는 함수
@@ -149,11 +147,10 @@ const Main = () => {
                 // 객체를 문자열로 변환하여 sessionStorage에 저장
                 sessionStorage.setItem('workData', JSON.stringify(tempDataStore.works));
             }
-            if(consoleOn === "Y")
-            {
+            if (consoleOn === "Y") {
                 console.log("근무 저장 완료", JSON.parse(sessionStorage.getItem('workData')));
             }
-            
+
         }
 
         // 5. DB에서 휴가 데이터를 가져오는 함수
@@ -181,18 +178,17 @@ const Main = () => {
                 // 객체를 문자열로 변환하여 sessionStorage에 저장
                 sessionStorage.setItem('vacationData', JSON.stringify(tempDataStore.vacations));
             }
-            if(consoleOn === "Y")
-            {
+            if (consoleOn === "Y") {
                 console.log("휴가 저장 완료", JSON.parse(sessionStorage.getItem('vacationData')))
             }
-            
+
         }
 
         // 7. 페이지 로드 시 데이터들을 가져오는 함수 호출
-        fetchEmployeeData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
-        fetchGroupData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
-        fetchWorkData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
-        fetchVacationData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchEmployeeData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchGroupData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchWorkData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchVacationData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
     }, [account])
 
 
@@ -243,26 +239,27 @@ const Main = () => {
                 </div>
             </div>
             <hr />
-            <div style={{ display: 'flex', width: "320px" }}>
-                <div id='buttonGroup'>
-                    {/* ✅ MenuList 추가 */}
-                    <MenuList
-                        menuItems={[
-                            { label: '메인' },
-                            { label: '채팅' },
-                            { label: '근태' },
-                            { label: '요청하기' },
-                            ...(account.role === "관리자" ? [
-                                { label: '스케줄 생성' },
-                                { label: '관리하기' },
-                                { label: 'QNA' }
-                            ] : [])
-                        ]}
-                        onItemSelect={handleMenuSelect} // 메뉴 클릭 시 실행할 함수 전달
-                    />
+            <div style={{ display: 'flex', width: "1920px" }}>
+                <div style={{ display: 'flex', width: "320px" }}>
+                    <div id='buttonGroup'>
+                        {/* ✅ MenuList 추가 */}
+                        <MenuList
+                            menuItems={[
+                                { label: '메인' },
+                                { label: '채팅' },
+                                { label: '근태' },
+                                { label: '요청하기' },
+                                ...(account.role === "관리자" ? [
+                                    { label: '스케줄 생성' },
+                                    { label: '관리하기' },
+                                    { label: 'QNA' }
+                                ] : [])
+                            ]}
+                            onItemSelect={handleMenuSelect} // 메뉴 클릭 시 실행할 함수 전달
+                        />
 
-                    {/* 버튼들 */}
-                    {/* <Buttons className="funcButton" name={'메인'} func={() => { setTextValue(<Calendar />); }} />              
+                        {/* 버튼들 */}
+                        {/* <Buttons className="funcButton" name={'메인'} func={() => { setTextValue(<Calendar />); }} />              
                     <Buttons className="funcButton" name={'채팅'} func={() => { setTextValue(<Chatting />); }} />
                     <Buttons className="funcButton" name={'근태'} func={() => { setTextValue(<Attendance />); }} />
                     <Buttons className="funcButton" name={'요청하기'} func={() => { setTextValue(<RequestForm />); }} />
@@ -274,8 +271,10 @@ const Main = () => {
                             <Buttons className="funcButton_auth" name={'QNA'} func={() => { setTextValue(<QNA />); }} auth={true} />
                         </>
                     )} */}
+                    </div>
+
                 </div>
-                <div id='changableView'>
+                <div id='changableView' style={{ width: "1600px" }} >
                     {/* 현재 선택된 컴포넌트 표시 */}
                     {textValue}
                 </div>

@@ -108,12 +108,12 @@ managementRouter.post('/dltEmployees', async (req, res) => {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////그룹처리///////////////////////////////////////////////
+///////////////////////////////////////직책처리///////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-// 그룹 데이터를 가져오는 라우터
+// 직책 데이터를 가져오는 라우터
 managementRouter.get('/getGroup', async (req, res) => {
-    // DB에서 직원 데이터 가져오기
+    // DB에서 직책 데이터 가져오기
     const sql = `SELECT * FROM cgi_24K_AI4_p2_3.${groupTB}`;
     try {
         conn.query(sql, (error, result) => {
@@ -124,45 +124,45 @@ managementRouter.get('/getGroup', async (req, res) => {
             }
 
             if (result?.length > 0) {
-                // 직원 데이터가 성공적으로 반환되었을 때
-                //console.log('직원 데이터 로드 완료:', result);
-                res.status(200).json({ message: '그룹 데이터 로드 완료', data: result });
+                // 직책 데이터가 성공적으로 반환되었을 때
+                //console.log('직책 데이터 로드 완료:', result);
+                res.status(200).json({ message: '직책 데이터 로드 완료', data: result });
             } else {
-                //console.log('그룹 데이터 없음');
-                res.status(404).json({ message: '그룹 데이터 없음', data: null });
+                //console.log('직책 데이터 없음');
+                res.status(404).json({ message: '직책 데이터 없음', data: null });
             }
         });
     } catch (error) {
-        console.error('그룹 데이터를 가져오는 중 에러:', error);
-        res.status(500).json({ message: '그룹 데이터 가져오기 오류', error: error.message });
+        console.error('직책 데이터를 가져오는 중 에러:', error);
+        res.status(500).json({ message: '직책 데이터 가져오기 오류', error: error.message });
     }
 });
 
-// 그룹 데이터를 추가하는 라우터
+// 직책 데이터를 추가하는 라우터
 managementRouter.post('/addGroup', async (req, res) => {
-    const { group_id, group_name, group_head, group_desc, group_pos, group_count } = req.body;
+    const { group_id, group_name, group_desc, group_pos, created_at} = req.body;
     const sql = `
-    INSERT INTO ${groupTB} (group_id, group_name, group_head, group_desc, group_pos, group_count) VALUES (?, ?, ?, ?, ?, ?)`;
+    INSERT INTO ${groupTB} (group_id, group_name, group_desc, group_pos, created_at) VALUES (?, ?, ?, ?, ?)`;
 
     try {
-        conn.query(sql, [group_id, group_name, group_head, group_desc, group_pos, group_count], (error, result) => {
+        conn.query(sql, [group_id, group_name, group_desc, group_pos, created_at], (error, result) => {
             if (error) {
-                console.error('그룹 추가 중 오류:', error);
-                res.status(500).json({ message: '그룹 추가 실패', error: error.message });
+                console.error('직책 추가 중 오류:', error);
+                res.status(500).json({ message: '직책 추가 실패', error: error.message });
                 return;
             }
 
             if (result?.affectedRows > 0) {
                 //console.log('직원 추가 성공:', result);
-                res.status(201).json({ message: '그룹 추가 성공', data: result });
+                res.status(201).json({ message: '직책 추가 성공', data: result });
             } else {
                 console.log('그룹 추가 실패: 변화 없음');
-                res.status(500).json({ message: '그룹 추가 실패', data: null });
+                res.status(500).json({ message: '직책 추가 실패', data: null });
             }
         });
     } catch (error) {
-        console.error('그룹 추가 중 오류:', error);
-        res.status(500).json({ message: '그룹 추가 오류', error: error.message });
+        console.error('직책 추가 중 오류:', error);
+        res.status(500).json({ message: '직책 추가 오류', error: error.message });
     }
 });
 
@@ -185,19 +185,19 @@ managementRouter.post('/dltGroup', async (req, res) => {
     try {
         conn.query(sql, [ids], (error, result) => {
             if (error) {
-                console.error('그룹 삭제 중 오류:', error);
-                return res.status(500).json({ message: '그룹 삭제 오류', error: error.message });
+                console.error('직책 삭제 중 오류:', error);
+                return res.status(500).json({ message: '직책 삭제 오류', error: error.message });
             }
 
             if (result.affectedRows > 0) {
-                res.status(200).json({ message: '그룹 삭제 성공', data: result });
+                res.status(200).json({ message: '직책 삭제 성공', data: result });
             } else {
-                res.status(404).json({ message: '삭제할 그룹 없습니다.', data: null });
+                res.status(404).json({ message: '삭제할 직책이 없습니다.', data: null });
             }
         });
     } catch (error) {
-        console.error('그룹 삭제 중 예외:', error);
-        res.status(500).json({ message: '그룹 삭제 중 서버 오류', error: error.message });
+        console.error('직책 삭제 중 예외:', error);
+        res.status(500).json({ message: '직책 삭제 중 서버 오류', error: error.message });
     }
 });
 
