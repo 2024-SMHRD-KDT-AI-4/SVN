@@ -26,7 +26,7 @@ const Attendance = () => {
         display: "flex",
         flexDirection: "column",
         gap: "20px",
-        width: "100%",
+        width: "1600px",
         boxSizing: "border-box",
       }}
     >

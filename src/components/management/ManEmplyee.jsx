@@ -169,7 +169,7 @@ const ManEmplyee = () => {
     return (
         <div style={{ width: "1600px" }}>
             <h2 style={{ margin: 0, marginRight: "20px" }}>직원관리</h2>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "20px", marginRight: "50px" }}>
                 <span
                     style={{
                         display: "inline-block",

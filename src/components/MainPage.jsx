@@ -63,50 +63,93 @@ const MainPage = () => {
     };
     return (
         <div className={styles.pageContainer}>
-            <div className={styles.container}>
-                <span className={styles.our}>SAVANNAH</span>
-            </div>
-
-            <form onSubmit={handleLogin}>
-                <input
-                    type="text"
-                    name="id"
-                    placeholder="아이디를 입력하세요."
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    name="pw"
-                    placeholder="비밀번호를 입력하세요."
-                    value={pw}
-                    onChange={(e) => setPw(e.target.value)}
-                    required
-                />
-                <button className={styles.btnLogin} type="submit">로그인</button>
-            </form>
-
-            <button className={styles.RUFirst} onClick={() => setShowModal(true)}>처음이신가요?</button>
-            <button className={styles.RUFirst} onClick={() => editerLogin()}>접속없이 바로 들어가기(개발자용)</button>
-
-            {/* 모달 */}
-            {showModal && (
-                <div className={styles.modal}>
-                    <div className={styles.modalContent}>
-                        <span className={styles.close} onClick={() => setShowModal(false)}>&times;</span>
-                        <h2>가입하기</h2>
-                        <form action="user/join" method="post">
-                            <input type="text" name="act_id" placeholder="아이디를 입력하세요." maxlength="" />
-                            <input type="password" name="act_pw" placeholder="비밀번호를 입력하세요." />
-                            <input type="text" name="act_name" placeholder="이름을 입력하세요." />
-                            <input type="text" name="act_mail" placeholder="이메일을 입력하세요." />
-                            <button type="submit">회원가입</button>
-                            <button type="button" onClick={() => setShowModal(false)}>나가기</button>
-                        </form>
-                    </div>
+            <div style={{border: ""}}>
+                <div className={styles.container}>
+                    <span className={styles.our}>SAVANNAH</span>
                 </div>
-            )}
+
+                <form onSubmit={handleLogin}>
+                    <input
+                        type="text"
+                        name="id"
+                        placeholder="아이디를 입력하세요."
+                        value={id}
+                        onChange={(e) => setId(e.target.value)}
+                        required
+                    />
+                    <input
+                        type="password"
+                        name="pw"
+                        placeholder="비밀번호를 입력하세요."
+                        value={pw}
+                        onChange={(e) => setPw(e.target.value)}
+                        required
+                    />
+                    <button className={styles.btnLogin} type="submit">로그인</button>
+                </form>
+
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column", // 버튼들을 수직으로 배치
+                    justifyContent: "center", // 세로 방향 중앙 정렬
+                    //marginTop: "5px"
+                    // height: "100vh", // 화면 전체 높이를 차지하게 설정
+                }}>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center", // 세로 방향 중앙 정렬
+                        // height: "100vh", // 화면 전체 높이를 차지하게 설정
+                    }}>
+                        <button
+                            className={styles.RUFirst}
+                            style={{
+                                width: "400px", // 버튼 고정 너비
+                                padding: "10px 20px", // 내부 여백
+                                margin: "10px 0", // 버튼 간 간격
+                            }}
+                            onClick={() => setShowModal(true)}
+                        >
+                            처음이신가요?
+                        </button>
+                    </div>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center", // 세로 방향 중앙 정렬
+                        // height: "100vh", // 화면 전체 높이를 차지하게 설정
+                    }}>
+                        <button
+                            className={styles.RUFirst}
+                            style={{
+                                width: "400px", // 버튼 고정 너비
+                                padding: "10px 20px", // 내부 여백
+                                margin: "10px 0", // 버튼 간 간격
+                            }}
+                            onClick={() => editerLogin()}
+                        >
+                            접속없이 바로 들어가기(개발자용)
+                        </button>
+                    </div>
+
+                </div>
+
+                {/* 모달 */}
+                {showModal && (
+                    <div className={styles.modal}>
+                        <div className={styles.modalContent}>
+                            <span className={styles.close} onClick={() => setShowModal(false)}>&times;</span>
+                            <h2>가입하기</h2>
+                            <form action="user/join" method="post">
+                                <input type="text" name="act_id" placeholder="아이디를 입력하세요." maxlength="" />
+                                <input type="password" name="act_pw" placeholder="비밀번호를 입력하세요." />
+                                <input type="text" name="act_name" placeholder="이름을 입력하세요." />
+                                <input type="text" name="act_mail" placeholder="이메일을 입력하세요." />
+                                <button type="submit">회원가입</button>
+                                <button type="button" onClick={() => setShowModal(false)}>나가기</button>
+                            </form>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

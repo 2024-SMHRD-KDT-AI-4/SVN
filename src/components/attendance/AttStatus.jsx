@@ -9,7 +9,7 @@ const AttStatus = (index = 0) => {
                 // flexDirection: "column",
                 // justifyContent: "center",
                 // alignItems: "center",
-                width: "500px",
+                width: "400px",
                 height: "100px",
                 border: "1px solid #ccc",
                 borderRadius: "10px",

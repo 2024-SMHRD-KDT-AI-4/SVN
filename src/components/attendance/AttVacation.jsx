@@ -9,7 +9,7 @@ const AttVacation = () => {
                 // flexDirection: "column",
                 // justifyContent: "center",
                 // alignItems: "center",
-                width: "500px",
+                width: "540px",
                 height: "100px",
                 border: "1px solid #ccc",
                 borderRadius: "10px",
