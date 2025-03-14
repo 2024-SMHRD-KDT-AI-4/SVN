@@ -67,20 +67,6 @@ const App = () => {
         <Route path="/system" element={<Main />} />
       </Routes>
 
-      {/* ✅ 하단 or 상단 원하는 위치에 버튼 배치 */}
-      <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
-        <button onClick={handleFaceCheck} style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          borderRadius: '8px',
-          backgroundColor: '#007bff',
-          color: '#fff',
-          border: 'none',
-          cursor: 'pointer'
-        }}>
-          얼굴 인식 시작
-        </button>
-      </div>
     </Router>
   );
 };

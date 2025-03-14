@@ -4,6 +4,9 @@ const { exec } = require('child_process');
 
 // 얼굴 인식 요청 API
 router.post('/face-check', (req, res) => {
+
+  console.log('체크')
+
   exec('python ./face_recognition/f_auto_recog.py', (error, stdout, stderr) => {
     if (error) {
       console.error('Python 실행 오류:', error);
