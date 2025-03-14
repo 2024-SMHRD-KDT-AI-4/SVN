@@ -17,7 +17,7 @@ app.use(express.json());  // JSON 형식의 body 파싱
 app.use(express.urlencoded({ extended: true }));  // URL 인코딩된 데이터 파싱
 
 // 정적 파일 서빙
-//app.use(express.static(buildPath));  // build 폴더 내의 모든 파일을 서빙
+// app.use(express.static(buildPath));  // build 폴더 내의 모든 파일을 서빙
 
 // 메인 라우터와 서브 라우터
 const mainRouter = require('./routes/mainRouter.js');
@@ -65,3 +65,8 @@ io.on('connection', (socket) => {
 // ---------------------- 소켓 주입 라우터 (이거만 남기기!!) ----------------------
 const scheduleAlertRouter = require('./routes/scheduleAlertRouter')(io); // io 주입
 app.use('/schedule-alert', scheduleAlertRouter);  // 스케줄 알림 처리
+
+// ---------------------- 얼굴 인식 소켓 통합 ----------------------
+// ✅ 새로 추가: 얼굴 인식 소켓
+const faceSocket = require('./config/faceSocket');
+faceSocket(io); // 얼굴 인식 소켓 연결
