@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 const path = require('path');
+const fs = require('fs');  // 파일 존재 확인용
 
 module.exports = function(io) {
   io.on('connection', (socket) => {
@@ -8,16 +9,28 @@ module.exports = function(io) {
     socket.on('faceCheck', () => {
       console.log('📸 얼굴 인식 요청 받음');
 
-      // ✅ Python 경로 검색
-      const pythonPathDefault = 'C:\\Users\\smhrd\\AppData\\Local\\Programs\\Python\\Python311\\python.exe'; // 기존 하드코딩 경로
-      let pythonPath = pythonPathDefault;
+      // ✅ venv 경로 우선 시도
+      const venvPythonPath = path.join(__dirname, '../venv/Scripts/python.exe');
+      let pythonPath = venvPythonPath;
 
-      exec('where python', (err, stdout) => {
-        if (!err) {
-          pythonPath = stdout.split('\n')[0].trim(); // 동적으로 찾은 Python 경로
-        }
-        console.log('🐍 Python 경로:', pythonPath);
+      // ✅ venv의 python.exe가 없을 때만 where python 사용
+      if (!fs.existsSync(venvPythonPath)) {
+        console.log('⚠️ venv python.exe가 없어 where python 시도');
+        exec('where python', (err, stdout) => {
+          if (!err) {
+            pythonPath = stdout.split('\n')[0].trim(); // 동적 탐색된 경로
+          } else {
+            console.error('❌ where python 실패:', err);
+          }
+          proceedWithPython(pythonPath); // 최종 경로로 진행
+        });
+      } else {
+        console.log('🐍 venv Python 경로 사용:', pythonPath);
+        proceedWithPython(pythonPath); // venv 경로로 바로 진행
+      }
 
+      // ✅ 파이썬 실행 함수 분리
+      function proceedWithPython(pythonPath) {
         // ✅ Python 파일 경로
         const scriptPath = path.join(__dirname, '../face_recognition/f_auto_recog.py');
 
@@ -46,7 +59,7 @@ module.exports = function(io) {
             socket.emit('faceResult', { success: true, wo_id: result });
           }
         });
-      });
+      }
     });
 
     socket.on('disconnect', () => {

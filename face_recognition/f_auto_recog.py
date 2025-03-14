@@ -2,6 +2,7 @@ import cv2
 import face_recognition
 import pickle
 import os
+import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 pkl_path = os.path.join(BASE_DIR, 'face_data', 'face_encodings.pkl')  
