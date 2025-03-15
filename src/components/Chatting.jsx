@@ -18,32 +18,32 @@ const Chatting = () => {
   const [chatInput, setChatInput] = useState('');
   const [messages, setMessages] = useState({});
 
- //  Socket.io로 실시간 스케줄 알림 받기
- useEffect(() => {
-  socket.on('scheduleAlert', (message) => {
-    console.log(' 받은 알림:', message);
+  //  Socket.io로 실시간 스케줄 알림 받기
+  useEffect(() => {
+    socket.on('scheduleAlert', (message) => {
+      console.log(' 받은 알림:', message);
 
-    // 선택된 그룹에 실시간 알림 추가
-    setMessages((prevMessages) => {
-      const updatedMessages = { ...prevMessages };
-      // 현재 그룹이 선택되어 있으면 거기에 추가
-      if (selectedGroup) {
-        updatedMessages[selectedGroup] = [
-          ...(updatedMessages[selectedGroup] || []),
-          `[알림] ${message}`, // 알림 메시지 형식
-        ];
-      }
-      return updatedMessages;
+      // 선택된 그룹에 실시간 알림 추가
+      setMessages((prevMessages) => {
+        const updatedMessages = { ...prevMessages };
+        // 현재 그룹이 선택되어 있으면 거기에 추가
+        if (selectedGroup) {
+          updatedMessages[selectedGroup] = [
+            ...(updatedMessages[selectedGroup] || []),
+            `[알림] ${message}`, // 알림 메시지 형식
+          ];
+        }
+        return updatedMessages;
+      });
     });
-  });
 
-  // 언마운트 시 연결 해제
-  return () => {
-    socket.off('scheduleAlert');
-  };
-}, [selectedGroup]); // 그룹이 바뀔 때마다 리스너 유지
+    // 언마운트 시 연결 해제
+    return () => {
+      socket.off('scheduleAlert');
+    };
+  }, [selectedGroup]); // 그룹이 바뀔 때마다 리스너 유지
 
- // 그룹 클릭 시 그룹 선택 및 메시지 초기화
+  // 그룹 클릭 시 그룹 선택 및 메시지 초기화
   const handleGroupClick = (groupId) => {
     setSelectedGroup(groupId);
     if (!messages[groupId]) {
@@ -55,6 +55,12 @@ const Chatting = () => {
   const handleSendMessage = () => {
     if (!chatInput.trim()) return; // 빈 입력 방지
 
+
+    console.log(chatInput);
+    // 서버로 메시지 전송
+    socket.emit('chatMessage', chatInput);
+
+    // 클라이언트 상태에 메시지 추가
     setMessages((prev) => ({
       ...prev,
       [selectedGroup]: [...(prev[selectedGroup] || []), chatInput],
@@ -62,6 +68,7 @@ const Chatting = () => {
 
     setChatInput(''); // 입력 필드 초기화
   };
+
 
   return (
     <div className="chat-container">
