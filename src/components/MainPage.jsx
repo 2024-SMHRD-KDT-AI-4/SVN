@@ -85,12 +85,13 @@ const MainPage = () => {
                         onChange={(e) => setPw(e.target.value)}
                         required
                     />
+                    <br/>
                     <button className={styles.btnLogin} type="submit">로그인</button>
                 </form>
 
                 <div style={{
                     display: "flex",
-                    flexDirection: "column", // 버튼들을 수직으로 배치
+                    flexDirection: "row", // 버튼들을 수평으로 배치
                     justifyContent: "center", // 세로 방향 중앙 정렬
                     //marginTop: "5px"
                     // height: "100vh", // 화면 전체 높이를 차지하게 설정
@@ -103,9 +104,9 @@ const MainPage = () => {
                         <button
                             className={styles.RUFirst}
                             style={{
-                                width: "400px", // 버튼 고정 너비
+                                width: "180px", // 버튼 고정 너비
                                 padding: "10px 20px", // 내부 여백
-                                margin: "10px 0", // 버튼 간 간격
+                                margin: "20px 15px", // 버튼 간 간격
                             }}
                             onClick={() => setShowModal(true)}
                         >
@@ -120,13 +121,13 @@ const MainPage = () => {
                         <button
                             className={styles.RUFirst}
                             style={{
-                                width: "400px", // 버튼 고정 너비
+                                width: "180px", // 버튼 고정 너비
                                 padding: "10px 20px", // 내부 여백
-                                margin: "10px 0", // 버튼 간 간격
+                                margin: "20px 15px", // 버튼 간 간격
                             }}
                             onClick={() => editerLogin()}
                         >
-                            접속없이 바로 들어가기(개발자용)
+                            접속skip(개발자용)
                         </button>
                     </div>
 

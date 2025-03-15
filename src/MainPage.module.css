@@ -1,3 +1,15 @@
+/* 색상 지정 */
+:root {
+    --primary: #57a8ff;
+    --primary-dark: #0056b3;
+    --white: #fafafa;
+    --gray-4: #ced4da;
+    --dark-3: #343a40;
+    --light-2: #f8f9fa;
+    --shadow-2: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-4: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
 /* 모달 배경 스타일 */
 .modal {
     display: block;
@@ -14,10 +26,10 @@
 
 /* 모달 내용 */
 .modal-content {
-    background-color: #fff;
+    background-color: var(--white);
     margin: 10% auto;
     padding: 30px;
-    border-radius: 8px;  /* 모서리를 둥글게 */
+    border-radius: 15px;  /* 모서리를 둥글게 */
     width: 50%;
     max-width: 400px;  /* 최대 너비 설정 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
@@ -59,6 +71,21 @@
     display: flex;
     justify-content: center; /* 가로 중앙 */
     align-items: center;     /* 세로 중앙 */
+    /* background-color: var(--light-2); 배경 색상 */
+    /* min-height: 100vh; 전체 화면 높이 차지 */
+}
+.pageContainer{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 200px;
+    padding: 100px;
+    
+    border: 1px solid var(--gray-4);
+    border-radius: 10px;
+    background-color: var(--light-2); /* 배경 색상 */
+    box-shadow: var(--shadow-2); /* 기본 그림자 효과 */
+    max-width: 400px; /* 폼 크기 제한 */
+    width: 100%;
 
 }
 .our {
@@ -72,11 +99,7 @@
     font-weight: bold;
     margin-bottom: 100px;
 }
-.pageContainer{
-    margin-top: 200px;
-    /* align-content: center; */
 
-}
 
 /* 로그인 폼 스타일 */
 form {
@@ -102,25 +125,28 @@ input:focus {
 
 .btnLogin {
     padding: 10px 15px;
-    background-color: #007BFF;
-    color: white;
+    background-color: var(--primary);
+    color: var(--white);
+    box-shadow: var(--shadow-2);
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 10px;
+    font-size: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .btnLogin:hover {
-    background-color: #0056b3; /* 마우스 올렸을 때 색 변경 */
+    background-color: var(--primary-dark); /* 마우스 올렸을 때 색 변경 */
+    color: var(--white);
 }
 
 .RUFirst {
     padding: 10px 15px;
-    background-color: #007BFF;
-    color: white;
+    background-color: var(--gray-4);
+    color: var(--dark-3);
+    box-shadow: var(--shadow-2);
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -129,7 +155,8 @@ input:focus {
 }
 
 .RUFirst:hover {
-    background-color: #0056b3; /* 마우스 올렸을 때 색 변경 */
+    background-color: var(--primary-dark); /* 마우스 올렸을 때 색 변경 */
+    color: var(--white);
 }
 
 a {
