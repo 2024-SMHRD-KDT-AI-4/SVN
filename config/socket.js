@@ -12,6 +12,7 @@ module.exports = {
         methods: ["GET", "POST"]
       }
     });
+    console.log("강인오 체크")
     return io; // 연결된 io 반환
   },
 

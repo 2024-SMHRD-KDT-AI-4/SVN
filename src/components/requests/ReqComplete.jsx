@@ -26,19 +26,19 @@ const ReqComplete = () => {
         //console.log("현재 로그인된 직원 ID(C):", empId); 
 
         if (!empId) {
-            console.log("첫 렌더링! 재렌더링 시작")
+            //console.log("첫 렌더링! 재렌더링 시작")
             //console.log("❌ empId가 없습니다. API 호출 중단");
             return;
         }
 
-        console.log(`📡 API 호출: /api/list/${empId}`); // 디버깅용 로그 추가
+        //console.log(`📡 API 호출: /api/list/${empId}`); // 디버깅용 로그 추가
 
         const fetchVacationData = async () => {
             //console.log("휴가 데이터 가져오기")
             try {
                 // 서버에 GET 요청을 보내 휴가 데이터를 가져옴
                 const response = await axios.post('request/list/getlist', { ids: empId });
-                console.log("mysql에서온 따끈한 결과", response.data.data);
+                //console.log("mysql에서온 따끈한 결과", response.data.data);
                 setRequests(response.data.data);
             }
             catch (error) {
