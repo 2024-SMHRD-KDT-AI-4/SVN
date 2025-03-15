@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './components/MainPage';
 import Main from './components/Main';
+import ManEmplyee from './components/management/ManEmplyee'; // ✅ 경로 맞춰서
 
 import io from 'socket.io-client';
 const socket = io('http://localhost:5067'); // 서버 연결
@@ -11,14 +12,12 @@ const App = () => {
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    // 스케줄 알림
     socket.on('scheduleAlert', (message) => {
       setToastMessage(`[알림] ${message}`);
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     });
 
-    // 얼굴 인식 결과
     socket.on('faceResult', (data) => {
       if (data.success) {
         setToastMessage(`[얼굴 인식 성공] ${data.wo_id}님 출근 인식 완료`);
@@ -35,14 +34,12 @@ const App = () => {
     };
   }, []);
 
-  // 얼굴 인식 요청 버튼
   const handleFaceCheck = () => {
     socket.emit('faceCheck'); // 소켓으로 얼굴 인식 요청
   };
 
   return (
     <Router>
-      {/* 토스트 알림 (맨 위 고정) */}
       {showToast && (
         <div style={{
           position: 'fixed',
@@ -61,12 +58,11 @@ const App = () => {
         </div>
       )}
 
-      {/* 라우터 */}
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/system" element={<Main />} />
+        <Route path="/management" element={<ManEmplyee />} /> {/* 오타로 존재하는 파일 그대로 사용 */}
       </Routes>
-
     </Router>
   );
 };
