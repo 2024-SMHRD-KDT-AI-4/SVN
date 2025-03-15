@@ -31,7 +31,7 @@ const AttFaceRecog = () => {
 
   return (
     <div>
-      <h3>출근 얼굴 인식 (소켓)</h3>
+      <h3>출근 얼굴 인식</h3>
       <button onClick={handleFaceCheck}>얼굴 인식</button>
     </div>
   );
