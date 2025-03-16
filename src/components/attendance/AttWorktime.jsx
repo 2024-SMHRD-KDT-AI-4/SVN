@@ -1,9 +1,20 @@
-import React from 'react'
+import React from 'react';
 
-const AttWorktime = () => {
+const AttWorktime = ({ day, time }) => {
+    // 총 근무시간 계산 함수
+    const timeResult = (income) => {
+        let hour = Math.floor(income / 60); // 시간 계산
+        let minute = income % 60; // 분 계산
+
+        return { h: hour, m: minute };
+    };
+
+    // JSX 내부에서 직접 함수 실행 대신 계산된 값을 변수로 저장
+    const workTime = timeResult(time);
+
     return (
         <div
-            //key={index}
+            // key={index}
             style={{
                 // display: "flex",
                 // flexDirection: "column",
@@ -18,9 +29,7 @@ const AttWorktime = () => {
                 padding: "10px",
             }}
         >
-            <div style={{
-                fontSize: "20px"
-            }}>
+            <div style={{ fontSize: "20px" }}>
                 <div
                     style={{
                         display: "flex", // flex 레이아웃 사용
@@ -35,7 +44,7 @@ const AttWorktime = () => {
                     <div style={{ flex: 1, textAlign: "center" }}>
                         <span>근무일수</span>
                         <br />
-                        <span>21일</span>
+                        <span>{day}일</span>
                     </div>
 
                     {/* 수직선 */}
@@ -48,28 +57,28 @@ const AttWorktime = () => {
                         }}
                     >
                     </div>
-                    <hr style={{
-                        border: "none",
-                        borderLeft: "2px solid grey",  // 선의 두께와 색상
-                        height: "80%",  // 수직선의 길이
-                        margin: "0 auto"  // 가운데 정렬
-                    }} />
-                    <div>
-                    </div>
+                    <hr
+                        style={{
+                            border: "none",
+                            borderLeft: "2px solid grey", // 선의 두께와 색상
+                            height: "80%", // 수직선의 길이
+                            margin: "0 auto", // 가운데 정렬
+                        }}
+                    />
+                    <div></div>
 
                     {/* 총근무시간 영역 */}
                     <div style={{ flex: 1, textAlign: "center" }}>
                         <span>총근무시간</span>
                         <br />
-                        <span>164시간 56분</span>
+                        <span>
+                            {`${workTime.h}시간 ${workTime.m < 10 ? '0' : ''}${workTime.m}분`}
+                        </span>
                     </div>
                 </div>
-
-
             </div>
-
         </div>
-    )
-}
+    );
+};
 
-export default AttWorktime
+export default AttWorktime;

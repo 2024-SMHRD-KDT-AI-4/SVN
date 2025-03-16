@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AttVacation = () => {
+const AttVacation = ({remain}) => {
     return (
         <div
             //key={index}
@@ -35,7 +35,7 @@ const AttVacation = () => {
                     <div style={{ flex: 1, textAlign: "center" }}>
                         <div>잔여휴가</div>
                         <br />
-                        <span>13일 5시간</span>
+                        <span>{remain}일</span>
                     </div>
 
                     {/* 수직선 */}

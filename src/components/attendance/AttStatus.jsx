@@ -1,9 +1,11 @@
 import React from 'react'
 
-const AttStatus = (index = 0) => {
+const AttStatus = ({late, early, absence}) => {
+
+    //console.log('테스트테스트',late, early, absence);
     return (
         <div
-            key={index}
+            key={0}
             style={{
                 // display: "flex",
                 // flexDirection: "column",
@@ -35,7 +37,7 @@ const AttStatus = (index = 0) => {
                         <span>지각</span>
                         <br />
                         <br />
-                        <span>1</span>
+                        <span>{late}</span>
                     </div>
                     <hr
                         style={{
@@ -49,7 +51,7 @@ const AttStatus = (index = 0) => {
                         <span>조퇴</span>
                         <br />
                         <br />
-                        <span>0</span>
+                        <span>{early}</span>
                     </div>
                     <hr
                         style={{
@@ -63,7 +65,7 @@ const AttStatus = (index = 0) => {
                         <span>결근</span>
                         <br />
                         <br />
-                        <span>0</span>
+                        <span>{absence}</span>
                     </div>
                 </div>
             </div>

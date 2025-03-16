@@ -9,6 +9,7 @@ const employeeTB = "tb_employee"; // DB테이블의 이름
 const groupTB = "tb_group"; // DB테이블의 이름
 const workTB = "tb_work"; // DB테이블의 이름
 const requestTB = "tb_request"; // DB테이블의 이름
+const attendanceTB = "tb_attendance"
 
 // POST 요청을 처리하기 위한 미들웨어 설정
 managementRouter.use(express.json()); // 요청 본문을 JSON으로 파싱
@@ -43,15 +44,15 @@ managementRouter.get('/getEmployees', async (req, res) => {
 
 // 직원 데이터를 추가하는 라우터
 managementRouter.post('/addEmployees', async (req, res) => {
-    const { employeeId, name, position, joinDate, department, dob, phone, email } = req.body;
+    const { employeeId, name, position, joinDate, department, dob, phone, email, accoutId } = req.body;
 
     const sql = `
-        INSERT INTO ${employeeTB} (emp_id, emp_name, emp_role, emp_firstDate, emp_group, emp_birthDate, emp_phone, emp_email) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO ${employeeTB} (emp_id, emp_name, emp_role, emp_firstDate, emp_group, emp_birthDate, emp_phone, emp_email ,act_id) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)
     `;
 
     try {
-        conn.query(sql, [employeeId, name, position, joinDate, department, dob, phone, email], (error, result) => {
+        conn.query(sql, [employeeId, name, position, joinDate, department, dob, phone, email, accoutId], (error, result) => {
             if (error) {
                 console.error('직원 추가 중 오류:', error);
                 res.status(500).json({ message: '직원 추가 실패', error: error.message });
@@ -303,6 +304,7 @@ managementRouter.post('/dltWork', async (req, res) => {
 // 휴가요청 데이터를 가져오는 라우터
 managementRouter.get('/getVacation', async (req, res) => {
     // DB에서 '휴가' 데이터만 가져오기
+    
     const sql = `
     SELECT 
     req_idx, req_type, req_content, emp_id, start_date, end_date, created_at, req_status, approved_at, admin_id, req_final 
@@ -390,5 +392,34 @@ managementRouter.post('/checkVacation', async (req, res) => {
         res.status(500).json({ message: '휴가 처리 중 서버 오류', error: error.message });
     }
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////근태처리///////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+// 근태요청 데이터를 가져오는 라우터
+managementRouter.get('/getAttendance', async (req, res) => {
+    // DB에서 '근태' 데이터 가져오기
+
+    const sql = `SELECT * FROM cgi_24K_AI4_p2_3.${attendanceTB}`;
+    try {
+        // Promise 기반으로 쿼리 실행
+        const [result] = await conn.promise().query(sql);
+
+        if (result.length > 0) {
+            // 데이터가 있을 경우
+            res.status(200).json({ message: '근태 데이터 로드 완료', data: result });
+        } else {
+            // 데이터가 없을 경우
+            console.log('근태 데이터 없음');
+            res.status(404).json({ message: '근태 데이터 없음', data: null });
+        }
+    } catch (error) {
+        // 에러 처리
+        console.error('근태 데이터를 가져오는 중 에러:', error);
+        res.status(500).json({ message: '근태 데이터 가져오기 오류', error: error.message });
+    }
+});
+
 
 module.exports = managementRouter;

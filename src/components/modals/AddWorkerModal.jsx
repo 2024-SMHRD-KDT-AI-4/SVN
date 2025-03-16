@@ -29,6 +29,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
         dob: "",        // 생년월일
         phone: "",      // 연락처
         email: "",      // 이메일
+        attId: "",      // 계정 id
     });
 
     // 입력값 변경 처리 함수
@@ -49,6 +50,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
             dob: "",
             phone: "",
             email: "",
+            attId: "",      // 계정 id
         });
     };
 
@@ -63,6 +65,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
             dob: "2025.03.06",
             phone: "010-1234-5678",
             email: "test@gmail.com",
+            attId: "",
         };
         // 상태 업데이트
         setFormData(testData);
@@ -80,6 +83,7 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
             dob: "",
             phone: "",
             email: "",
+            attId: "",
         });
     };
 
@@ -180,11 +184,18 @@ const AddWorkerModal = ({ isOpen, onClose, onSubmit }) => {
                         value={formData.email} onChange={handleChange}  // email 필드 변경 시 handleChange 호출
                     />
                 </div>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+                    <label htmlFor="attId">계정id</label>
+                    <input
+                        type="attId" name="attId" id="attId" placeholder="계정id"
+                        value={formData.attId} onChange={handleChange}  // attId 필드 변경 시 handleChange 호출
+                    />
+                </div>
 
                 {/* 취소 및 저장 버튼 */}
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
                     <button onClick={onClose} style={{ padding: "5px 10px" }}>취소</button>  {/* 취소 버튼: 모달 닫기 */}
-                    <button onClick={testSubmit} style={{ padding: "5px 10px" }}>테스트</button>  {/* 테스트 버튼: 데이터 저장 */}
+                    {/* <button onClick={testSubmit} style={{ padding: "5px 10px" }}>테스트</button>  테스트 버튼: 데이터 저장 */}
                     <button onClick={handleSubmit} style={{ padding: "5px 10px" }}>저장</button>  {/* 저장 버튼: 데이터 저장 */}
                 </div>
             </div>

@@ -20,6 +20,7 @@ const Chatting = () => {
 
   //  Socket.io로 실시간 스케줄 알림 받기
   useEffect(() => {
+    return;
     socket.on('scheduleAlert', (message) => {
       console.log(' 받은 알림:', message);
 

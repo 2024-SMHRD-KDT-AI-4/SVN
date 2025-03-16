@@ -36,7 +36,7 @@ const ManVacation = () => {
         }
     }, [modalData]); // modalData가 변경될 때마다 실행
 
-    const vacationLine = (vCode, vType, vEmp, vStart, vEnd, vContent, vStatus, vAdminID, vApproval, vFinal) => {
+    const vacationLine = (vCode, vType, vEmp, vStart, vEnd, vContent, vStatus, vApp_at, vAdminID, vApproval, vFinal) => {
         return (
             <div>
                 <div style={{ display: "flex", gap: "25px" }}>
@@ -49,18 +49,31 @@ const ManVacation = () => {
                     </span>
                     <span style={{ width: "100px", textAlign: "right" }}>{vType}</span>
                     <span style={{ width: "140px", textAlign: "right" }}>{vEmp}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{vStart}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{vEnd}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{new Date(vStart).toLocaleDateString("en-CA")}</span>
+                    <span style={{ width: "140px", textAlign: "right" }}>{new Date(vEnd).toLocaleDateString("en-CA")}</span>
                     <span style={{ width: "140px", textAlign: "right" }}>{vContent}</span>
                     <span style={{ width: "140px", textAlign: "right" }}>{vStatus}</span>
+                    {
+                        vStatus === "N" ? (
+                            <span style={{ width: "140px", textAlign: "right" }}>NIL</span>
+                        ) : (
+                            <span style={{ width: "140px", textAlign: "right" }}>{new Date(vApp_at).toLocaleDateString("en-CA")}</span>
+                        )
+                    }
+
                     <span style={{ width: "140px", textAlign: "right" }}>{vAdminID}</span>
-                    <span style={{ width: "140px", textAlign: "right" }}>{vApproval}</span>
-                    {vStatus === "N" ?
-                        <span style={{ width: "140px", textAlign: "right" }}>
-                            <button onClick={() => btnReviewVacation(vCode, "승인", true)}>승인</button>
-                            <button onClick={() => btnReviewVacation(vCode, "반려", false)}>반려</button>
-                        </span> :
-                        <span style={{ width: "140px", textAlign: "right" }}>{vFinal}</span>
+
+                    {
+                        vStatus === "N" ? (
+                            <span style={{ width: "140px", textAlign: "right" }}>
+                                <button onClick={() => btnReviewVacation(vCode, "승인", true)}>승인</button>
+                                <button onClick={() => btnReviewVacation(vCode, "반려", false)}>반려</button>
+                            </span>
+                        ) : (
+                            <span style={{ width: "140px", textAlign: "right" }}>
+                                {vApproval}
+                            </span>
+                        )
                     }
                 </div>
                 <hr />

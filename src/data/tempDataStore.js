@@ -95,7 +95,7 @@ const tempDataStore = {
             group_count: 2,
         },
     ],
-    works : [
+    works: [
         {
             work_id: "DE01",
             work_name: "오픈",
@@ -186,7 +186,105 @@ const tempDataStore = {
             approved_at: "",
             admin_id: ""
         },
-    ]
+    ],
+    attendances: [
+        {
+            att_idx: 1,
+            emp_id: 241210001,
+            att_firstDate: "2024-12-10",
+            att_remain: 3,
+            att_total_days: 99,
+            att_total_time: 23760,
+            att_late: 0,
+            att_early_leave: 0,
+            att_absence: 0,
+            created_at: "2025-03-17 01:03:19"
+        },
+        {
+            att_idx: 2,
+            emp_id: 241210002,
+            att_firstDate: "2024-12-10",
+            att_remain: 3,
+            att_total_days: 99,
+            att_total_time: 23760,
+            att_late: 0,
+            att_early_leave: 0,
+            att_absence: 0,
+            created_at: "2025-03-17 01:04:35"
+        },
+        {
+            att_idx: 3,
+            emp_id: 241210003,
+            att_firstDate: "2024-12-10",
+            att_remain: 3,
+            att_total_days: 99,
+            att_total_time: 23760,
+            att_late: 0,
+            att_early_leave: 0,
+            att_absence: 0,
+            created_at: "2025-03-17 01:04:35"
+        },
+        {
+            att_idx: 4,
+            emp_id: 241210004,
+            att_firstDate: "2024-12-10",
+            att_remain: 3,
+            att_total_days: 99,
+            att_total_time: 23760,
+            att_late: 0,
+            att_early_leave: 0,
+            att_absence: 0,
+            created_at: "2025-03-17 01:04:35"
+        },
+        {
+            att_idx: 5,
+            emp_id: 241210005,
+            att_firstDate: "2024-12-10",
+            att_remain: 3,
+            att_total_days: 99,
+            att_total_time: 23760,
+            att_late: 0,
+            att_early_leave: 0,
+            att_absence: 0,
+            created_at: "2025-03-17 01:04:35"
+        },
+        {
+            att_idx: 6,
+            emp_id: 241210006,
+            att_firstDate: "2024-12-10",
+            att_remain: 3,
+            att_total_days: 99,
+            att_total_time: 47520,
+            att_late: 0,
+            att_early_leave: 0,
+            att_absence: 0,
+            created_at: "2025-03-17 01:04:35"
+        },
+        {
+            att_idx: 7,
+            emp_id: 250306007,
+            att_firstDate: "2025-03-13",
+            att_remain: 0,
+            att_total_days: 5,
+            att_total_time: 1200,
+            att_late: 0,
+            att_early_leave: 0,
+            att_absence: 0,
+            created_at: "2025-03-17 01:04:35"
+        },
+        {
+            att_idx: 8,
+            emp_id: 250306008,
+            att_firstDate: "2025-03-13",
+            att_remain: 0,
+            att_total_days: 5,
+            att_total_time: 2400,
+            att_late: 0,
+            att_early_leave: 0,
+            att_absence: 0,
+            created_at: "2025-03-17 01:04:35"
+        }
+    ]   
 };
 
 export default tempDataStore;

@@ -50,7 +50,7 @@ const Main = () => {
     useEffect(() => {
 
         if (account.id === "temp") {
-            console.log("첫 시작! 데이터를 요청하지 않음");
+            //console.log("첫 시작! 데이터를 요청하지 않음");
             return;
         }
         ///////////////////////////////////////////////////
@@ -184,11 +184,42 @@ const Main = () => {
 
         }
 
+        // 6. DB에서 근태 데이터를 가져오는 함수
+        const fetchAttendanceData = async (consoleOn = "C") => {
+            //console.log("근태 데이터 가져오기")
+            if (account.id !== "tester") {
+                try {
+                    // 서버에 GET 요청을 보내 근태 데이터를 가져옴
+                    const response = await axios.get('/management/getAttendance');
+                    const fetchedAttendanceData = JSON.stringify(response.data.data, null, 2); // 서버에서 받은 휴가 데이터
+                    //console.log("근태 데이터:", fetchedAttendanceData);
+                    // 4. 받은 휴가 데이터를 세션 저장소에 저장
+                    sessionStorage.setItem('attendanceData', fetchedAttendanceData);
+
+                } catch (error) {
+                    // 6. 서버에서 데이터를 가져오는 데 실패한 경우 오류 처리
+                    if (error.status === 404 && account.id !== "tester") {
+                        console.log("불러올 휴가 데이터가 없습니다. 추가하세요.")
+                        return
+                    }
+                }
+            }
+            else {
+                //console.error("휴가 데이터를 가져오는 데 실패했습니다.", error);
+                // 객체를 문자열로 변환하여 sessionStorage에 저장
+                sessionStorage.setItem('attendanceData', JSON.stringify(tempDataStore.attendances));
+            }
+            if (consoleOn === "Y") {
+                console.log("근태 저장 완료", JSON.parse(sessionStorage.getItem('attendanceData')))
+            }
+
+        }
         // 7. 페이지 로드 시 데이터들을 가져오는 함수 호출
         fetchEmployeeData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
-        fetchGroupData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
-        fetchWorkData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
-        fetchVacationData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchGroupData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchWorkData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchVacationData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchAttendanceData("Y");// 콘솔을 확인하려면 "Y"를 파라미터로 주라
     }, [account])
 
 
