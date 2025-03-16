@@ -10,6 +10,7 @@ import Schedule2 from './Schedule2';
 import RequestForm from './requests/RequestForm';
 import QNA from './QNA';
 import MenuList from './MenuList'; // 🔹 메뉴 리스트 추가
+import logoImage from '../savannah.png'; // 이미지 파일 경로
 import '../App.css';
 
 
@@ -259,6 +260,7 @@ const Main = () => {
         <div>
             {/* 사용자 프로필 영역 */}
             <div id='profile'>
+                <img style={{width: "50px", height: "50px"}} src={logoImage} alt="zz" srcset="" />
                 <span id='logo'>SAVANNAH</span>
                 <div id="account">
                     {/* 사용자 정보 표시 */}

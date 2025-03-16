@@ -61,7 +61,11 @@
     margin-left: 25px;
     font-size: 30px;
     font-weight: bold; /* 'bold'에서 따옴표 제거 */
+    background-image: linear-gradient(to right, #3b79ff, #92caff); /* 그라데이션 색상 */
+    -webkit-background-clip: text; /* 텍스트에 배경을 잘라서 적용 */
+    color: transparent; /* 텍스트 색상을 투명하게 만들어 그라데이션만 보이도록 */
 }
+
 
 #account {
     display: flex;
@@ -77,3 +81,4 @@
 #buttonGroup {
     background-color: rgb(168, 196, 238);
 }
+
