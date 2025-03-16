@@ -1,14 +1,15 @@
 import { React, useState, useEffect } from "react";
 import AddWorkerModal from "../modals/AddWorkerModal";
-// import DeleteWorkerModal from "../modals/DeleteWorkerModal";
 import DeleteConfirmModal from "../modals/DeleteConfirmModal";
 import axios from 'axios';
+import io from 'socket.io-client'; // ⭐️ 추가됨
 
 const ManEmplyee = () => {
     const [employeeData, setEmployeeData] = useState([{}]);
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDltModalOpen, setIsDltModalOpen] = useState(false);
+    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
         const storedEmployees = sessionStorage.getItem('employeeData');
@@ -17,7 +18,39 @@ const ManEmplyee = () => {
             parsedData = JSON.parse(storedEmployees);
             setEmployeeData(parsedData);
         }
+
+        const newSocket = io("http://localhost:5067");
+        setSocket(newSocket);
+
+        newSocket.on('faceResult', (data) => {
+            if (data.success) alert(`얼굴 인식 성공: ${data.wo_id}`);
+            else alert(`얼굴 인식 실패: ${data.message}`);
+        });
+
+        return () => newSocket.disconnect();
     }, []);
+
+    const handleAddEmployee = async (newEmployee) => {
+        // 그대로 두기
+    };
+
+    const handleDeleteWorker = async (confirm) => {
+        // 그대로 두기
+    };
+
+    const btnAddEmployee = () => setIsAddModalOpen(true);
+    const btnRemoveEmployee = () => {
+        if (selectedEmployees.length === 0) return;
+        setIsDltModalOpen(true);
+    };
+    const btnAddFace = () => {
+        if (socket) {
+            socket.emit('faceCheck');
+            alert("직원 얼굴 인식이 시작됩니다. 잠시만 기다려 주세요.");
+        } else {
+            alert("서버 연결 오류");
+        }
+    };
 
     const handleCheckboxChange = (code) => {
         setSelectedEmployees((prev) =>
@@ -49,80 +82,6 @@ const ManEmplyee = () => {
             <hr />
         </div>
     );
-
-    const handleAddEmployee = async (newEmployee) => {
-        let temp_employeeId = `250306${(employeeData.length + 1 > 99 ? "" : employeeData.length + 1 > 9 ? "0" : "00")}${employeeData.length + 1}`;
-        let temp_name = `${newEmployee.name}${employeeData.length + 1}` || `테스트맨`;
-        let temp_position = newEmployee.position || "테스트";
-        let temp_joinDate = newEmployee.joinDate || "2025.03.06";
-        let temp_department = newEmployee.department || "테스트부서";
-        let temp_dob = newEmployee.dob || "2025.03.06";
-        let temp_phone = newEmployee.phone || "010-1234-5678";
-        let temp_email = newEmployee.email || "newworker@com";
-
-        try {
-            const response = await axios.post("/management/addEmployees", {
-                employeeId: temp_employeeId,
-                name: temp_name,
-                position: temp_position,
-                joinDate: temp_joinDate,
-                department: temp_department,
-                dob: temp_dob,
-                phone: temp_phone,
-                email: temp_email
-            });
-
-            const updatedEmployeeData = [
-                ...employeeData,
-                {
-                    emp_id: temp_employeeId,
-                    emp_name: temp_name,
-                    emp_role: temp_position,
-                    emp_firstDate: temp_joinDate,
-                    emp_group: temp_department,
-                    emp_birthDate: temp_dob,
-                    emp_phone: temp_phone,
-                    emp_email: temp_email,
-                    created_at: new Date().toISOString()
-                }
-            ];
-            sessionStorage.setItem('employeeData', JSON.stringify(updatedEmployeeData));
-            setEmployeeData(updatedEmployeeData);
-            setIsAddModalOpen(false);
-        } catch (error) {
-            console.error("Failed to add worker:", error);
-            alert("직원을 추가하는 데 실패했습니다.");
-        }
-    };
-
-    const handleDeleteWorker = async (confirm) => {
-        if (!confirm) return;
-        try {
-            const response = await axios.post("/management/dltEmployees", { ids: selectedEmployees });
-            if (response.status === 200) {
-                const updatedWorkerData = employeeData.filter((worker) => !selectedEmployees.includes(worker.emp_id));
-                sessionStorage.setItem('employeeData', JSON.stringify(updatedWorkerData));
-                setEmployeeData(updatedWorkerData);
-                setSelectedEmployees([]);
-            } else {
-                alert("직원 삭제 요청 실패.");
-            }
-        } catch (error) {
-            console.error("직원 삭제 오류:", error);
-            alert("직원 삭제 실패.");
-        }
-    };
-
-    /////// 버튼 기능들 /////////////////////////////
-    const btnAddEmployee = () => setIsAddModalOpen(true);
-    const btnRemoveEmployee = () => {
-        if (selectedEmployees.length === 0) return;
-        setIsDltModalOpen(true);
-    };
-    const btnAddFace = () => {
-        alert("직원 얼굴 등록하기 기능 준비중입니다."); // 추후 모달 연결 가능
-    };
-    /////////////////////////////////////////
 
     return (
         <div style={{ width: "1600px" }}>
@@ -168,4 +127,4 @@ const ManEmplyee = () => {
 
 const buttonStyle = { display: "inline-block", padding: "10px 20px", backgroundColor: "#007BFF", color: "#fff", borderRadius: "5px", cursor: "pointer", textAlign: "center", fontSize: "14px", fontWeight: "bold", marginLeft: "10px" };
 
-export default ManEmplyee
+export default ManEmplyee;
