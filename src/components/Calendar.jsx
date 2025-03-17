@@ -1,139 +1,210 @@
-import { React, useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../Calendar.module.css";
-import Schedule from './Schedule';
+import Schedule from "./Schedule";
+
+const Calendar = () => {
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [schedules, setSchedules] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [view, setView] = useState("Calendar"); // 🔥 주간/월간 뷰 관리
+    const [newEvent, setNewEvent] = useState("");
+    const [vacations, setVacations] = useState({}); // ✅ 휴가 데이터 저장 상태
+
+const fetchVacations = async () => {
+    try {
+        console.log("🔍 [fetchVacations] API 요청 실행됨!");
+
+        const response = await fetch("http://localhost:5067/management/getVacation"); // ✅ 백엔드 API 경로 맞춤
+        console.log("📡 [서버 응답 상태 코드]:", response.status);
+
+        if (!response.ok) {
+            throw new Error(`❌ HTTP 오류 발생: ${response.status}`);
+        }
+
+        const { data } = await response.json(); // ✅ 응답에서 데이터만 추출
+        console.log("📦 [휴가 데이터]:", JSON.stringify(data, null, 2));
+
+        if (!Array.isArray(data)) {
+            console.warn("⚠️ 서버에서 받은 데이터가 배열이 아님!", data);
+            setVacations({});
+            return;
+        }
+
+        // ✅ 날짜별로 휴가 데이터를 그룹화
+        const groupedVacations = {};
+        data.forEach((vacation) => {
+            const formattedDate = vacation.start_date.split("T")[0]; // 날짜 변환
+
+            if (!groupedVacations[formattedDate]) {
+                groupedVacations[formattedDate] = [];
+            }
+
+            groupedVacations[formattedDate].push({
+                emp_id: vacation.emp_id,
+                content: vacation.req_content, // ✅ 요청 내용 저장
+            });
+        });
+
+        console.log("✅ [가공된 휴가 데이터]:", groupedVacations);
+        setVacations(groupedVacations);
+    } catch (error) {
+        console.error("❌ 휴가 데이터를 불러오는 중 오류 발생:", error);
+    }
+};
 
 
-const Calendar = () => { // 현 컴포넌트의 함수실행
-    const [currentDate, setCurrentDate] = useState(new Date()); //  오늘의 날짜를 담을 State 변수
-    // %주의% new Date() : Date라는 클래스를 이용해서 생성한 인스턴스(인스턴스 명 : currentDate)
-    const [view, setView] = useState("Calendar");
-
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-    const [selectedDate, setSelectedDate] = useState(null); // 선택한 날짜 저장
-    const [events, setEvents] = useState({}); // 날짜별 이벤트 저장
-    const [newEvent, setNewEvent] = useState(""); // 새 이벤트 입력 값
 
 
 
-    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; //1주일(7일)을 담은 리스트 상수(const) 변수
+const fetchSchedules = async () => {
+    try {
+        console.log("🔍 [fetchSchedules] API 요청 실행됨!");
 
-    const getDaysInMonth = (year, month) => {  // year, month 파라미터(매개변수)들을 가지고 있는 함수
-        return new Date(year, month + 1, 0).getDate(); // getdate()함수를 반환 -> 당연히 해당 getdate() 함수는 숫자형 값을 반환 -> 즉 숫자형 값을 반환
-    };
+        const response = await fetch("http://localhost:5067/autoschedule/getSchedules");
+        console.log("📡 [서버 응답 상태 코드]:", response.status);
 
-    const changeMonth = (offset) => { // 달력의 월단위 변경을 위한 함수(버튼 이벤트에 등록). offset은 1,-1 -> 버튼으로 월 변경을 생각할 것
+        if (!response.ok) {
+            throw new Error(`❌ HTTP 오류 발생: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("📦 [서버 응답 데이터]:", JSON.stringify(data, null, 2));
+
+        if (!Array.isArray(data)) {
+            console.warn("⚠️ 서버에서 받은 데이터가 배열이 아님!", data);
+            setSchedules([]);
+            return;
+        }
+
+        const groupedSchedules = {};
+        data.forEach((schedule) => {
+            const formattedDate = schedule.date.split("T")[0];
+            const { work_name, employee_name } = schedule;
+
+            if (!groupedSchedules[formattedDate]) {
+                groupedSchedules[formattedDate] = { 오픈: [], 미들: [], 마감: [] };
+            }
+
+            if (work_name.includes("오픈")) {
+                groupedSchedules[formattedDate]["오픈"].push(employee_name);
+            } else if (work_name.includes("미들")) {
+                groupedSchedules[formattedDate]["미들"].push(employee_name);
+            } else if (work_name.includes("마감")) {
+                groupedSchedules[formattedDate]["마감"].push(employee_name);
+            }
+        });
+
+        console.log("✅ [가공된 데이터]:", groupedSchedules);
+        setSchedules(groupedSchedules);
+
+    } catch (error) {
+        console.error("❌ 주간 스케줄 데이터를 불러오는 중 오류 발생:", error);
+    }
+};
+
+
+
+
+    useEffect(() => {
+        fetchSchedules();
+        fetchVacations();
+    }, []);
+    
+    useEffect(() => {
+        console.log("🔍 [변경된 휴가 데이터]:", vacations);
+        setCurrentDate(new Date()); // ✅ 강제 리렌더링 트리거
+    }, [vacations]);
+
+
+
+    const changeMonth = (offset) => {
         const newDate = new Date(
             currentDate.getFullYear(),
             currentDate.getMonth() + offset,
             1
-        ); // newDate는 지역변수로써 원하는 월을 담는 변수
-        setCurrentDate(newDate); // 원하는 변수를 훅메서드를 이용해서 state 변수에 수정하고 업데이트가 진행되며 화면 갱신
+        );
+        setCurrentDate(newDate);
     };
 
-    const checking = (number) => {
-        let income = number;
-        income = income === 0 ? 7 : income; // 결과를 재할당
-        return income; // 반환
-    };
-
-    const addEvent = () => {
-        if (!newEvent.trim()) return; // 빈 값 방지
-
-        setEvents((prevEvents) => ({
-            ...prevEvents,
-            [selectedDate]: Array.isArray(prevEvents[selectedDate]) // 기존에 배열인지 확인
-                ? [...prevEvents[selectedDate], newEvent] // 배열이면 기존 이벤트에 추가
-                : [newEvent], // 배열이 아니면 새 배열 생성
-        }));
-
-        setNewEvent(""); // 입력 필드 초기화
-        setIsModalOpen(false); // 모달 닫기
-    };
-
-    const deleteEvent = (date, index) => {
-        setEvents((prevEvents) => {
-            const updatedEvents = { ...prevEvents };
-            updatedEvents[date] = updatedEvents[date].filter((_, i) => i !== index);
-
-            // 만약 해당 날짜의 모든 이벤트가 삭제되면 빈 배열 대신 키 자체를 삭제
-            if (updatedEvents[date].length === 0) {
-                delete updatedEvents[date];
-            }
-
-            return updatedEvents;
-        });
-    };
+    const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
 
-    const renderDays = () => { // 실질적인 캘린더의 전체적 표시와 배치를 맡는 함수, day라는 리스트를 return(반환)
-        const year = currentDate.getFullYear(); // 오늘 날짜 기준의 년
-        const month = currentDate.getMonth(); // 오늘 날짜 기준의 월
 
-        //console.log('해당월 : ' + (month + 1) + '월')
 
-        const daysInPreMonth = getDaysInMonth(year, month - 1)
-        //console.log('이전 월의 날짜 갯수 : ', daysInPreMonth)
-        const daysInMonth = getDaysInMonth(year, month); // 위의 연도와 월을 담은 변수를 사용해서 당월이 최대로 가지는 월수를 담은 배열
-        // (예시 1월이면 length(길이) : 31, 2월이면 length(길이) : 28)
 
-        const firstDay = checking(new Date(year, month, 1).getDay()); // 위의 연도와 월을 담은 변수를 사용해서 당월의 1일의 요일을 담는 변수
-        // 2월 기준 1일은 토요일임으로 6을 담음
-        const days = []; // 반환할 리스트 변수를 선언. 현재는 비어있음
 
-        for (let pre = 0; pre < firstDay; pre++) { // firstDay는 2월을 기준으로 6. 반복문은 6번 수행됨
-            //console.log(styles.inactive) 항상 로그를 찍어 문제를 찾아서 해결해야합니다.(주석처리해둘 것)
-            days.push( // push 함수를 이용해서 리스트에 할당 -> 
-                <div key={`pre-empty-${pre}`} className={styles.inactive}>
-                    {daysInPreMonth - firstDay + (pre + 1)}
-                </div>
-            );
-        }
 
-        for (let day = 1; day <= daysInMonth; day++) {
-            const formattedDate = `${year}-${month + 1}-${day}`; // YYYY-M-D 형식
-            days.push(
-                <div
-                    key={day}
-                    className={styles.active}
-                    onClick={() => {
-                        setSelectedDate(formattedDate);
-                        setIsModalOpen(true);
-                    }}
-                >
-                    <span className={styles.dayNumber}>{day}</span>
-                    <span className={styles.eventsContainer}>
-                        {/* ✅ 5개까지만 일정 표시 */}
-                        {Array.isArray(events[formattedDate]) &&
-                            events[formattedDate].slice(0, 5).map((event, index) => (
-                                <span key={index} className={styles.event} title={event}>{event}</span>
-                            ))
-                        }
 
-                        {/* ✅ '... 외 n개'를 항상 가장 아래로 */}
-                        {events[formattedDate] && events[formattedDate].length > 5 && (
-                            <span className={styles.moreEvents}>
-                                ... 외 {events[formattedDate].length - 5}개
-                            </span>
-                        )}
+
+
+
+const renderDays = () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const daysInMonth = getDaysInMonth(year, month);
+    const firstDay = new Date(year, month, 1).getDay();
+    const days = [];
+
+    for (let pre = 0; pre < firstDay; pre++) {
+        days.push(<div key={`pre-empty-${pre}`} className={styles.inactive}></div>);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const formattedDate = `${year}-${(month + 1).toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+        const schedule = schedules[formattedDate];
+        const vacationList = vacations[formattedDate] || [];
+        const hasVacation = vacationList.length > 0;
+
+        // ✅ 휴가 여부 확인 함수
+        const isOnVacation = (name) => vacationList.some(v => v.emp_id.trim() === name.trim());
+
+        days.push(
+            <div
+                key={day}
+                className={styles.active} 
+                onClick={() => {
+                    setSelectedDate(formattedDate);
+                    setIsModalOpen(true);
+                }}
+            >
+                <span className={styles.dayNumber}>{day}</span>
+                
+                {/* ✅ 일정 표시 (오픈 → 미들 → 마감) */}
+                {schedule ? (
+                    <span className={styles.scheduleBox}>
+                        <p>🟢 오픈: {schedule.오픈.map(name => `${name}${isOnVacation(name) ? " 🏖" : ""}`).join(", ") || "없음"}</p>
+                        <p>🟡 미들: {schedule.미들.map(name => `${name}${isOnVacation(name) ? " 🏖" : ""}`).join(", ") || "없음"}</p>
+                        <p>🔴 마감: {schedule.마감.map(name => `${name}${isOnVacation(name) ? " 🏖" : ""}`).join(", ") || "없음"}</p>
                     </span>
-                </div>
-            );
-        }
+                ) : (
+                    <p className={styles.scheduleBox}>📌 일정 없음</p>
+                )}
 
-        const other = days.length
-        //console.log(other)
-        for (let j = (other + 1); j < 43; j++) {
-            days.push( // push 함수를 이용해서 리스트에 할당 -> 
-                <div key={`post-empty-${j}`} className={styles.inactive}>
-                    {j - other}
-                </div>
-            );
-        }
-        //console.log(days.length)
-        return days;
-    };
+                {/* ✅ 마감 아래에 휴가자를 배치 */}
+                {hasVacation && (
+                    <p className={styles.vacationNotice}>
+                        🏖 휴가자: {vacationList.map(v => v.emp_id).join(", ")}
+                    </p>
+                )}
+            </div>
+        );
+    }
 
-    // 📌 🔥 조건부 렌더링 추가 (주간 버튼 클릭 시 `Schedule` 렌더링)
+    return days;
+};
+
+
+
+
+
+
+
+
+
+
+
+
     if (view === "Schedule") {
         return <Schedule goBack={() => setView("Calendar")} />;
     }
@@ -141,11 +212,11 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
     return (
         <div className={styles.calendar}>
             <div className={styles.calendarChanges}>
-                
-                {/* 🔥 onClick 이벤트 추가 (주간 버튼 클릭 시 Schedule로 전환) */}
+                {/* 🔥 주간 버튼 추가 */}
                 <span className={styles.weekBtn} onClick={() => setView("Schedule")}>주간</span>
                 <span className={styles.monthBtn}>월간</span>
             </div>
+
             <div className={styles.header}>
                 <button onClick={() => changeMonth(-1)}>◀</button>
                 <h2>
@@ -154,48 +225,51 @@ const Calendar = () => { // 현 컴포넌트의 함수실행
                 </h2>
                 <button onClick={() => changeMonth(1)}>▶</button>
             </div>
-            <div className={styles.daysOfWeek}>
-                {daysOfWeek.map((day) => (
 
-                    day === "Sun" || day === "Sat" ? <div className={styles.test1} key={day}>{day}</div>
-                        : <div className={styles.test} key={day}>{day}</div>
-                ))}
-            </div>
             <div className={styles.days}>{renderDays()}</div>
+
             {isModalOpen && (
                 <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
-                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                        <h3>{selectedDate}</h3>
-                        <div className={styles.eventList}>
-                            {events[selectedDate] && events[selectedDate].length > 0 ? (
-                                events[selectedDate].map((event, index) => (
-                                    <div key={index} className={styles.eventItem}>
-                                        <p className={styles.eventText}>{event}</p>
-                                        <button
-                                            className={styles.deleteButton}
-                                            onClick={() => deleteEvent(selectedDate, index)}
-                                        >
-                                            ❌
-                                        </button>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>저장된 이벤트가 없습니다.</p>
-                            )}
-                        </div>
-                        <input
-                            type="text"
-                            value={newEvent}
-                            onChange={(e) => setNewEvent(e.target.value)}
-                            placeholder="새 이벤트 추가"
-                        />
-                        <button onClick={addEvent} className={styles.addButton}>추가</button>
-                        <button onClick={() => setIsModalOpen(false)} className={styles.closeButton}>닫기</button>
+                <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                    <h3>{selectedDate}</h3>
+            
+                    {/* 📌 일정 목록 */}
+                    <div className={styles.eventList}>
+                        {schedules[selectedDate] ? (
+                            <>
+                                <p>🟢 오픈: {schedules[selectedDate].오픈 || "없음"}</p>
+                                <p>🟡 미들: {schedules[selectedDate].미들 || "없음"}</p>
+                                <p>🔴 마감: {schedules[selectedDate].마감 || "없음"}</p>
+                            </>
+                        ) : (
+                            <p>📌 일정 없음</p>
+                        )}
                     </div>
+            
+                    {/* 📌 휴가 목록 추가 */}
+                    {vacations[selectedDate] && vacations[selectedDate].length > 0 ? (
+                        <div className={styles.vacationList}>
+                            <h4>휴가 일정</h4>
+                            <ul>
+                                {vacations[selectedDate].map((vac, index) => (
+                                    <li key={index} className={styles.vacationItem}>
+                                        {vac.emp_id}: {vac.content}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ) : (
+                        <p>📌 해당 날짜에 휴가 일정 없음</p>
+                    )}
+
+                    <button onClick={() => setIsModalOpen(false)} className={styles.closeButton}>닫기</button>
                 </div>
+            </div>
+            
             )}
         </div>
     );
 };
 
 export default Calendar;
+

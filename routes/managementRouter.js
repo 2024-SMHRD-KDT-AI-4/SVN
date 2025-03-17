@@ -422,4 +422,56 @@ managementRouter.get('/getAttendance', async (req, res) => {
 });
 
 
+// getScheduleData
+
+managementRouter.get('/getScheduleData', async (req, res) => {
+    const sql = `
+        SELECT 
+            e.emp_id, 
+            e.emp_name, 
+            e.emp_role, 
+            e.emp_group, 
+            e.emp_firstDate,
+            e.emp_birthDate,
+            e.emp_phone,
+            e.emp_email,
+            w.work_id, 
+            w.work_name, 
+            w.work_start, 
+            w.work_end, 
+            w.work_break, 
+            w.work_days, 
+            w.work_max_rule
+        FROM tb_employee e
+        INNER JOIN tb_work w 
+        ON e.emp_group = w.work_name
+    `;
+
+    try {
+        conn.query(sql, (error, result) => {
+            if (error) {
+                console.error('❌ 스케줄 데이터 조회 에러:', error);
+                res.status(500).json({ message: 'DB 조회 오류', error: error.message });
+                return;
+            }
+
+            console.log("📢 DB에서 가져온 데이터:", result); // ✅ DB에서 데이터를 제대로 가져오는지 확인!
+
+            if (result?.length > 0) {
+                res.status(200).json({ message: '스케줄 데이터 로드 완료', data: result });
+            } else {
+                console.log("⚠️ DB에서 데이터 없음");
+                res.status(404).json({ message: '스케줄 데이터 없음', data: null });
+            }
+        });
+    } catch (error) {
+        console.error('❌ 스케줄 데이터를 가져오는 중 에러:', error);
+        res.status(500).json({ message: '스케줄 데이터 가져오기 오류', error: error.message });
+    }
+});
+
+
+
+
+
 module.exports = managementRouter;

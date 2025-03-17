@@ -28,6 +28,13 @@ app.use('/attendance', attendanceRouter);
 const requestRouter = require('./routes/requestRouter.js');
 app.use('/request', requestRouter);
 
+const autoScheduleRouter = require('./routes/autoSchedule.js'); // ✅ 추가!
+app.use('/autoSchedule', autoScheduleRouter); // ✅ API 등록!
+
+const scheduleManagerRouter = require('./routes/scheduleManager.js'); 
+app.use('/schedule-manager', scheduleManagerRouter);  // ✅ 새로운 라우터 추가
+
+
 // ---------------------- 서버 + 소켓.io ---------------------- //
 const server = app.listen(PORT, () => {
   console.log(`서버 실행 중: http://localhost:${PORT}`);
