@@ -152,7 +152,7 @@ const Calendar = () => {
         }
 
 
-
+        console.log('강인오', schedules);
 
 
         for (let day = 1; day <= daysInMonth; day++) {
