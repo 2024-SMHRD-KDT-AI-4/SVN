@@ -70,7 +70,7 @@ const Attendance = () => {
       <h4>오늘 근무 현황</h4>
       <div style={{ display: "flex", gap: "20px", justifyContent: "space-around" }}>
         <div style={cardStyle}><span style={{marginLeft: "20px"}}>오늘은</span><AttTodayPlan /></div>
-        <div style={cardStyle}><span style={{marginLeft: "20px"}}>경고</span><AttFaceRecog /></div> {/* ✅ 여기도 교체 */}
+        <div style={cardStyle}><span style={{marginLeft: "20px"}}></span><AttFaceRecog /></div> 
         <div style={cardStyle}><span style={{marginLeft: "20px"}}>근무체크</span><AttTodayCheck /></div>
       </div>
     </div>
