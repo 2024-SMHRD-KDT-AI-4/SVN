@@ -2,10 +2,15 @@ const express = require("express");
 const db = require("../config/db"); // MySQL 연결 파일 가져오기
 const router = express.Router(); // ✅ `express.Router()` 선언
 
-// 📌 날짜 변환 함수 (YYYY-MM-DD 형식으로 변환)
 const formatDate = (date) => {
     const d = new Date(date);
-    return d.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식 변환
+    
+    // ✅ UTC 변환 없이 정확한 "YYYY-MM-DD" 포맷 반환
+    const year = d.getFullYear();
+    const month = (d.getMonth() + 1).toString().padStart(2, "0");
+    const day = d.getDate().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
 };
 
 // 📌 자동 생성된 스케줄 저장 API
