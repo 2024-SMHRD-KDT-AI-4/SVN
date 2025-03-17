@@ -43,14 +43,7 @@ const ManEmplyee = () => {
     //     if (selectedEmployees.length === 0) return;
     //     setIsDltModalOpen(true);
     // };
-    // const btnAddFace = () => {
-    //     if (socket) {
-    //         socket.emit('faceCheck');
-    //         alert("직원 얼굴 인식이 시작됩니다. 잠시만 기다려 주세요.");
-    //     } else {
-    //         alert("서버 연결 오류");
-    //     }
-    // };
+
 
     const handleCheckboxChange = (code) => {
         setSelectedEmployees((prev) =>
@@ -59,7 +52,7 @@ const ManEmplyee = () => {
                 : [...prev, code]
         );
     };
-    
+
     const employLine = (id, name, role, firstDate, group, birthDate, phone, email) => (
         <div>
             <div style={{ display: "flex", gap: "25px" }}>
@@ -73,7 +66,7 @@ const ManEmplyee = () => {
                 <span style={{ width: "150px", textAlign: "right" }}>{id}</span>
                 <span style={{ width: "150px", textAlign: "right" }}>{name}</span>
                 <span style={{ width: "150px", textAlign: "right" }}>{role}</span>
-                <span style={{ width: "150px", textAlign: "right" }}>{new Date(firstDate).toLocaleDateString("en-CA")}</span> 
+                <span style={{ width: "150px", textAlign: "right" }}>{new Date(firstDate).toLocaleDateString("en-CA")}</span>
                 <span style={{ width: "150px", textAlign: "right" }}>{group}</span>
                 <span style={{ width: "150px", textAlign: "right" }}>{new Date(birthDate).toLocaleDateString("en-CA")}</span>
                 <span style={{ width: "150px", textAlign: "right" }}>{phone}</span>
@@ -153,7 +146,13 @@ const ManEmplyee = () => {
         setIsDltModalOpen(true);
     };
     const btnAddFace = () => {
-        alert("직원 얼굴 등록하기 기능 준비중입니다."); // 추후 모달 연결 가능
+        if (socket) {
+            socket.emit('faceCheck');
+            alert("직원 얼굴 인식이 시작됩니다. 잠시만 기다려 주세요.");
+        } else {
+            console.log('소켓없음')
+            alert("서버 연결 오류");
+        }
     };
     /////////////////////////////////////////
 
