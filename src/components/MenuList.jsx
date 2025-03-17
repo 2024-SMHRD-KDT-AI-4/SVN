@@ -39,6 +39,7 @@ const MenuList = ({ menuItems, onItemSelect }) => {
               minHeight: '100px', // 🔹 버튼 높이 고정
               display: 'flex', // 🔹 내부 정렬을 위해 flex 사용
               alignItems: 'center', // 🔹 텍스트를 수직 중앙 정렬
+              textAlign: 'center' // 🔹 텍스트를 수평 중앙 정렬
             }}
           >
             <ListItemText primary={item.label} /> {/* 리스트 아이템 텍스트 표시 */}

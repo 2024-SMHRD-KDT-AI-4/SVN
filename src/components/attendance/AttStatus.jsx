@@ -11,7 +11,7 @@ const AttStatus = ({late, early, absence}) => {
                 // flexDirection: "column",
                 // justifyContent: "center",
                 // alignItems: "center",
-                width: "400px",
+                width: "480px",
                 height: "100px",
                 border: "1px solid #ccc",
                 borderRadius: "10px",

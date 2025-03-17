@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.4.7",
     "axios": "^1.8.1",
+    "bootswatch": "^5.3.3",
     "cors": "^2.8.5",
     "cra-template": "1.2.0",
     "dayjs": "^1.11.13",

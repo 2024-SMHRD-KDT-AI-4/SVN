@@ -13,7 +13,7 @@ function AttTodayCheck() {
 
     return () => clearInterval(timer); // 언마운트 시 타이머 제거
   }, []);
-
+  
   // 출근하기
   const handleCheckIn = async () => {
     try {

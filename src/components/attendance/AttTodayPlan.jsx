@@ -9,7 +9,7 @@ const AttTodayPlan = () => {
                 // flexDirection: "column",
                 // justifyContent: "center",
                 // alignItems: "center",
-                width: "400px",
+                width: "480px",
                 height: "400px",
                 border: "1px solid #ccc",
                 borderRadius: "10px",

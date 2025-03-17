@@ -21,6 +21,7 @@ const Main = () => {
         id: "temp", // 로그인 상태에 따라 초기 값 설정
         name: "Unknown", // 기본 사용자 이름
         role: "Unknown", // 기본 사용자 역할
+        empID: "Unknown"
     });
 
     // 페이지가 로드될 때 실행되는 useEffect 훅
@@ -260,7 +261,7 @@ const Main = () => {
         <div>
             {/* 사용자 프로필 영역 */}
             <div id='profile'>
-                <img style={{width: "50px", height: "50px"}} src={logoImage} alt="zz" srcset="" />
+                <img style={{ width: "50px", height: "50px", marginLeft: "20px" }} src={logoImage} alt="zz" srcset="" />
                 <span id='logo'>SAVANNAH</span>
                 <div id="account">
                     {/* 사용자 정보 표시 */}
@@ -268,7 +269,17 @@ const Main = () => {
                     {/* 알림표시 아이콘 */}
                     <img src="#" alt="알림" srcSet="" />
                     {/* 계정 접속자의 사진 */}
-                    <img src="#" alt="사진" srcSet="" />
+                    {/* <img src="#" alt="사진" srcSet="" /> */}
+                    {/* <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                        <button type="button" class="btn btn-primary">Primary</button>
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style={{}}>
+                                <a class="dropdown-item" href="#">계정수정</a>
+                                <a class="dropdown-item" href="#">로그아웃</a>
+                            </div>
+                        </div>
+                    </div> */}
                 </div>
             </div>
             <hr />

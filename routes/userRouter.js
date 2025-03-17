@@ -73,6 +73,7 @@ userRouter.post("/login", (request, response) => {
                     id: user.act_id,
                     name: user.act_name,
                     role: role, // 동적으로 role 설정
+                    empID: ""
                 }
             });
         } else {

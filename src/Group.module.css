@@ -28,4 +28,8 @@ span.groupTab:hover {
     background-color: #4a90e2;
     
   }
+  .manageBtns{
+    margin-top: 10px;
+
+  }
 /* 나중에 시간이 되면 이 모듈에 전부 취합할 예정 */
