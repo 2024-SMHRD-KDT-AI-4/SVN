@@ -141,7 +141,7 @@ managementRouter.get('/getGroup', async (req, res) => {
 
 // 직책 데이터를 추가하는 라우터
 managementRouter.post('/addGroup', async (req, res) => {
-    const { group_id, group_name, group_desc, group_pos, created_at} = req.body;
+    const { group_id, group_name, group_desc, group_pos, created_at } = req.body;
     const sql = `
     INSERT INTO ${groupTB} (group_id, group_name, group_desc, group_pos, created_at) VALUES (?, ?, ?, ?, ?)`;
 
@@ -304,7 +304,7 @@ managementRouter.post('/dltWork', async (req, res) => {
 // 휴가요청 데이터를 가져오는 라우터
 managementRouter.get('/getVacation', async (req, res) => {
     // DB에서 '휴가' 데이터만 가져오기
-    
+
     const sql = `
     SELECT 
     req_idx, req_type, req_content, emp_id, start_date, end_date, created_at, req_status, approved_at, admin_id, req_final 
@@ -333,7 +333,7 @@ managementRouter.get('/getVacation', async (req, res) => {
 // 휴가 데이터를 처리하는 라우터
 managementRouter.post('/checkVacation', async (req, res) => {
     const { ids, what, who } = req.body; // req.body에서 ids와 who를 받음
-    console.log("휴가 처리할 관리자의 관리자id",who);
+    console.log("휴가 처리할 관리자의 관리자id", who);
     // 처리수행 쿼리문
     const updateSql = `
         UPDATE tb_request
@@ -363,7 +363,7 @@ managementRouter.post('/checkVacation', async (req, res) => {
     `;
 
     try {
-        conn.query(updateSql, [who, what ,ids], (updateError, updateResult) => {
+        conn.query(updateSql, [who, what, ids], (updateError, updateResult) => {
             if (updateError) {
                 console.error('휴가 처리 중 오류:', updateError);
                 return res.status(500).json({ message: '휴가 처리 오류', error: updateError.message });
@@ -378,9 +378,9 @@ managementRouter.post('/checkVacation', async (req, res) => {
                     }
 
                     // 처리된 데이터를 응답으로 반환
-                    res.status(200).json({ 
-                        message: '휴가 처리 성공', 
-                        data: rows 
+                    res.status(200).json({
+                        message: '휴가 처리 성공',
+                        data: rows
                     });
                 });
             } else {
@@ -470,8 +470,30 @@ managementRouter.get('/getScheduleData', async (req, res) => {
     }
 });
 
+// 직원 데이터를 삭제하는 라우터
+managementRouter.post('/getMyScheduleData', async (req, res) => {
+    const { name } = req.body; // req.body에서 ids라는 배열로 여러 ID를 전달받음
 
+    // 쿼리 실행
+    const sql = `SELECT * FROM cgi_24K_AI4_p2_3.tb_autoschedule WHERE employee_name = ? ;`;
 
+    try {
+        conn.query(sql, [name], (error, result) => {
+            if (error) {
+                console.error('일정 로드 중 오류:', error);
+                return res.status(500).json({ message: '일정 로드 오류', error: error.message });
+            }
 
+            if (result.affectedRows > 0) {
+                res.status(200).json({ message: '일정 로드 성공', data: result });
+            } else {
+                res.status(404).json({ message: '일정이 없습니다.', data: null });
+            }
+        });
+    } catch (error) {
+        console.error('일정 로드 중 예외:', error);
+        res.status(500).json({ message: '일정 로드 중 서버 오류', error: error.message });
+    }
+});
 
 module.exports = managementRouter;

@@ -93,6 +93,7 @@ const WeeklyTableCalendar = () => {
         console.log("✅ [최종 변환된 일정 데이터]:", formattedSchedules);
 
         setSchedules(formattedSchedules);
+        sessionStorage.setItem('autoSchData',JSON.stringify(formattedSchedules));
     } catch (error) {
         console.error("❌ 주간 스케줄 데이터를 불러오는 중 오류 발생:", error);
     }

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const AttTodayPlan = () => {
+
     return (
         <div
             //key={index}
@@ -29,7 +30,7 @@ const AttTodayPlan = () => {
                 }}>
                     <div>2월 8일 화요일</div>
                     <div>10:00 ~ 21:30 (소정 8시간/연장 2시간)</div>
-                    
+
                 </div>
 
             </div>

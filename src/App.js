@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './components/MainPage';
 import Main from './components/Main';
 import ManEmplyee from './components/management/ManEmplyee'; // ✅ 경로 맞춰서
-// import "bootswatch/dist/flatly/bootstrap.min.css";
+//import "bootswatch/dist/flatly/bootstrap.min.css";
 
 const App = () => {
   return (

@@ -216,12 +216,51 @@ const Main = () => {
             }
 
         }
+
+        const fetchJoinData = async () => {
+            let allData = null;
+            try {
+                const response = await axios.post("/management/getMyScheduleData", { name: account.name });
+                if (response.status === 200) {
+                    console.log("✅ 서버 응답 데이터:", response.data);
+                    if (response.data.data) {
+                        allData = response.data.data;
+                    }
+                } 
+            } catch (error) {
+                //console.error("직원 삭제 오류:", error);
+                alert("오늘 일정 로드 실패.");
+                return;
+            }
+            // 1. 세션 저장소에서 계정 정보를 불러옵니다.
+            let me = JSON.parse(sessionStorage.getItem('user'));
+            console.log(me.emp_name);
+            console.log(allData);
+            const today = new Date().toLocaleDateString('ko-KR');
+            console.log('오늘은', today); // 예: "2025. 3. 16."
+
+
+
+
+            const check1 = JSON.parse(sessionStorage.getItem('autoSchData'));
+
+            console.log('강인오', check1);
+            return;
+            const check2 = check1.filter(a => a.emp_name === me.emp_name);
+            const check3 = check2.filter(b => b.date === today);
+
+
+            console.log(check3);
+
+        };
+
         // 7. 페이지 로드 시 데이터들을 가져오는 함수 호출
-        fetchEmployeeData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchEmployeeData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
         fetchGroupData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
         fetchWorkData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
         fetchVacationData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
-        fetchAttendanceData("Y");// 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchAttendanceData();// 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        // fetchJoinData();
     }, [account])
 
 
@@ -270,6 +309,8 @@ const Main = () => {
                     <img src="#" alt="알림" srcSet="" />
                     {/* 계정 접속자의 사진 */}
                     {/* <img src="#" alt="사진" srcSet="" /> */}
+                    <a href="http://localhost:5067">메인화면으로</a>
+
                     {/* <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                         <button type="button" class="btn btn-primary">Primary</button>
                         <div class="btn-group" role="group">
