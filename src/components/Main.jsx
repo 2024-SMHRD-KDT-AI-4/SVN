@@ -8,7 +8,7 @@ import Attendance from './attendance/Attendance';
 import Management from './management/Management';
 import Schedule2 from './Schedule2';
 import RequestForm from './requests/RequestForm';
-import QNA from './QNA';
+// import QNA from './QNA';
 import MenuList from './MenuList'; // 🔹 메뉴 리스트 추가
 import logoImage from '../savannah.png'; // 이미지 파일 경로
 import '../App.css';
@@ -287,9 +287,9 @@ const Main = () => {
             case '관리하기':
                 if (account.role === "관리자") setTextValue(<Management />);
                 break;
-            case 'QNA':
-                if (account.role === "관리자") setTextValue(<QNA />);
-                break;
+            // case 'QNA':
+            //     if (account.role === "관리자") setTextValue(<QNA />);
+            //     break;
             default:
                 setTextValue(<Calendar />);
         }
@@ -337,7 +337,7 @@ const Main = () => {
                                 ...(account.role === "관리자" ? [
                                     { label: '스케줄 생성' },
                                     { label: '관리하기' },
-                                    { label: 'QNA' }
+                                    // { label: 'QNA' }
                                 ] : [])
                             ]}
                             onItemSelect={handleMenuSelect} // 메뉴 클릭 시 실행할 함수 전달
