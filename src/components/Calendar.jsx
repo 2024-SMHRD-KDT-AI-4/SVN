@@ -193,7 +193,7 @@ const Calendar = () => {
                                     margin: "0", // p 태그 기본 마진 제거
                                 }}
                             >
-                                🟢 오픈: {schedule.오픈.map(name => `${name}${isOnVacation(name) ? " 🏖" : ""}`).join(", ") || "없음"}
+                                🟢 오픈: {schedules[formattedDate]?.오픈?.map(name => `${name}${isOnVacation(name) ? " 🏖" : ""}`).join(", ") || "없음"}
                             </p>
 
                             <p
@@ -206,7 +206,7 @@ const Calendar = () => {
                                     margin: "0", // p 태그 기본 마진 제거
                                 }}
                             >
-                                🟡 미들: {schedule.미들.map(name => `${name}${isOnVacation(name) ? " 🏖" : ""}`).join(", ") || "없음"}
+                                  🟡 미들: {schedules[formattedDate]?.미들?.map(name => `${name}${isOnVacation(name) ? " 🏖" : ""}`).join(", ") || "없음"}
                             </p>
 
                             <p
@@ -219,7 +219,7 @@ const Calendar = () => {
                                     margin: "0", // p 태그 기본 마진 제거
                                 }}
                             >
-                                🔴 마감: {schedule.마감.map(name => `${name}${isOnVacation(name) ? " 🏖" : ""}`).join(", ") || "없음"}
+                                  🔴 마감: {schedules[formattedDate]?.마감?.map(name => `${name}${isOnVacation(name) ? " 🏖" : ""}`).join(", ") || "없음"}
                             </p>
                             {hasVacation && (
                         <p className={styles.vacationNotice}>
