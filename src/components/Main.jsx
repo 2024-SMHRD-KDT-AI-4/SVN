@@ -34,7 +34,8 @@ const Main = () => {
             setAccount({
                 id: userData?.id, // 기본적으로 "temp"로 설정
                 name: userData?.name, // 이름이 없으면 기본값 "Unknown"
-                role: userData?.role // 역할이 없으면 기본값 "Unknown"
+                role: userData?.role, // 역할이 없으면 기본값 "Unknown"
+                empID: "일단대기"
             });
         } else {
             // 2. 세션에 사용자 정보가 없으면 기본값 설정
@@ -42,7 +43,8 @@ const Main = () => {
             let kk = {
                 id: "tester",
                 name: '안지운', // 로그인하지 않은 경우 기본 이름
-                role: '관리자' // 기본 역할 설정
+                role: '관리자', // 기본 역할 설정
+                empID: '241210002'
             }
             sessionStorage.setItem('user', JSON.stringify(kk));
             setAccount(kk);
@@ -217,11 +219,11 @@ const Main = () => {
 
         }
         // 7. 페이지 로드 시 데이터들을 가져오는 함수 호출
-        fetchEmployeeData("Y"); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchEmployeeData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
         fetchGroupData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
         fetchWorkData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
         fetchVacationData(); // 콘솔을 확인하려면 "Y"를 파라미터로 주라
-        fetchAttendanceData("Y");// 콘솔을 확인하려면 "Y"를 파라미터로 주라
+        fetchAttendanceData();// 콘솔을 확인하려면 "Y"를 파라미터로 주라
     }, [account])
 
 
@@ -270,16 +272,6 @@ const Main = () => {
                     <img src="#" alt="알림" srcSet="" />
                     {/* 계정 접속자의 사진 */}
                     {/* <img src="#" alt="사진" srcSet="" /> */}
-                    {/* <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                        <button type="button" class="btn btn-primary">Primary</button>
-                        <div class="btn-group" role="group">
-                            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style={{}}>
-                                <a class="dropdown-item" href="#">계정수정</a>
-                                <a class="dropdown-item" href="#">로그아웃</a>
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
             </div>
             <hr />
@@ -301,20 +293,6 @@ const Main = () => {
                             ]}
                             onItemSelect={handleMenuSelect} // 메뉴 클릭 시 실행할 함수 전달
                         />
-
-                        {/* 버튼들 */}
-                        {/* <Buttons className="funcButton" name={'메인'} func={() => { setTextValue(<Calendar />); }} />              
-                    <Buttons className="funcButton" name={'채팅'} func={() => { setTextValue(<Chatting />); }} />
-                    <Buttons className="funcButton" name={'근태'} func={() => { setTextValue(<Attendance />); }} />
-                    <Buttons className="funcButton" name={'요청하기'} func={() => { setTextValue(<RequestForm />); }} />
-
-                    {account.role === "관리자" && (
-                        <>
-                            <Buttons className="funcButton_auth" name={'스케줄 생성'} func={() => { setTextValue(<Schedule />); }} auth={true} />
-                            <Buttons className="funcButton_auth" name={'관리하기'} func={() => { setTextValue(<Management />); }} auth={true} />
-                            <Buttons className="funcButton_auth" name={'QNA'} func={() => { setTextValue(<QNA />); }} auth={true} />
-                        </>
-                    )} */}
                     </div>
 
                 </div>

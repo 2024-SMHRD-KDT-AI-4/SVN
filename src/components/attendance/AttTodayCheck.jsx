@@ -20,7 +20,7 @@ function AttTodayCheck() {
       const response = await fetch('/attendance/check-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wo_id: 'E_001' }) // 임시로 E_001
+        body: JSON.stringify({ wo_id: 'E_002' }) // 임시로 E_001
       });
       const data = await response.json();
       if (data.success) {
@@ -39,7 +39,7 @@ function AttTodayCheck() {
       const response = await fetch('/attendance/check-out', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wo_id: 'E_001' }) // 임시로 E_001
+        body: JSON.stringify({ wo_id: 'E_002' }) // 임시로 E_001
       });
       const data = await response.json();
       if (data.success) {

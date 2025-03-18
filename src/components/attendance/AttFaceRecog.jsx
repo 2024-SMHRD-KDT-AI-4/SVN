@@ -13,7 +13,16 @@ const AttFaceRecog = () => {
     const handleFaceResult = (data) => {
       if (data.success) {
         const now = new Date().toLocaleString(); // 현재 시간
-        alert(`${data.wo_id}님 얼굴 인식 성공! 시간: ${now}`);
+        if(data.wo_id === "E_002"){
+          alert(`${data.wo_id}님 얼굴 인식 성공! 시간: ${now}`);
+        }
+        else if(data.wo_id === "Unknown"){
+          alert(`인식 실패 [미등록자]: 관리자에게 인식 요청`);
+        }
+        else if(data.wo_id === "Time out"){
+          alert(`인식 실패 [미등록자] & 시간 경과(20sec): 관리자에게 요청`);
+        }
+
       } else {
         alert(`인식 실패: ${data.message}`);
       }

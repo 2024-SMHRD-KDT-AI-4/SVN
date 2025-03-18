@@ -19,9 +19,9 @@ const Attendance = () => {
     const findEmpId = storedEmployee.filter(emp => emp.act_id == me.id);
     me.empID = findEmpId[0].emp_id;
     sessionStorage.setItem('user', JSON.stringify(me));
-    me = JSON.parse(sessionStorage.getItem('user'));
+    me = JSON.parse(sessionStorage.getItem('user')); // 유저 가지고 오기
 
-    console.log(me);
+    //console.log(me);
 
     if (findEmpId) {
       const storedAttendance = JSON.parse(sessionStorage.getItem('attendanceData'));
