@@ -16,7 +16,7 @@ router.post('/check-in', (req, res) => {
   const { wo_id } = req.body;  // 프론트에서 { wo_id: 'E_001' } 같은 식으로 받음
   // DB에 NOW()로 출근시간 INSERT
   const insertSql = `
-    INSERT INTO test2_table (wo_id, start_time)
+    INSERT INTO tb_check_att (wo_id, start_time)
     VALUES (?, NOW())
   `;
   connection.query(insertSql, [wo_id], (err, result) => {
@@ -28,7 +28,7 @@ router.post('/check-in', (req, res) => {
     // 방금 INSERT된 행의 출근시간을 조회하여 반환
     const selectSql = `
       SELECT DATE_FORMAT(start_time, '%Y-%m-%d %H:%i:%s') AS start_time
-      FROM test2_table
+      FROM tb_check_att
       WHERE id = ?
     `;
     connection.query(selectSql, [result.insertId], (err2, rows) => {
@@ -48,7 +48,7 @@ router.post('/check-out', (req, res) => {
 
   // end_time이 NULL인 레코드에 NOW()로 퇴근시간 UPDATE
   const updateSql = `
-    UPDATE test2_table
+    UPDATE tb_check_att
     SET end_time = NOW()
     WHERE wo_id = ?
       AND end_time IS NULL
@@ -68,7 +68,7 @@ router.post('/check-out', (req, res) => {
     // 방금 UPDATE된 end_time을 SELECT
     const selectSql = `
       SELECT DATE_FORMAT(end_time, '%Y-%m-%d %H:%i:%s') AS end_time
-      FROM test2_table
+      FROM tb_check_att
       WHERE wo_id = ?
       ORDER BY id DESC
       LIMIT 1

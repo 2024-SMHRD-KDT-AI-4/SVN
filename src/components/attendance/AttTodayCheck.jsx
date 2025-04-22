@@ -13,7 +13,7 @@ function AttTodayCheck() {
 
     return () => clearInterval(timer); // 언마운트 시 타이머 제거
   }, []);
-  
+
   // 출근하기
   const handleCheckIn = async () => {
     try {
@@ -60,13 +60,16 @@ function AttTodayCheck() {
   };
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '10px', width: '350px' }}>
-     
+    <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '10px', width: '450px' }}>
+
       <h2>{formatTime(currentTime)}</h2> {/* 실시간 시계 */}
       <p>출근시간: {startTime || '---'}</p>
       <p>퇴근시간: {endTime || '---'}</p>
-      <button onClick={handleCheckIn}>출근하기</button>
-      <button onClick={handleCheckOut} style={{ marginLeft: '10px' }}>퇴근하기</button>
+
+      <div>
+        <button onClick={handleCheckIn}>출근하기</button>
+        <button onClick={handleCheckOut} style={{ marginLeft: '10px' }}>퇴근하기</button>
+      </div>
     </div>
   );
 }

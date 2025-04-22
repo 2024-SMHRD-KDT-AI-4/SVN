@@ -45,9 +45,56 @@ const AttFaceRecog = () => {
   };
 
   return (
-    <div>
-      <h3> 얼굴 자동 인식</h3>
-      <button onClick={handleFaceCheck}>얼굴 인식</button>
+<div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "400px",
+        // backgroundColor: "#f3f4f6", // 연한 회색
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#ffffff", // 흰색 배경
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // 그림자 효과
+          borderRadius: "16px", // 둥근 모서리
+          padding: "24px",
+          width: "480px",
+          minHeight: "360px",
+          textAlign: "center",
+        }}
+      >
+        <h3
+          style={{
+            fontSize: "24px",
+            fontWeight: "600",
+            color: "#1f2937", // 진한 회색
+            marginBottom: "16px",
+          }}
+        >
+          얼굴 자동 인식
+        </h3>
+        <button
+          onClick={handleFaceCheck}
+          style={{
+            width: "100%",
+            backgroundColor: "#3b82f6", // 파란색
+            color: "#ffffff", // 흰색 텍스트
+            padding: "12px",
+            border: "none",
+            borderRadius: "8px",
+            fontSize: "16px",
+            fontWeight: "500",
+            cursor: "pointer",
+            transition: "background-color 0.3s ease",
+          }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = "#2563eb")} // 어두운 파란색
+          onMouseOut={(e) => (e.target.style.backgroundColor = "#3b82f6")} // 기본 파란색
+        >
+          얼굴 인식
+        </button>
+      </div>
     </div>
   );
 };
